@@ -1,0 +1,89 @@
+name: TownyElections
+description: Bring democracy to Minecraft!
+version: 1.4.10
+author: Joselu
+main: com.aurgiyalgo.TownyElections.TownyElections
+depend: [Towny]
+api-version: 1.14
+commands:
+  townyelections:
+    description: Command for TownyElections info and management
+    usage: /<command>
+    aliases: telect
+    permission: townyelections.use
+  elections:
+    description: Command for elections
+    usage: <command>
+    permission: townyelections.elections
+  party:
+    description: Command for managing political parties
+    usage: /<command>
+    permission: townyelections.party
+  revolutions:
+    description: Command for managing revolutions
+    usage: /<command>
+    permission: townyelections.revolutions
+permissions:
+  townyelections.*:
+    description: Operator access
+    default: op
+    children:
+      townyelections.use: true
+      townyelections.vote.*: true
+      townyelections.convoke.*: true
+      townyelections.run.*: true
+      townyelections.unvote.*: true
+      townyelections.revolution.*: true
+  townyelections.use:
+    description: Access to main command and plugin info
+    default: true
+  townyelections.elections:
+    description: Access to elections command
+    default: true
+  townyelections.parties:
+    description: Access to parties command
+    default: true
+  townyelections.revolutions:
+    description: Access to revolutions command
+    default: true
+  townyelections.vote.*:
+    description: Access to vote command
+    default: op
+    children:
+      townyelections.vote.town: true
+      townyelections.vote.nation: true
+      townyelections.vote.towndecision: true
+      townyelections.vote.nationdecision: true
+  townyelections.convoke.*:
+    description: Access to vote command
+    default: op
+    children:
+      townyelections.convoke.town: true
+      townyelections.convoke.nation: true
+      townyelections.convoke.towndecision: true
+      townyelections.convoke.nationdecision: true
+  townyelections.run.*:
+    description: Access to vote command
+    default: op
+    children:
+      townyelections.run.town: true
+      townyelections.run.nation: true
+  townyelections.stop.*:
+    description: Access to vote command
+    default: op
+    children:
+      townyelections.stop.town: true
+      townyelections.stop.nation: true
+      townyelections.stop.towndecision: true
+      townyelections.stop.nationdecision: true
+  townyelections.unvote.*:
+    description: Access to vote command
+    default: op
+    children:
+      townyelections.unvote.town: true
+      townyelections.unvote.nation: true
+      townyelections.unvote.towndecision: true
+      townyelections.unvote.nationdecision: true
+  townyelections.revolution:
+    description: Access to revolutions
+    default: op

@@ -1,0 +1,7 @@
+&8-------- &6&lTowny Elections&r &8--------
+
+&fDescription: &e%version%
+&fVersion: &e%version%
+&fDeveloper: &e%author%
+
+&8---------------------------------
