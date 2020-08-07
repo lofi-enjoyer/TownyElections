@@ -397,9 +397,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 	}
 
 	private boolean executeHelp(CommandSender sender, Command cmd, String str, String[] args) {
-		for (String line : instance.getHelpMessage()) {
-			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', line));
-		}
+		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', instance.getHelpMessage()));
 		return true;
 	}
 
