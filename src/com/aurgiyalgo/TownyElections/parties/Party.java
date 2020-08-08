@@ -9,7 +9,7 @@ import java.util.UUID;
 public abstract class Party {
 	
 	public static enum PartyType {
-		TOWN("TOWN"), NATION("NATION");
+		TOWN("TOWN", TownParty.class), NATION("NATION", NationParty.class);
 		
 		private static Map<String, PartyType> lookup = new HashMap<String, PartyType>();
 		
@@ -20,20 +20,26 @@ public abstract class Party {
 		}
 		
 		private String type;
+		private Class<? extends Party> classType;
 		
-		private PartyType(String type) {
+		private PartyType(String type, Class<? extends Party> classType) {
 			this.type = type;
+			this.classType = classType;
 		}
 		
 		public static PartyType getPartyType(String type) {
 			return lookup.get(type);
+		}
+		
+		public Class<? extends Party> getClassType() {
+			return classType;
 		}
 	}
 	
 	protected String name;
 	protected UUID leader;
 	protected List<UUID> members;
-	protected PartyType partyType;
+	protected String partyType;
 	protected UUID territory;
 	
 	public Party(String name, UUID leader, PartyType partyType) {
@@ -41,7 +47,7 @@ public abstract class Party {
 		
 		this.name = name;
 		this.leader = leader;
-		this.partyType = partyType;
+		this.partyType = partyType.type;
 	}
 
 	public String getName() {
@@ -78,7 +84,7 @@ public abstract class Party {
 	}
 	
 	public PartyType getType() {
-		return partyType;
+		return PartyType.getPartyType(partyType);
 	}
 
 }
