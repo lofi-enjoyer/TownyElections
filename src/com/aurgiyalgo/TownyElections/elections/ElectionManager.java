@@ -23,15 +23,12 @@ import com.palmergames.bukkit.towny.object.Town;
 
 public class ElectionManager {
 
-	private TownyElections instance;
 	private List<TownElection> townElections;
 	private List<NationElection> nationElections;
 	private List<TownDecision> townDecisions;
 	private List<NationDecision> nationDecisions;
 
 	public ElectionManager(TownyElections instance) {
-		this.instance = instance;
-
 		townElections = new ArrayList<TownElection>();
 		nationElections = new ArrayList<NationElection>();
 		townDecisions = new ArrayList<TownDecision>();

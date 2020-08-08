@@ -12,8 +12,12 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 public class DataHandler {
 	
+	private static Gson gson;
 	private File _dataFile;
 	private boolean _dataIsLoaded;
 	private JSONObject _jsonData;
@@ -22,7 +26,10 @@ public class DataHandler {
 	/**
 	 * @param dataFolder Folder where the "data.json" will be loaded/stored
 	 */
-	public DataHandler(File dataFolder) {
+	public DataHandler(File dataFolder, String fileName) {
+		
+		gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+		
 		_jsonDataToSave = new JSONObject();
 		if (!dataFolder.exists()) return;
 		_dataFile = new File(dataFolder, "data.json");
@@ -80,6 +87,10 @@ public class DataHandler {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static Gson getGson() {
+		return gson;
 	}
 
 }

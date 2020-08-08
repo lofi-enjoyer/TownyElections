@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class PartiesManager {
+public class PartyManager {
 	
 	private List<Party> parties;
 	
-	public PartiesManager() {
+	public PartyManager() {
 		parties = new ArrayList<Party>();
 	}
 	

@@ -18,7 +18,6 @@ import com.aurgiyalgo.TownyElections.commands.ElectionsCommandHandler;
 import com.aurgiyalgo.TownyElections.commands.PartyCommandHandler;
 import com.aurgiyalgo.TownyElections.commands.RevolutionsCommandHandler;
 import com.aurgiyalgo.TownyElections.commands.TElectCommandHandler;
-import com.aurgiyalgo.TownyElections.data.DataHandler;
 import com.aurgiyalgo.TownyElections.elections.ElectionManager;
 import com.aurgiyalgo.TownyElections.elections.NationDecision;
 import com.aurgiyalgo.TownyElections.elections.NationElection;
@@ -38,7 +37,6 @@ public class TownyElections extends JavaPlugin {
 	private ElectionManager _electionManager;
 	private RevolutionManager _revolutionManager;
 	private TEMetrics _metrics;
-	private DataHandler _dataHandler;
 	private boolean _debugEnabled;
 	
 	private String _helpText;
@@ -179,89 +177,110 @@ public class TownyElections extends JavaPlugin {
 		}
 	}
 	
+	@Deprecated
 	public static TownElection getTownElection(Player p) {
 		return instance._electionManager.getTownElection(p);
 	}
-	
+
+	@Deprecated
 	public static void addTownElection(TownElection e) {
 		instance._electionManager.addTownElection(e);
 	}
-	
+
+	@Deprecated
 	public static void addRevolution(Revolution r) {
 		instance._revolutionManager.addRevolution(r);
 	}
-	
+
+	@Deprecated
 	public static void removeTownElection(TownElection e) {
 		instance._electionManager.removeTownElection(e);
 	}
-	
+
+	@Deprecated
 	public static void addNationElection(NationElection e) {
 		instance._electionManager.addNationElection(e);
 	}
-	
+
+	@Deprecated
 	public static void removeNationElection(NationElection e) {
 		instance._electionManager.removeNationElection(e);
 	}
-	
+
+	@Deprecated
 	public static Revolution getRevolution(Player p) {
 		return instance._revolutionManager.getRevolution(p);
 	}
-	
+
+	@Deprecated
 	public static void removeRevolutions(Town t) {
 		instance._revolutionManager.removeTownRevolutions(t);
 	}
-	
+
+	@Deprecated
 	public static NationElection getNationElection(Player p) {
 		return instance._electionManager.getNationElection(p);
 	}
-	
+
+	@Deprecated
 	public static Revolution getInvite(UUID player) {
 		return instance._revolutionManager.getInvite(player);
 	}
-	
+
+	@Deprecated
 	public static void revolutionInvite(UUID player, Revolution r) {
 		instance._revolutionManager.revolutionInvite(player, r);
 	}
-	
+
+	@Deprecated
 	public static TownDecision getTownDecision(Player p) {
 		return instance._electionManager.getTownDecision(p);
 	}
-	
+
+	@Deprecated
 	public static void removeTownDecision(TownDecision d) {
 		instance._electionManager.removeTownDecision(d);
 	}
-	
+
+	@Deprecated
 	public static void addTownDecision(TownDecision d) {
 		instance._electionManager.addTownDecision(d);
 	}
-	
+
+	@Deprecated
 	public static NationDecision getNationDecision(Player p) {
 		return instance._electionManager.getNationDecision(p);
 	}
-	
+
+	@Deprecated
 	public static void removeNationDecision(NationDecision d) {
 		instance._electionManager.removeNationDecision(d);
 	}
-	
+
+	@Deprecated
 	public static void addNationDecision(NationDecision d) {
 		instance._electionManager.addNationDecision(d);
 	}
-	
+
+	@Deprecated
 	public static void disbandRevolution(Revolution r) {
 		if (!instance._revolutionManager.getRevolutions().contains(r)) return;
 		instance._revolutionManager.getRevolutions().remove(r);
 	}
-	
+
+	@Deprecated
 	public static boolean areRevolutionsEnabled() {
 		return instance._revolutionManager.areRevolutionsEnabled();
 	}
-	
+
+	@Deprecated
 	public static String getTranslatedMessage(String key) {
 		String message = instance._languageFile.getString(key);
 		if (message == null) return null;
 		return ChatColor.translateAlternateColorCodes('&', message);
 	}
-	
+
+	@Deprecated
 	public static void sendTownMessage(Town n, String message) {
 		for (Player p : Bukkit.getOnlinePlayers()) {
 			if (n.hasResident(p.getName())) {
@@ -269,7 +288,8 @@ public class TownyElections extends JavaPlugin {
 			}
 		}
 	}
-	
+
+	@Deprecated
 	public static void sendTownSubtitle(Town n, String message) {
 		for (Player p : Bukkit.getOnlinePlayers()) {
 			if (n.hasResident(p.getName())) {
@@ -277,7 +297,8 @@ public class TownyElections extends JavaPlugin {
 			}
 		}
 	}
-	
+
+	@Deprecated
 	public static void sendNationMessage(Nation n, String message) {
 		for (Player p : Bukkit.getOnlinePlayers()) {
 			if (n.hasResident(p.getName())) {
@@ -285,7 +306,8 @@ public class TownyElections extends JavaPlugin {
 			}
 		}
 	}
-	
+
+	@Deprecated
 	public static void sendNationSubtitle(Nation n, String message) {
 		for (Player p : Bukkit.getOnlinePlayers()) {
 			if (n.hasResident(p.getName())) {
@@ -293,7 +315,8 @@ public class TownyElections extends JavaPlugin {
 			}
 		}
 	}
-	
+
+	@Deprecated
 	public static void successRevolution(Revolution r) {
 		instance._revolutionManager.finishRevolution(r);
 	}
