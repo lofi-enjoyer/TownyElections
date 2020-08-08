@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import com.aurgiyalgo.TownyElections.data.DataHandler;
 import com.google.gson.Gson;
@@ -46,11 +48,20 @@ public class PartyManager {
 		if (jsonArray == null) return;
 		for (int i = 0; i < jsonArray.size(); i++) {
 			JSONObject currentObject = jsonArray.get(i);
-			Party party = _gson.fromJson(currentObject.toJSONString(), Party.PartyType.getPartyType(currentObject.get("partyType").toString()));
-//			War war = _gson.fromJson(currentObject.toJSONString(), WarType.getWarType(currentObject.get("_type").toString()).getClassType());
-//			war.setupWar();
-//			_wars.add(war);
+			Party party = _gson.fromJson(currentObject.toJSONString(), Party.PartyType.getPartyType(currentObject.get("partyType").toString()).getClassType());
+			_parties.add(party);
 		}
+	}
+	
+	public void saveData() {
+		List<JSONObject> jsonArray = new ArrayList<JSONObject>();
+		for (Party party : _parties) {
+			try {
+				JSONObject jsonObject = (JSONObject) new JSONParser().parse(_gson.toJson(party));
+				jsonArray.add(jsonObject);
+			} catch (ParseException e) {e.printStackTrace();}
+		}
+		_dataHandler.addDataList("parties", jsonArray);
 	}
 
 }

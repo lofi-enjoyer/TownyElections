@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.google.gson.annotations.Expose;
+
 public abstract class Party {
 	
 	public static enum PartyType {
@@ -36,10 +38,15 @@ public abstract class Party {
 		}
 	}
 	
+	@Expose
 	protected String name;
+	@Expose
 	protected UUID leader;
+	@Expose
 	protected List<UUID> members;
+	@Expose
 	protected String partyType;
+	@Expose
 	protected UUID territory;
 	
 	public Party(String name, UUID leader, PartyType partyType) {
