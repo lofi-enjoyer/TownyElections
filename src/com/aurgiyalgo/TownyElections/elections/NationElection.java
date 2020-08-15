@@ -12,15 +12,21 @@ import org.bukkit.entity.Player;
 
 import com.aurgiyalgo.TownyElections.TownyElections;
 import com.aurgiyalgo.TownyElections.TownyElections.MutableInteger;
+import com.google.gson.annotations.Expose;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 
 public class NationElection {
 	
+	@Expose
 	private List<UUID> candidates;
+	@Expose
 	private Map<UUID, UUID> votes;
+	@Expose
 	private long endTime;
+	@Expose
+	private UUID nationUuid;
 	private Nation nation;
 	private UUID winner;
 	
@@ -30,6 +36,15 @@ public class NationElection {
 		
 		candidates = new ArrayList<UUID>();
 		votes = new HashMap<UUID, UUID>();
+		nationUuid = nation.getUuid();
+	}
+	
+	public void setup() {
+		try {
+			nation = TownyUniverse.getInstance().getDataSource().getNation(nationUuid);
+		} catch (NotRegisteredException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public UUID finishElection() {

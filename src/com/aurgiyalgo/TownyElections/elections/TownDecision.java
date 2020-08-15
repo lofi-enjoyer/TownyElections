@@ -6,7 +6,9 @@ import java.util.UUID;
 
 import com.aurgiyalgo.TownyElections.TownyElections;
 import com.aurgiyalgo.TownyElections.TownyElections.MutableInteger;
+import com.google.gson.annotations.Expose;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Town;
 
 public class TownDecision {
@@ -17,9 +19,14 @@ public class TownDecision {
 	public static final String PVP = "PVP";
 	public static final String OPEN = "OPEN";
 	
+	@Expose
 	private Map<UUID, Boolean> votes;
+	@Expose
+	private UUID townUuid;
 	private Town town;
+	@Expose
 	private long endTime;
+	@Expose
 	private String type;
 	private boolean winner;
 	
@@ -28,6 +35,15 @@ public class TownDecision {
 		this.endTime = endTime;
 		this.type = type;
 		votes = new HashMap<UUID, Boolean>();
+		townUuid = town.getUuid();
+	}
+	
+	public void setup() {
+		try {
+			town = TownyUniverse.getInstance().getDataSource().getTown(townUuid);
+		} catch (NotRegisteredException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public boolean finishDecision() {

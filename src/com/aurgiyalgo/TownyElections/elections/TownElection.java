@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 
 import com.aurgiyalgo.TownyElections.TownyElections;
 import com.aurgiyalgo.TownyElections.TownyElections.MutableInteger;
+import com.google.gson.annotations.Expose;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -19,9 +20,14 @@ import com.palmergames.bukkit.towny.object.Town;
 
 public class TownElection {
 	
+	@Expose
 	private List<UUID> candidates;
+	@Expose
 	private Map<UUID, UUID> votes;
+	@Expose
 	private long endTime;
+	@Expose
+	private UUID townUuid;
 	private Town town;
 	private UUID winner;
 	
@@ -31,6 +37,15 @@ public class TownElection {
 		
 		candidates = new ArrayList<UUID>();
 		votes = new HashMap<UUID, UUID>();
+		townUuid = town.getUuid();
+	}
+	
+	public void setup() {
+		try {
+			town = TownyUniverse.getInstance().getDataSource().getTown(townUuid);
+		} catch (NotRegisteredException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void addCandidate(UUID candidate) {

@@ -6,15 +6,21 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 
+import com.google.gson.annotations.Expose;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 
 public class Revolution {
 	
+	private UUID townUuid;
 	private Town town;
+	@Expose
 	private UUID leader;
+	@Expose
 	private List<UUID> members;
+	@Expose
 	private List<UUID> killedStaff;
 	
 	public Revolution(Town town, UUID leader) {
@@ -22,6 +28,14 @@ public class Revolution {
 		this.leader = leader;
 		this.members = new ArrayList<UUID>();
 		this.killedStaff = new ArrayList<UUID>();
+	}
+	
+	public void setup() {
+		try {
+			town = TownyUniverse.getInstance().getDataSource().getTown(townUuid);
+		} catch (NotRegisteredException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void finishRevolution() {

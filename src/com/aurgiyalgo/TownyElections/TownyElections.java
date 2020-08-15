@@ -52,10 +52,10 @@ public class TownyElections extends JavaPlugin {
 		setupLanguageFile();
 		setupExtraFiles();
 		
-		_electionManager = new ElectionManager(this);
-		_revolutionManager = new RevolutionManager(this);
+		_electionManager = new ElectionManager(this, getDataFolder());
+		_revolutionManager = new RevolutionManager(this, getDataFolder());
 		try {
-			_electionManager.loadElections(getDataFolder());
+			_electionManager.loadElections();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
