@@ -204,7 +204,7 @@ public class ElectionManager {
 		
 	}
 
-	public void saveElections(File dataFolder) throws Exception {
+	public void saveElections() {
 		List<JSONObject> jsonArray;
 		jsonArray = new ArrayList<JSONObject>();
 		for (TownElection w : _townElections) {
@@ -232,6 +232,10 @@ public class ElectionManager {
 			} catch (ParseException e) {e.printStackTrace();}
 		}
 		_dataHandler.addDataList("townDecisions", jsonArray);
+		
+		_dataHandler.saveData();
+		
+		System.out.println("Election data saved");
 		
 //		if (!dataFolder.exists()) {
 //			dataFolder.mkdir();

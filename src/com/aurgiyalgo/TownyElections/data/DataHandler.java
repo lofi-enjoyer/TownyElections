@@ -32,7 +32,7 @@ public class DataHandler {
 		
 		_jsonDataToSave = new JSONObject();
 		if (!dataFolder.exists()) return;
-		_dataFile = new File(dataFolder, "data.json");
+		_dataFile = new File(dataFolder, fileName);
 		_dataIsLoaded = _dataFile.exists();
 
 		if (!_dataIsLoaded) return;

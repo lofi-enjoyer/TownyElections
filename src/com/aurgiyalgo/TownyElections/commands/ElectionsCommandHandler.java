@@ -412,11 +412,17 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			p.sendMessage(TownyElections.getTranslatedMessage("not-active-election"));
 			return true;
 		}
-		p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6Candidates: "));
+		p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
+		StringBuilder builder = new StringBuilder();
+		builder.append(ChatColor.GOLD + "Candidates:\n");
+		if (e.getCandidates().size() <= 0) {
+			builder.append(ChatColor.RED + "There are no candidates");
+			p.sendMessage(builder.toString());
+			return true;
+		}
 		for (UUID id : e.getCandidates()) {
 			p.sendMessage("- " + Bukkit.getOfflinePlayer(id).getName());
 		}
-		p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
 		return true;
 	}
 

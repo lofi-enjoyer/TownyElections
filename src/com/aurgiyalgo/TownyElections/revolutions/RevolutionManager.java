@@ -16,6 +16,7 @@ import org.json.simple.parser.ParseException;
 import com.aurgiyalgo.TownyElections.TownyElections;
 import com.aurgiyalgo.TownyElections.data.DataHandler;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.palmergames.bukkit.towny.object.Town;
 
 public class RevolutionManager {
@@ -30,11 +31,11 @@ public class RevolutionManager {
 		this.revolutions = new ArrayList<Revolution>();
 		this.invites = new HashMap<UUID, Revolution>();
 		this.enabledRevolutions = true;
-		_gson = new Gson();
+		_gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 		this._dataHandler = new DataHandler(dataFolder, "revolutions.json");
 	}
 	
-	public void loadRevolutions(File dataFolder) throws Exception {
+	public void loadRevolutions() {
 		List<JSONObject> jsonArray;
 		jsonArray = _dataHandler.getDataList("revolutions");
 		if (jsonArray == null) return;
@@ -79,7 +80,7 @@ public class RevolutionManager {
 //		}
 	}
 	
-	public void saveRevolutions(File dataFolder) throws Exception {
+	public void saveRevolutions() {
 		List<JSONObject> jsonArray;
 		jsonArray = new ArrayList<JSONObject>();
 		for (Revolution w : revolutions) {
@@ -89,6 +90,10 @@ public class RevolutionManager {
 			} catch (ParseException e) {e.printStackTrace();}
 		}
 		_dataHandler.addDataList("revolutions", jsonArray);
+		
+		_dataHandler.saveData();
+		
+		System.out.println("Revolution data saved");
 
 //		if (!dataFolder.exists()) {
 //			dataFolder.mkdir();

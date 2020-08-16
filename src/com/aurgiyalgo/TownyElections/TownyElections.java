@@ -54,11 +54,9 @@ public class TownyElections extends JavaPlugin {
 		
 		_electionManager = new ElectionManager(this, getDataFolder());
 		_revolutionManager = new RevolutionManager(this, getDataFolder());
-		try {
-			_electionManager.loadElections();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+
+		_electionManager.loadElections();
+		_revolutionManager.loadRevolutions();
 
 		getCommand("townyelections").setExecutor(new TElectCommandHandler(instance));
 		getCommand("townyelections").setTabCompleter(new TElectTabCompleter());
@@ -69,11 +67,8 @@ public class TownyElections extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		try {
-			_electionManager.saveElections(getDataFolder());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		_electionManager.saveElections();
+		_revolutionManager.saveRevolutions();
 		
 		saveConfig();
 	}
@@ -142,7 +137,9 @@ public class TownyElections extends JavaPlugin {
 		try {
 			Iterator<String> i = Files.readAllLines(helpFile.toPath()).iterator();
 			StringBuilder builder = new StringBuilder();
+			builder.append(i.next());
 			while (i.hasNext()) {
+				builder.append("\n");
 				builder.append(i.next());
 			}
 			_helpText = builder.toString();
@@ -156,7 +153,9 @@ public class TownyElections extends JavaPlugin {
 		try {
 			Iterator<String> i = Files.readAllLines(infoFile.toPath()).iterator();
 			StringBuilder builder = new StringBuilder();
+			builder.append(i.next());
 			while (i.hasNext()) {
+				builder.append("\n");
 				builder.append(i.next());
 			}
 			_infoText = builder.toString();

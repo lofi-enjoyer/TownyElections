@@ -28,6 +28,8 @@ public class Revolution {
 		this.leader = leader;
 		this.members = new ArrayList<UUID>();
 		this.killedStaff = new ArrayList<UUID>();
+		
+		this.townUuid = town.getUuid();
 	}
 	
 	public void setup() {
