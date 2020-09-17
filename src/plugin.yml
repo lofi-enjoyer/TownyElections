@@ -1,6 +1,6 @@
 name: TownyElections
 description: Bring democracy to Minecraft!
-version: 1.4.10
+version: 1.4.11
 author: Joselu
 main: com.aurgiyalgo.TownyElections.TownyElections
 depend: [Towny]
