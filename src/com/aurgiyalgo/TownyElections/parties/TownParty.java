@@ -13,6 +13,10 @@ public class TownParty extends Party {
 	public TownParty(String name, UUID leader) {
 		super(name, leader, PartyType.TOWN);
 		
+		setup();
+	}
+	
+	public void setup() {
 		try {
 			town = TownyUniverse.getInstance().getDataSource().getTown(territory);
 		} catch (NotRegisteredException e) {}

@@ -39,7 +39,7 @@ public class TEListener implements Listener {
 		
 		TownElection townElection = TownyElections.getTownElection(Bukkit.getPlayer(e.getResident().getName()));
 		if (townElection != null) {
-			townElection.getCandidates().remove(player.getUniqueId());
+			TownyElections.getInstance().getPartyManager().getPlayerTownParty(player.getUniqueId()).removeMember(player.getUniqueId());
 			townElection.removeVote(player.getUniqueId());
 		}
 		

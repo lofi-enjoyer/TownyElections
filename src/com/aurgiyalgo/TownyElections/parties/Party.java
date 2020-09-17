@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.aurgiyalgo.TownyElections.TownyElections;
 import com.google.gson.annotations.Expose;
 
 public abstract class Party {
@@ -55,6 +56,8 @@ public abstract class Party {
 		this.name = name;
 		this.leader = leader;
 		this.partyType = partyType.type;
+		
+		members.add(leader);
 	}
 
 	public String getName() {
@@ -79,6 +82,10 @@ public abstract class Party {
 	}
 	
 	public void removeMember(UUID member) {
+		if (members.size() <= 1) {
+			TownyElections.getInstance().getPartyManager().removeParty(this);
+			return;
+		}
 		members.remove(member);
 	}
 

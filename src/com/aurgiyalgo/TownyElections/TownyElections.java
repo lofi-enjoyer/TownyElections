@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Iterator;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -25,6 +26,7 @@ import com.aurgiyalgo.TownyElections.elections.TownDecision;
 import com.aurgiyalgo.TownyElections.elections.TownElection;
 import com.aurgiyalgo.TownyElections.listeners.TElectTabCompleter;
 import com.aurgiyalgo.TownyElections.metrics.TEMetrics;
+import com.aurgiyalgo.TownyElections.parties.PartyManager;
 import com.aurgiyalgo.TownyElections.revolutions.Revolution;
 import com.aurgiyalgo.TownyElections.revolutions.RevolutionManager;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -37,6 +39,8 @@ public class TownyElections extends JavaPlugin {
 	private ElectionManager _electionManager;
 	private RevolutionManager _revolutionManager;
 	private TEMetrics _metrics;
+	private PartyManager _partyManager;
+	
 	private boolean _debugEnabled;
 	
 	private String _helpText;
@@ -54,7 +58,8 @@ public class TownyElections extends JavaPlugin {
 		
 		_electionManager = new ElectionManager(this, getDataFolder());
 		_revolutionManager = new RevolutionManager(this, getDataFolder());
-
+		_partyManager = new PartyManager(this.getDataFolder());
+		
 		_electionManager.loadElections();
 		_revolutionManager.loadRevolutions();
 
@@ -69,6 +74,7 @@ public class TownyElections extends JavaPlugin {
 	public void onDisable() {
 		_electionManager.saveElections();
 		_revolutionManager.saveRevolutions();
+		_partyManager.saveData();
 		
 		saveConfig();
 	}
@@ -347,6 +353,19 @@ public class TownyElections extends JavaPlugin {
 	public static class Permissions {
 		public static final Permission TOWN_VOTE = new Permission("townyelections.vote.town");
 		public static final Permission NATION_VOTE = new Permission("townyelections.vote.nation");
+	}
+	
+	public static void debug(Level level, String msg) {
+		if (!instance._debugEnabled) return;
+		instance.getLogger().log(level, msg);
+	}
+	
+	public static TownyElections getInstance() {
+		return instance;
+	}
+	
+	public PartyManager getPartyManager() {
+		return _partyManager;
 	}
 
 }

@@ -1,8 +1,6 @@
 package com.aurgiyalgo.TownyElections.elections;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -12,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import com.aurgiyalgo.TownyElections.TownyElections;
 import com.aurgiyalgo.TownyElections.TownyElections.MutableInteger;
+import com.aurgiyalgo.TownyElections.parties.TownParty;
 import com.google.gson.annotations.Expose;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -21,22 +20,19 @@ import com.palmergames.bukkit.towny.object.Town;
 public class TownElection {
 	
 	@Expose
-	private List<UUID> candidates;
-	@Expose
-	private Map<UUID, UUID> votes;
+	private Map<UUID, String> votes;
 	@Expose
 	private long endTime;
 	@Expose
 	private UUID townUuid;
 	private Town town;
-	private UUID winner;
+	private String winner;
 	
 	public TownElection(long endTime, Town town) {
 		this.endTime = endTime;
 		this.town = town;
 		
-		candidates = new ArrayList<UUID>();
-		votes = new HashMap<UUID, UUID>();
+		votes = new HashMap<UUID, String>();
 		townUuid = town.getUuid();
 	}
 	
@@ -48,25 +44,12 @@ public class TownElection {
 		}
 	}
 	
-	public void addCandidate(UUID candidate) {
-		if (candidates.contains(candidate)) return;
-		candidates.add(candidate);
-	}
-	
-	public void removeCandidate(UUID candidate) {
-		candidates.remove(candidate);
-		for (Map.Entry<UUID, UUID> entry : votes.entrySet()) {
-			if (entry.getValue().equals(candidate)) {
-				votes.remove(entry.getKey());
-			}
+	public void addVote(UUID player, String candidate) {
+		if (votes.containsKey(player)) return;
+		for (TownParty party : TownyElections.getInstance().getPartyManager().getTownParties()) {
+			if (!party.getName().equals(candidate)) continue;
+			votes.put(player, candidate);
 		}
-	}
-	
-	public void addVote(UUID player, UUID candidate) {
-		if (!(candidates.contains(candidate))) {
-			return;
-		}
-		votes.put(player, candidate);
 	}
 	
 	public void removeVote(UUID player) {
@@ -75,27 +58,25 @@ public class TownElection {
 		}
 	}
 	
-	public UUID finishElection() {
+	public String finishElection() {
 		if (votes.isEmpty()) {
 			TownyElections.sendTownMessage(town, TownyElections.getTranslatedMessage("no-winner"));
 			return null;
 		}
 		
-		Map<UUID, MutableInteger> voteCount = new HashMap<UUID, MutableInteger>();
+		Map<String, MutableInteger> voteCount = new HashMap<String, MutableInteger>();
 		
-		for (Map.Entry<UUID, UUID> entry : votes.entrySet())  {
+		for (Map.Entry<UUID, String> entry : votes.entrySet())  {
 			if (!voteCount.containsKey(entry.getValue())) {
 				voteCount.put(entry.getValue(), new MutableInteger(1));
-				System.out.println(entry.getValue() + " - " + voteCount.get(entry.getValue()));
 				continue;
 			}
 			voteCount.get(entry.getValue()).value++;
 		}
 		
-		Map.Entry<UUID, MutableInteger> maxCandidate = null;
+		Map.Entry<String, MutableInteger> maxCandidate = null;
 		
-		for (Map.Entry<UUID, MutableInteger> entry : voteCount.entrySet()) {
-			System.out.println(entry.getKey() + " - " + entry.getValue());
+		for (Map.Entry<String, MutableInteger> entry : voteCount.entrySet()) {
 			if (maxCandidate == null) {
 				maxCandidate = entry;
 				continue;
@@ -138,7 +119,7 @@ public class TownElection {
 		return votes.size();
 	}
 	
-	public Map<UUID, UUID> getVotes() {
+	public Map<UUID, String> getVotes() {
 		return votes;
 	}
 
@@ -150,11 +131,7 @@ public class TownElection {
 		return town;
 	}
 	
-	public List<UUID> getCandidates() {
-		return candidates;
-	}
-	
-	public UUID getWinner() {
+	public String getWinner() {
 		return winner;
 	}
 

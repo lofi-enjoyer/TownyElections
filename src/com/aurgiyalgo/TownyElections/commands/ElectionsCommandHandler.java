@@ -1,6 +1,8 @@
 package com.aurgiyalgo.TownyElections.commands;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -28,6 +30,8 @@ import com.aurgiyalgo.TownyElections.events.TownElectionRunEvent;
 import com.aurgiyalgo.TownyElections.events.TownElectionStopEvent;
 import com.aurgiyalgo.TownyElections.events.TownElectionUnvoteEvent;
 import com.aurgiyalgo.TownyElections.events.TownElectionVoteEvent;
+import com.aurgiyalgo.TownyElections.parties.Party;
+import com.aurgiyalgo.TownyElections.parties.TownParty;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -246,7 +250,8 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			return true;
 		}
 		Player p = (Player) sender;
-		if (TownyElections.checkPerms(p, TownyElections.Permissions.TOWN_VOTE)) return true;
+		if (TownyElections.checkPerms(p, TownyElections.Permissions.TOWN_VOTE))
+			return true;
 		if (args.length <= 2) {
 			p.sendMessage(TownyElections.getTranslatedMessage("not-enough-arguments"));
 			return true;
@@ -415,13 +420,15 @@ public class ElectionsCommandHandler implements CommandExecutor {
 		p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
 		StringBuilder builder = new StringBuilder();
 		builder.append(ChatColor.GOLD + "Candidates:\n");
-		if (e.getCandidates().size() <= 0) {
+		List<TownParty> parties = TownyElections.getInstance().getPartyManager().getTownParties().stream()
+				.filter((party) -> party.getTown().equals(e.getTown())).collect(Collectors.toList());
+		if (parties.size() <= 0) {
 			builder.append(ChatColor.RED + "There are no candidates");
 			p.sendMessage(builder.toString());
 			return true;
 		}
-		for (UUID id : e.getCandidates()) {
-			p.sendMessage("- " + Bukkit.getOfflinePlayer(id).getName());
+		for (Party party : parties) {
+			p.sendMessage("- " + party.getName());
 		}
 		return true;
 	}
@@ -547,13 +554,12 @@ public class ElectionsCommandHandler implements CommandExecutor {
 		TownElectionRunEvent event = new TownElectionRunEvent(e);
 		Bukkit.getPluginManager().callEvent(event);
 		if (!event.isCancelled()) {
-			e.addCandidate(p.getUniqueId());
 			p.sendMessage(TownyElections.getTranslatedMessage("candidate-now"));
 			String msg = TownyElections.getTranslatedMessage("new-candidate").replaceAll("%player%", p.getName());
 			TownyElections.sendTownSubtitle(e.getTown(), msg);
 			p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
 		}
-		
+
 		return true;
 	}
 
@@ -608,7 +614,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			p.sendMessage(TownyElections.getTranslatedMessage("already-voted"));
 			return true;
 		}
-		if (!e.getCandidates().contains(Bukkit.getOfflinePlayer(args[2]).getUniqueId())) {
+		if (!TownyElections.getInstance().getPartyManager().getPartiesForTown(e.getTown().getName()).contains(args[2])) {
 			p.sendMessage(TownyElections.getTranslatedMessage("invalid-candidate"));
 			return true;
 		}
@@ -622,7 +628,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 		TownElectionVoteEvent event = new TownElectionVoteEvent(e);
 		Bukkit.getPluginManager().callEvent(event);
 		if (!event.isCancelled()) {
-			e.addVote(p.getUniqueId(), Bukkit.getOfflinePlayer(args[2]).getUniqueId());
+			e.addVote(p.getUniqueId(), args[2]);
 			String msg = TownyElections.getTranslatedMessage("you-voted");
 			msg = msg.replaceAll("%player", Bukkit.getOfflinePlayer(args[2]).getName());
 			p.sendMessage(msg);
