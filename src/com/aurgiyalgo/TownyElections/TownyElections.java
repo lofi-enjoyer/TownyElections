@@ -62,12 +62,13 @@ public class TownyElections extends JavaPlugin {
 		
 		_electionManager.loadElections();
 		_revolutionManager.loadRevolutions();
+		_partyManager.loadData();
 
 		getCommand("townyelections").setExecutor(new TElectCommandHandler(instance));
 		getCommand("townyelections").setTabCompleter(new TElectTabCompleter());
 		getCommand("elections").setExecutor(new ElectionsCommandHandler(this));
 		getCommand("revolutions").setExecutor(new RevolutionsCommandHandler(this));
-		getCommand("party").setExecutor(new PartyCommandHandler(this));
+		getCommand("party").setExecutor(new PartyCommandHandler());
 	}
 
 	@Override

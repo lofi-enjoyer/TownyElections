@@ -97,6 +97,8 @@ public abstract class Party {
 		this.members = members;
 	}
 	
+	public abstract void setup();
+	
 	public PartyType getType() {
 		return PartyType.getPartyType(partyType);
 	}

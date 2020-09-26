@@ -64,13 +64,31 @@ public class PartyManager {
 				continue;
 			townParties.add((TownParty) party);
 		}
-		return null;
+		return townParties;
+	}
+	
+	public List<NationParty> getPartiesForNation(String nation) {
+		List<NationParty> nationParties = new ArrayList<NationParty>();
+		for (Party party : _parties) {
+			if (!(party instanceof NationParty)) continue;
+			if (!((NationParty) party).getNation().getName().equals(nation)) continue;
+			nationParties.add((NationParty) party);
+		}
+		return nationParties;
 	}
 	
 	public TownParty getPlayerTownParty(UUID player) {
 		for (Party party : _parties) {
 			if (!(party instanceof TownParty)) continue;
 			if (party.members.contains(player)) return (TownParty) party;
+		}
+		return null;
+	}
+	
+	public NationParty getPlayerNationParty(UUID player) {
+		for (Party party : _parties) {
+			if (!(party instanceof NationParty)) continue;
+			if (party.members.contains(player)) return (NationParty) party;
 		}
 		return null;
 	}
@@ -83,6 +101,7 @@ public class PartyManager {
 			JSONObject currentObject = jsonArray.get(i);
 			Party party = _gson.fromJson(currentObject.toJSONString(),
 					Party.PartyType.getPartyType(currentObject.get("partyType").toString()).getClassType());
+			party.setup();
 			_parties.add(party);
 		}
 	}

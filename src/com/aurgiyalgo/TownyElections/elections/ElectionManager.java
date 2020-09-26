@@ -235,8 +235,6 @@ public class ElectionManager {
 		
 		_dataHandler.saveData();
 		
-		System.out.println("Election data saved");
-		
 //		if (!dataFolder.exists()) {
 //			dataFolder.mkdir();
 //		}

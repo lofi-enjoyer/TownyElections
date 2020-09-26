@@ -13,6 +13,11 @@ public class NationParty extends Party {
 	public NationParty(String name, UUID leader) {
 		super(name, leader, PartyType.NATION);
 		
+		setup();
+	}
+	
+	@Override
+	public void setup() {
 		try {
 			nation = TownyUniverse.getInstance().getDataSource().getNation(territory);
 		} catch (NotRegisteredException e) {}
