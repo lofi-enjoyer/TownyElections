@@ -46,12 +46,18 @@ public abstract class Party {
 	@Expose
 	protected List<UUID> members;
 	@Expose
+	protected List<UUID> assistants;
+	@Expose
 	protected String partyType;
 	@Expose
 	protected UUID territory;
 	
+	protected List<UUID> invites;
+	
 	public Party(String name, UUID leader, PartyType partyType) {
 		members = new ArrayList<UUID>();
+		assistants = new ArrayList<UUID>();
+		invites = new ArrayList<UUID>();
 		
 		this.name = name;
 		this.leader = leader;
@@ -87,6 +93,13 @@ public abstract class Party {
 			return;
 		}
 		members.remove(member);
+		assistants.remove(member);
+	}
+	
+	public void addAssistant(UUID member) {
+		if (!members.contains(member)) return;
+		if (assistants.contains(member)) return;
+		assistants.add(member);
 	}
 
 	public List<UUID> getMembers() {
@@ -95,6 +108,24 @@ public abstract class Party {
 
 	public void setMembers(List<UUID> members) {
 		this.members = members;
+	}
+	
+	public boolean isAssistant(UUID player) {
+		if (!members.contains(player)) return false;
+		
+		return assistants.contains(player);
+	}
+	
+	public void addInvite(UUID player) {
+		if (!invites.contains(player)) invites.add(player);
+	}
+	
+	public void removeInvite(UUID player) {
+		invites.remove(player);
+	}
+	
+	public boolean isInvited(UUID player) {
+		return invites.contains(player);
 	}
 	
 	public abstract void setup();

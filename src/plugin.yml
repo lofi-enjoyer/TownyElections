@@ -1,7 +1,7 @@
-name: TownyElections
+name: ${project.artifactId}
 description: Bring democracy to Minecraft!
-version: 1.4.11
-author: Joselu
+version: ${project.version}_${git.commit.id.abbrev}
+author: aurgiyalgo
 main: com.aurgiyalgo.TownyElections.TownyElections
 depend: [Towny]
 api-version: 1.14

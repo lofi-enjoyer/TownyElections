@@ -1,5 +1,6 @@
 package com.aurgiyalgo.TownyElections.parties;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -17,6 +18,10 @@ public class TownParty extends Party {
 	}
 	
 	public void setup() {
+		if (members == null) members = new ArrayList<UUID>();
+		if (assistants == null) assistants = new ArrayList<UUID>();
+		if (invites == null) invites = new ArrayList<UUID>();
+		
 		try {
 			town = TownyUniverse.getInstance().getDataSource().getTown(territory);
 		} catch (NotRegisteredException e) {}
