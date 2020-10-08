@@ -16,20 +16,6 @@ import com.aurgiyalgo.TownyElections.TownyElections;
 import com.aurgiyalgo.TownyElections.elections.NationElection;
 import com.aurgiyalgo.TownyElections.elections.TownDecision;
 import com.aurgiyalgo.TownyElections.elections.TownElection;
-import com.aurgiyalgo.TownyElections.events.NationElectionCreateEvent;
-import com.aurgiyalgo.TownyElections.events.NationElectionRunEvent;
-import com.aurgiyalgo.TownyElections.events.NationElectionStopEvent;
-import com.aurgiyalgo.TownyElections.events.NationElectionUnvoteEvent;
-import com.aurgiyalgo.TownyElections.events.NationElectionVoteEvent;
-import com.aurgiyalgo.TownyElections.events.TownDecisionCreateEvent;
-import com.aurgiyalgo.TownyElections.events.TownDecisionStopEvent;
-import com.aurgiyalgo.TownyElections.events.TownDecisionUnvoteEvent;
-import com.aurgiyalgo.TownyElections.events.TownDecisionVoteEvent;
-import com.aurgiyalgo.TownyElections.events.TownElectionCreateEvent;
-import com.aurgiyalgo.TownyElections.events.TownElectionRunEvent;
-import com.aurgiyalgo.TownyElections.events.TownElectionStopEvent;
-import com.aurgiyalgo.TownyElections.events.TownElectionUnvoteEvent;
-import com.aurgiyalgo.TownyElections.events.TownElectionVoteEvent;
 import com.aurgiyalgo.TownyElections.parties.Party;
 import com.aurgiyalgo.TownyElections.parties.TownParty;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -38,12 +24,6 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 
 public class ElectionsCommandHandler implements CommandExecutor {
-
-	private TownyElections instance;
-
-	public ElectionsCommandHandler(TownyElections instance) {
-		this.instance = instance;
-	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String str, String[] args) {
@@ -144,11 +124,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			p.sendMessage(TownyElections.getTranslatedMessage("not-active-election"));
 			return true;
 		}
-		TownDecisionUnvoteEvent event = new TownDecisionUnvoteEvent(e);
-		Bukkit.getPluginManager().callEvent(event);
-		if (!event.isCancelled()) {
-			e.removeVote(p.getUniqueId());
-		}
+		e.removeVote(p.getUniqueId());
 		return true;
 	}
 
@@ -173,11 +149,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			p.sendMessage(TownyElections.getTranslatedMessage("not-active-election"));
 			return true;
 		}
-		TownDecisionStopEvent event = new TownDecisionStopEvent(e);
-		Bukkit.getPluginManager().callEvent(event);
-		if (!event.isCancelled()) {
-			TownyElections.removeTownDecision(e);
-		}
+		TownyElections.removeTownDecision(e);
 		return true;
 	}
 
@@ -234,13 +206,9 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			return true;
 		}
 		TownDecision e = new TownDecision(t, finishTime, type);
-		TownDecisionCreateEvent event = new TownDecisionCreateEvent(e);
-		Bukkit.getPluginManager().callEvent(event);
-		if (!event.isCancelled()) {
-			TownyElections.addTownDecision(e);
-			TownyElections.sendTownSubtitle(t, TownyElections.getTranslatedMessage("election-convoked"));
-			p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
-		}
+		TownyElections.addTownDecision(e);
+		TownyElections.sendTownSubtitle(t, TownyElections.getTranslatedMessage("election-convoked"));
+		p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
 		return true;
 	}
 
@@ -273,15 +241,11 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			TownyElections.sendTownSubtitle(e.getTown(), msg);
 			return true;
 		}
-		TownDecisionVoteEvent event = new TownDecisionVoteEvent(e);
-		Bukkit.getPluginManager().callEvent(event);
-		if (!event.isCancelled()) {
-			e.addVote(p.getUniqueId(), Boolean.valueOf(args[2]));
-			String msg = TownyElections.getTranslatedMessage("you-voted");
-			msg = msg.replaceAll("%player%", args[2]);
-			p.sendMessage(msg);
-			p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
-		}
+		e.addVote(p.getUniqueId(), Boolean.valueOf(args[2]));
+		String msg = TownyElections.getTranslatedMessage("you-voted");
+		msg = msg.replaceAll("%player%", args[2]);
+		p.sendMessage(msg);
+		p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
 		return true;
 	}
 
@@ -306,11 +270,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			p.sendMessage(TownyElections.getTranslatedMessage("not-active-election"));
 			return true;
 		}
-		TownElectionUnvoteEvent event = new TownElectionUnvoteEvent(e);
-		Bukkit.getPluginManager().callEvent(event);
-		if (!event.isCancelled()) {
-			e.removeVote(p.getUniqueId());
-		}
+		e.removeVote(p.getUniqueId());
 		return true;
 	}
 
@@ -335,11 +295,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			p.sendMessage(TownyElections.getTranslatedMessage("not-active-election-nation"));
 			return true;
 		}
-		NationElectionUnvoteEvent event = new NationElectionUnvoteEvent(e);
-		Bukkit.getPluginManager().callEvent(event);
-		if (!event.isCancelled()) {
-			e.removeVote(p.getUniqueId());
-		}
+		e.removeVote(p.getUniqueId());
 		return true;
 	}
 
@@ -364,11 +320,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			p.sendMessage(TownyElections.getTranslatedMessage("not-active-election"));
 			return true;
 		}
-		TownElectionStopEvent event = new TownElectionStopEvent(e);
-		Bukkit.getPluginManager().callEvent(event);
-		if (!event.isCancelled()) {
-			TownyElections.removeTownElection(e);
-		}
+		TownyElections.removeTownElection(e);
 		return true;
 	}
 
@@ -393,16 +345,12 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			p.sendMessage(TownyElections.getTranslatedMessage("not-active-election-nation"));
 			return true;
 		}
-		NationElectionStopEvent event = new NationElectionStopEvent(e);
-		Bukkit.getPluginManager().callEvent(event);
-		if (!event.isCancelled()) {
-			TownyElections.removeNationElection(e);
-		}
+		TownyElections.removeNationElection(e);
 		return true;
 	}
 
 	private boolean executeHelp(CommandSender sender, Command cmd, String str, String[] args) {
-		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', instance.getHelpMessage()));
+		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', TownyElections.Text.HELP_MESSAGE));
 		return true;
 	}
 
@@ -484,13 +432,9 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			return true;
 		}
 		TownElection e = new TownElection(finishTime, t);
-		TownElectionCreateEvent event = new TownElectionCreateEvent(e);
-		Bukkit.getPluginManager().callEvent(event);
-		if (!event.isCancelled()) {
-			TownyElections.addTownElection(e);
-			TownyElections.sendTownSubtitle(t, TownyElections.getTranslatedMessage("election-convoked"));
-			p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
-		}
+		TownyElections.addTownElection(e);
+		TownyElections.sendTownSubtitle(t, TownyElections.getTranslatedMessage("election-convoked"));
+		p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
 		return true;
 	}
 
@@ -526,13 +470,9 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			return true;
 		}
 		NationElection e = new NationElection(n, finishTime);
-		NationElectionCreateEvent event = new NationElectionCreateEvent(e);
-		Bukkit.getPluginManager().callEvent(event);
-		if (!event.isCancelled()) {
-			TownyElections.addNationElection(e);
-			TownyElections.sendNationSubtitle(n, TownyElections.getTranslatedMessage("election-convoked"));
-			p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
-		}
+		TownyElections.addNationElection(e);
+		TownyElections.sendNationSubtitle(n, TownyElections.getTranslatedMessage("election-convoked"));
+		p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
 		return true;
 	}
 
@@ -551,15 +491,10 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			p.sendMessage(TownyElections.getTranslatedMessage("not-active-election"));
 			return true;
 		}
-		TownElectionRunEvent event = new TownElectionRunEvent(e);
-		Bukkit.getPluginManager().callEvent(event);
-		if (!event.isCancelled()) {
-			p.sendMessage(TownyElections.getTranslatedMessage("candidate-now"));
-			String msg = TownyElections.getTranslatedMessage("new-candidate").replaceAll("%player%", p.getName());
-			TownyElections.sendTownSubtitle(e.getTown(), msg);
-			p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
-		}
-
+		p.sendMessage(TownyElections.getTranslatedMessage("candidate-now"));
+		String msg = TownyElections.getTranslatedMessage("new-candidate").replaceAll("%player%", p.getName());
+		TownyElections.sendTownSubtitle(e.getTown(), msg);
+		p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
 		return true;
 	}
 
@@ -578,15 +513,11 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			p.sendMessage(TownyElections.getTranslatedMessage("not-active-election-nation"));
 			return true;
 		}
-		NationElectionRunEvent event = new NationElectionRunEvent(e);
-		Bukkit.getPluginManager().callEvent(event);
-		if (!event.isCancelled()) {
-			e.addCandidate(p.getUniqueId());
-			p.sendMessage(TownyElections.getTranslatedMessage("candidate-now"));
-			String msg = TownyElections.getTranslatedMessage("new-candidate").replaceAll("%player%", p.getName());
-			TownyElections.sendNationSubtitle(e.getNation(), msg);
-			p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
-		}
+		e.addCandidate(p.getUniqueId());
+		p.sendMessage(TownyElections.getTranslatedMessage("candidate-now"));
+		String msg = TownyElections.getTranslatedMessage("new-candidate").replaceAll("%player%", p.getName());
+		TownyElections.sendNationSubtitle(e.getNation(), msg);
+		p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
 		return true;
 	}
 
@@ -625,15 +556,11 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			TownyElections.sendTownSubtitle(e.getTown(), msg);
 			return true;
 		}
-		TownElectionVoteEvent event = new TownElectionVoteEvent(e);
-		Bukkit.getPluginManager().callEvent(event);
-		if (!event.isCancelled()) {
-			e.addVote(p.getUniqueId(), args[2]);
-			String msg = TownyElections.getTranslatedMessage("you-voted");
-			msg = msg.replaceAll("%player", Bukkit.getOfflinePlayer(args[2]).getName());
-			p.sendMessage(msg);
-			p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
-		}
+		e.addVote(p.getUniqueId(), args[2]);
+		String msg = TownyElections.getTranslatedMessage("you-voted");
+		msg = msg.replaceAll("%player", Bukkit.getOfflinePlayer(args[2]).getName());
+		p.sendMessage(msg);
+		p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
 		return true;
 	}
 
@@ -672,15 +599,11 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			TownyElections.sendNationSubtitle(e.getNation(), msg);
 			return true;
 		}
-		NationElectionVoteEvent event = new NationElectionVoteEvent(e);
-		Bukkit.getPluginManager().callEvent(event);
-		if (!event.isCancelled()) {
-			e.addVote(p.getUniqueId(), Bukkit.getOfflinePlayer(args[2]).getUniqueId());
-			String msg = TownyElections.getTranslatedMessage("you-voted");
-			msg = msg.replaceAll("%player", Bukkit.getOfflinePlayer(args[2]).getName());
-			p.sendMessage(msg);
-			p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
-		}
+		e.addVote(p.getUniqueId(), Bukkit.getOfflinePlayer(args[2]).getUniqueId());
+		String msg = TownyElections.getTranslatedMessage("you-voted");
+		msg = msg.replaceAll("%player", Bukkit.getOfflinePlayer(args[2]).getName());
+		p.sendMessage(msg);
+		p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
 		return true;
 	}
 

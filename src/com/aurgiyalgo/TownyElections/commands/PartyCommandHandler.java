@@ -44,7 +44,7 @@ public class PartyCommandHandler implements CommandExecutor {
 	}
 
 	private boolean executeHelp(CommandSender sender, Command cmd, String str, String[] args) {
-		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', TownyElections.getInstance().getHelpMessage()));
+		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', TownyElections.Text.HELP_MESSAGE));
 		return true;
 	}
 

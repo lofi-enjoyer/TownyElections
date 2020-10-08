@@ -1,5 +1,4 @@
 name: ${project.artifactId}
-description: Bring democracy to Minecraft!
 version: ${project.version}_${git.commit.id.abbrev}
 author: aurgiyalgo
 main: com.aurgiyalgo.TownyElections.TownyElections
@@ -12,20 +11,13 @@ commands:
     aliases: telect
     permission: townyelections.use
   elections:
-    description: Command for elections
     usage: <command>
     permission: townyelections.elections
   party:
-    description: Command for managing political parties
     usage: /<command>
     permission: townyelections.party
-  revolutions:
-    description: Command for managing revolutions
-    usage: /<command>
-    permission: townyelections.revolutions
 permissions:
   townyelections.*:
-    description: Operator access
     default: op
     children:
       townyelections.use: true
@@ -33,18 +25,11 @@ permissions:
       townyelections.convoke.*: true
       townyelections.run.*: true
       townyelections.unvote.*: true
-      townyelections.revolution.*: true
   townyelections.use:
-    description: Access to main command and plugin info
     default: true
   townyelections.elections:
-    description: Access to elections command
     default: true
   townyelections.parties:
-    description: Access to parties command
-    default: true
-  townyelections.revolutions:
-    description: Access to revolutions command
     default: true
   townyelections.vote.*:
     description: Access to vote command
@@ -55,7 +40,6 @@ permissions:
       townyelections.vote.towndecision: true
       townyelections.vote.nationdecision: true
   townyelections.convoke.*:
-    description: Access to vote command
     default: op
     children:
       townyelections.convoke.town: true
@@ -63,13 +47,11 @@ permissions:
       townyelections.convoke.towndecision: true
       townyelections.convoke.nationdecision: true
   townyelections.run.*:
-    description: Access to vote command
     default: op
     children:
       townyelections.run.town: true
       townyelections.run.nation: true
   townyelections.stop.*:
-    description: Access to vote command
     default: op
     children:
       townyelections.stop.town: true
@@ -77,13 +59,9 @@ permissions:
       townyelections.stop.towndecision: true
       townyelections.stop.nationdecision: true
   townyelections.unvote.*:
-    description: Access to vote command
     default: op
     children:
       townyelections.unvote.town: true
       townyelections.unvote.nation: true
       townyelections.unvote.towndecision: true
       townyelections.unvote.nationdecision: true
-  townyelections.revolution:
-    description: Access to revolutions
-    default: op

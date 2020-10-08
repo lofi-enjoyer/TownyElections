@@ -31,12 +31,12 @@ public class TElectCommandHandler implements CommandExecutor {
 	}
 
 	private boolean executeHelp(CommandSender sender, Command cmd, String str, String[] args) {
-		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', instance.getHelpMessage()));
+		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', TownyElections.Text.HELP_MESSAGE));
 		return true;
 	}
 
 	private boolean executeInfo(CommandSender sender, Command cmd, String str, String[] args) {
-		String infoMessage = instance.getInfoMessage();
+		String infoMessage = TownyElections.Text.INFO_MESSAGE;
 		infoMessage = infoMessage.replaceAll("%description%", instance.getDescription().getDescription());
 		infoMessage = infoMessage.replaceAll("%version%", instance.getDescription().getVersion());
 		infoMessage = infoMessage.replaceAll("%author%", instance.getDescription().getAuthors().get(0));
