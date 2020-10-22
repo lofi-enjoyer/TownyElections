@@ -32,6 +32,7 @@ public class NationElection extends Election {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public String finishElection() {
 		if (votes.isEmpty()) {
 			TownyElections.sendNationMessage(nation, TownyElections.getTranslatedMessage("no-winner"));

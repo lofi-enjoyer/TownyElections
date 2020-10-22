@@ -1,6 +1,7 @@
 package com.aurgiyalgo.TownyElections.commands;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -21,6 +22,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 
+@SuppressWarnings("deprecation")
 public class ElectionsCommandHandler implements CommandExecutor {
 
 	@Override
@@ -333,7 +335,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			p.sendMessage(TownyElections.getTranslatedMessage("already-voted"));
 			return true;
 		}
-		if (!TownyElections.getInstance().getPartyManager().getPartiesForTown(e.getTown().getName()).contains(args[2])) {
+		if (TownyElections.getInstance().getPartyManager().getPartiesForTown(e.getTown().getName()).stream().filter(party -> party.getName().equals(args[2])).collect(Collectors.toList()).isEmpty()) {
 			p.sendMessage(TownyElections.getTranslatedMessage("invalid-candidate"));
 			return true;
 		}
@@ -373,7 +375,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			p.sendMessage(TownyElections.getTranslatedMessage("already-voted"));
 			return true;
 		}
-		if (!TownyElections.getInstance().getPartyManager().getPartiesForNation(e.getNation().getName()).contains(args[2])) {
+		if (TownyElections.getInstance().getPartyManager().getPartiesForNation(e.getNation().getName()).stream().filter(party -> party.getName().equals(args[2])).collect(Collectors.toList()).isEmpty()) {
 			p.sendMessage(TownyElections.getTranslatedMessage("invalid-candidate"));
 			return true;
 		}
