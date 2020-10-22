@@ -1,8 +1,6 @@
 package com.aurgiyalgo.TownyElections.commands;
 
 import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -14,8 +12,8 @@ import org.bukkit.entity.Player;
 
 import com.aurgiyalgo.TownyElections.TownyElections;
 import com.aurgiyalgo.TownyElections.elections.NationElection;
-import com.aurgiyalgo.TownyElections.elections.TownDecision;
 import com.aurgiyalgo.TownyElections.elections.TownElection;
+import com.aurgiyalgo.TownyElections.parties.NationParty;
 import com.aurgiyalgo.TownyElections.parties.Party;
 import com.aurgiyalgo.TownyElections.parties.TownParty;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -30,7 +28,6 @@ public class ElectionsCommandHandler implements CommandExecutor {
 		if (args.length < 1) {
 			return executeHelp(sender, cmd, str, args);
 		}
-
 		switch (args[0]) {
 		case "town":
 			if (args.length < 2) {
@@ -42,8 +39,6 @@ public class ElectionsCommandHandler implements CommandExecutor {
 				return executeTownVote(sender, cmd, str, args);
 			case "convoke":
 				return executeTownConvoke(sender, cmd, str, args);
-			case "run":
-				return executeTownRun(sender, cmd, str, args);
 			case "list":
 				return executeTownList(sender, cmd, str, args);
 			case "stop":
@@ -65,8 +60,6 @@ public class ElectionsCommandHandler implements CommandExecutor {
 				return executeNationVote(sender, cmd, str, args);
 			case "convoke":
 				return executeNationConvoke(sender, cmd, str, args);
-			case "run":
-				return executeNationRun(sender, cmd, str, args);
 			case "list":
 				return executeNationList(sender, cmd, str, args);
 			case "stop":
@@ -78,174 +71,10 @@ public class ElectionsCommandHandler implements CommandExecutor {
 				break;
 			}
 			break;
-		case "towndecision":
-			if (args.length < 2) {
-				sender.sendMessage(TownyElections.getTranslatedMessage("not-enough-arguments"));
-				return true;
-			}
-			switch (args[1]) {
-			case "vote":
-				return executeTownDecisionVote(sender, cmd, str, args);
-			case "convoke":
-				return executeTownDecisionConvoke(sender, cmd, str, args);
-			case "stop":
-				return executeTownDecisionStop(sender, cmd, str, args);
-			case "unvote":
-				return executeTownDecisionUnvote(sender, cmd, str, args);
-			default:
-				sender.sendMessage(ChatColor.RED + "Invalid argument!");
-			}
-			break;
 		default:
 			sender.sendMessage(ChatColor.RED + "Invalid argument!");
 			break;
 		}
-		return true;
-	}
-
-	private boolean executeTownDecisionUnvote(CommandSender sender, Command cmd, String str, String[] args) {
-		if (!(sender instanceof Player)) {
-			sender.sendMessage(TownyElections.getTranslatedMessage("only-player"));
-			return true;
-		}
-		Player p = (Player) sender;
-		if (!(p.hasPermission("townyelections.unvote.towndecision"))) {
-			p.sendMessage(TownyElections.getTranslatedMessage("no-permission"));
-			return true;
-		}
-		try {
-			TownyUniverse.getInstance().getDataSource().getResident(p.getName()).getTown();
-		} catch (NotRegisteredException e) {
-			p.sendMessage(TownyElections.getTranslatedMessage("not-in-a-town"));
-			return true;
-		}
-		TownDecision e = TownyElections.getTownDecision(p);
-		if (e == null) {
-			p.sendMessage(TownyElections.getTranslatedMessage("not-active-election"));
-			return true;
-		}
-		e.removeVote(p.getUniqueId());
-		return true;
-	}
-
-	private boolean executeTownDecisionStop(CommandSender sender, Command cmd, String str, String[] args) {
-		if (!(sender instanceof Player)) {
-			sender.sendMessage(TownyElections.getTranslatedMessage("only-player"));
-			return true;
-		}
-		Player p = (Player) sender;
-		if (!(p.hasPermission("townyelections.stop.towndecision"))) {
-			p.sendMessage(TownyElections.getTranslatedMessage("no-permission"));
-			return true;
-		}
-		try {
-			TownyUniverse.getInstance().getDataSource().getResident(p.getName()).getTown();
-		} catch (NotRegisteredException e) {
-			p.sendMessage(TownyElections.getTranslatedMessage("not-in-a-town"));
-			return true;
-		}
-		TownDecision e = TownyElections.getTownDecision(p);
-		if (e == null) {
-			p.sendMessage(TownyElections.getTranslatedMessage("not-active-election"));
-			return true;
-		}
-		TownyElections.removeTownDecision(e);
-		return true;
-	}
-
-	private boolean executeTownDecisionConvoke(CommandSender sender, Command cmd, String str, String[] args) {
-		if (!(sender instanceof Player)) {
-			sender.sendMessage(TownyElections.getTranslatedMessage("only-player"));
-			return true;
-		}
-		Player p = (Player) sender;
-		if (!(p.hasPermission("townyelections.convoke.towndecision"))) {
-			p.sendMessage(TownyElections.getTranslatedMessage("no-permission"));
-			return true;
-		}
-		Town t;
-		try {
-			t = TownyUniverse.getInstance().getDataSource().getResident(p.getName()).getTown();
-		} catch (NotRegisteredException e) {
-			p.sendMessage(TownyElections.getTranslatedMessage("not-in-a-town"));
-			return true;
-		}
-		if (args.length < 4) {
-			p.sendMessage(TownyElections.getTranslatedMessage("not-enough-arguments"));
-			return true;
-		}
-		if (TownyElections.getTownElection(p) != null) {
-			p.sendMessage(TownyElections.getTranslatedMessage("active-town-decision"));
-		}
-		long finishTime = 0;
-		try {
-			finishTime = Integer.parseInt(args[2]) * 1000 + System.currentTimeMillis();
-		} catch (Exception e) {
-			p.sendMessage(TownyElections.getTranslatedMessage("error-input-string"));
-			return true;
-		}
-		String type;
-		switch (args[3]) {
-		case "fire":
-			type = TownDecision.FIRE;
-			break;
-		case "explosion":
-			type = TownDecision.EXPLOSIONS;
-			break;
-		case "pvp":
-			type = TownDecision.PVP;
-			break;
-		case "public":
-			type = TownDecision.PUBLIC;
-			break;
-		case "open":
-			type = TownDecision.OPEN;
-			break;
-		default:
-			sender.sendMessage(ChatColor.RED + "Invalid argument!");
-			return true;
-		}
-		TownDecision e = new TownDecision(t, finishTime, type);
-		TownyElections.addTownDecision(e);
-		TownyElections.sendTownSubtitle(t, TownyElections.getTranslatedMessage("election-convoked"));
-		p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
-		return true;
-	}
-
-	private boolean executeTownDecisionVote(CommandSender sender, Command cmd, String str, String[] args) {
-		if (!(sender instanceof Player)) {
-			sender.sendMessage(TownyElections.getTranslatedMessage("only-player"));
-			return true;
-		}
-		Player p = (Player) sender;
-		if (TownyElections.checkPerms(p, TownyElections.Permissions.TOWN_VOTE))
-			return true;
-		if (args.length <= 2) {
-			p.sendMessage(TownyElections.getTranslatedMessage("not-enough-arguments"));
-			return true;
-		}
-		TownDecision e;
-		e = TownyElections.getTownDecision(p);
-		if (e == null) {
-			p.sendMessage(TownyElections.getTranslatedMessage("not-active-town-decision"));
-			return true;
-		}
-		if (e.hasVoted(p.getUniqueId())) {
-			p.sendMessage(TownyElections.getTranslatedMessage("already-voted"));
-			return true;
-		}
-		if (System.currentTimeMillis() >= e.getEndTime()) {
-			TownyElections.removeTownDecision(e);
-			String msg = TownyElections.getTranslatedMessage("election-won").replaceAll("%option%",
-					String.valueOf(e.getWinner()));
-			TownyElections.sendTownSubtitle(e.getTown(), msg);
-			return true;
-		}
-		e.addVote(p.getUniqueId(), Boolean.valueOf(args[2]));
-		String msg = TownyElections.getTranslatedMessage("you-voted");
-		msg = msg.replaceAll("%player%", args[2]);
-		p.sendMessage(msg);
-		p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
 		return true;
 	}
 
@@ -265,7 +94,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			p.sendMessage(TownyElections.getTranslatedMessage("not-in-a-town"));
 			return true;
 		}
-		TownElection e = TownyElections.getTownElection(p);
+		TownElection e = TownyElections.getInstance().getElectionManager().getTownElection(p);
 		if (e == null) {
 			p.sendMessage(TownyElections.getTranslatedMessage("not-active-election"));
 			return true;
@@ -290,7 +119,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			p.sendMessage(TownyElections.getTranslatedMessage("not-in-a-nation"));
 			return true;
 		}
-		NationElection e = TownyElections.getNationElection(p);
+		NationElection e = TownyElections.getInstance().getElectionManager().getNationElection(p);
 		if (e == null) {
 			p.sendMessage(TownyElections.getTranslatedMessage("not-active-election-nation"));
 			return true;
@@ -315,12 +144,12 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			p.sendMessage(TownyElections.getTranslatedMessage("not-in-a-town"));
 			return true;
 		}
-		TownElection e = TownyElections.getTownElection(p);
+		TownElection e = TownyElections.getInstance().getElectionManager().getTownElection(p);
 		if (e == null) {
 			p.sendMessage(TownyElections.getTranslatedMessage("not-active-election"));
 			return true;
 		}
-		TownyElections.removeTownElection(e);
+		TownyElections.getInstance().getElectionManager().removeTownElection(e);
 		return true;
 	}
 
@@ -340,17 +169,12 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			p.sendMessage(TownyElections.getTranslatedMessage("not-in-a-nation"));
 			return true;
 		}
-		NationElection e = TownyElections.getNationElection(p);
+		NationElection e = TownyElections.getInstance().getElectionManager().getNationElection(p);
 		if (e == null) {
 			p.sendMessage(TownyElections.getTranslatedMessage("not-active-election-nation"));
 			return true;
 		}
-		TownyElections.removeNationElection(e);
-		return true;
-	}
-
-	private boolean executeHelp(CommandSender sender, Command cmd, String str, String[] args) {
-		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', TownyElections.Text.HELP_MESSAGE));
+		TownyElections.getInstance().getElectionManager().removeNationElection(e);
 		return true;
 	}
 
@@ -360,7 +184,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			return true;
 		}
 		Player p = (Player) sender;
-		TownElection e = TownyElections.getTownElection(p);
+		TownElection e = TownyElections.getInstance().getElectionManager().getTownElection(p);
 		if (e == null) {
 			p.sendMessage(TownyElections.getTranslatedMessage("not-active-election"));
 			return true;
@@ -368,16 +192,17 @@ public class ElectionsCommandHandler implements CommandExecutor {
 		p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
 		StringBuilder builder = new StringBuilder();
 		builder.append(ChatColor.GOLD + "Candidates:\n");
-		List<TownParty> parties = TownyElections.getInstance().getPartyManager().getTownParties().stream()
-				.filter((party) -> party.getTown().equals(e.getTown())).collect(Collectors.toList());
+		List<TownParty> parties = TownyElections.getInstance().getPartyManager().getPartiesForTown(e.getTown().getName());
 		if (parties.size() <= 0) {
 			builder.append(ChatColor.RED + "There are no candidates");
 			p.sendMessage(builder.toString());
 			return true;
 		}
 		for (Party party : parties) {
-			p.sendMessage("- " + party.getName());
+			builder.append("- " + party.getName());
 		}
+		p.sendMessage(builder.toString());
+		p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
 		return true;
 	}
 
@@ -387,15 +212,23 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			return true;
 		}
 		Player p = (Player) sender;
-		NationElection e = TownyElections.getNationElection(p);
+		NationElection e = TownyElections.getInstance().getElectionManager().getNationElection(p);
 		if (e == null) {
 			p.sendMessage(TownyElections.getTranslatedMessage("not-active-election-nation"));
 			return true;
 		}
-		p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6Candidates: "));
-		for (UUID id : e.getCandidates()) {
-			p.sendMessage("- " + Bukkit.getOfflinePlayer(id).getName());
+		StringBuilder builder = new StringBuilder();
+		builder.append(ChatColor.GOLD + "Candidates:\n");
+		List<NationParty> parties = TownyElections.getInstance().getPartyManager().getPartiesForNation(e.getNation().getName());
+		if (parties.size() <= 0) {
+			builder.append(ChatColor.RED + "There are no candidates");
+			p.sendMessage(builder.toString());
+			return true;
 		}
+		for (Party party : parties) {
+			builder.append("- " + party.getName());
+		}
+		p.sendMessage(builder.toString());
 		p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
 		return true;
 	}
@@ -421,7 +254,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			p.sendMessage(TownyElections.getTranslatedMessage("not-enough-arguments"));
 			return true;
 		}
-		if (TownyElections.getTownElection(p) != null) {
+		if (TownyElections.getInstance().getElectionManager().getTownElection(p) != null) {
 			p.sendMessage(TownyElections.getTranslatedMessage("active-election"));
 		}
 		long finishTime = 0;
@@ -432,7 +265,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			return true;
 		}
 		TownElection e = new TownElection(finishTime, t);
-		TownyElections.addTownElection(e);
+		TownyElections.getInstance().getElectionManager().addTownElection(e);;
 		TownyElections.sendTownSubtitle(t, TownyElections.getTranslatedMessage("election-convoked"));
 		p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
 		return true;
@@ -459,7 +292,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			p.sendMessage(TownyElections.getTranslatedMessage("not-enough-arguments"));
 			return true;
 		}
-		if (TownyElections.getTownElection(p) != null) {
+		if (TownyElections.getInstance().getElectionManager().getTownElection(p) != null) {
 			p.sendMessage(TownyElections.getTranslatedMessage("active-election"));
 		}
 		long finishTime = 0;
@@ -470,53 +303,8 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			return true;
 		}
 		NationElection e = new NationElection(n, finishTime);
-		TownyElections.addNationElection(e);
+		TownyElections.getInstance().getElectionManager().addNationElection(e);
 		TownyElections.sendNationSubtitle(n, TownyElections.getTranslatedMessage("election-convoked"));
-		p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
-		return true;
-	}
-
-	private boolean executeTownRun(CommandSender sender, Command cmd, String str, String[] args) {
-		if (!(sender instanceof Player)) {
-			sender.sendMessage(TownyElections.getTranslatedMessage("only-player"));
-			return true;
-		}
-		Player p = (Player) sender;
-		if (!(p.hasPermission("townyelections.run.town"))) {
-			p.sendMessage(TownyElections.getTranslatedMessage("no-permission"));
-			return true;
-		}
-		TownElection e = TownyElections.getTownElection(p);
-		if (e == null) {
-			p.sendMessage(TownyElections.getTranslatedMessage("not-active-election"));
-			return true;
-		}
-		p.sendMessage(TownyElections.getTranslatedMessage("candidate-now"));
-		String msg = TownyElections.getTranslatedMessage("new-candidate").replaceAll("%player%", p.getName());
-		TownyElections.sendTownSubtitle(e.getTown(), msg);
-		p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
-		return true;
-	}
-
-	private boolean executeNationRun(CommandSender sender, Command cmd, String str, String[] args) {
-		if (!(sender instanceof Player)) {
-			sender.sendMessage(TownyElections.getTranslatedMessage("only-player"));
-			return true;
-		}
-		Player p = (Player) sender;
-		if (!(p.hasPermission("townyelections.run.nation"))) {
-			p.sendMessage(TownyElections.getTranslatedMessage("no-permission"));
-			return true;
-		}
-		NationElection e = TownyElections.getNationElection(p);
-		if (e == null) {
-			p.sendMessage(TownyElections.getTranslatedMessage("not-active-election-nation"));
-			return true;
-		}
-		e.addCandidate(p.getUniqueId());
-		p.sendMessage(TownyElections.getTranslatedMessage("candidate-now"));
-		String msg = TownyElections.getTranslatedMessage("new-candidate").replaceAll("%player%", p.getName());
-		TownyElections.sendNationSubtitle(e.getNation(), msg);
 		p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
 		return true;
 	}
@@ -527,7 +315,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			return true;
 		}
 		Player p = (Player) sender;
-		if (!(p.hasPermission("townyelections.vote.town"))) {
+		if (!(p.hasPermission(TownyElections.Permissions.TOWN_VOTE))) {
 			p.sendMessage(TownyElections.getTranslatedMessage("no-permission"));
 			return true;
 		}
@@ -536,7 +324,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			return true;
 		}
 		TownElection e;
-		e = TownyElections.getTownElection(p);
+		e = TownyElections.getInstance().getElectionManager().getTownElection(p);
 		if (e == null) {
 			p.sendMessage(TownyElections.getTranslatedMessage("not-active-election"));
 			return true;
@@ -550,10 +338,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			return true;
 		}
 		if (System.currentTimeMillis() >= e.getEndTime()) {
-			TownyElections.removeTownElection(e);
-			String msg = TownyElections.getTranslatedMessage("election-won").replaceAll("%player%",
-					Bukkit.getOfflinePlayer(e.getWinner()).getName());
-			TownyElections.sendTownSubtitle(e.getTown(), msg);
+			TownyElections.getInstance().getElectionManager().removeTownElection(e);
 			return true;
 		}
 		e.addVote(p.getUniqueId(), args[2]);
@@ -579,7 +364,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			return true;
 		}
 		NationElection e;
-		e = TownyElections.getNationElection(p);
+		e = TownyElections.getInstance().getElectionManager().getNationElection(p);
 		if (e == null) {
 			p.sendMessage(TownyElections.getTranslatedMessage("not-active-election-nation"));
 			return true;
@@ -588,22 +373,27 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			p.sendMessage(TownyElections.getTranslatedMessage("already-voted"));
 			return true;
 		}
-		if (!e.getCandidates().contains(Bukkit.getOfflinePlayer(args[2]).getUniqueId())) {
+		if (!TownyElections.getInstance().getPartyManager().getPartiesForNation(e.getNation().getName()).contains(args[2])) {
 			p.sendMessage(TownyElections.getTranslatedMessage("invalid-candidate"));
 			return true;
 		}
 		if (System.currentTimeMillis() >= e.getEndTime()) {
-			TownyElections.removeNationElection(e);
+			TownyElections.getInstance().getElectionManager().removeNationElection(e);
 			String msg = TownyElections.getTranslatedMessage("election-won").replaceAll("%player%",
 					Bukkit.getOfflinePlayer(e.getWinner()).getName());
 			TownyElections.sendNationSubtitle(e.getNation(), msg);
 			return true;
 		}
-		e.addVote(p.getUniqueId(), Bukkit.getOfflinePlayer(args[2]).getUniqueId());
+		e.addVote(p.getUniqueId(), args[2]);
 		String msg = TownyElections.getTranslatedMessage("you-voted");
 		msg = msg.replaceAll("%player", Bukkit.getOfflinePlayer(args[2]).getName());
 		p.sendMessage(msg);
 		p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
+		return true;
+	}
+
+	private boolean executeHelp(CommandSender sender, Command cmd, String str, String[] args) {
+		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', TownyElections.Text.HELP_MESSAGE));
 		return true;
 	}
 

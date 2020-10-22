@@ -3,6 +3,7 @@ package com.aurgiyalgo.TownyElections.elections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -10,35 +11,23 @@ import org.bukkit.entity.Player;
 
 import com.aurgiyalgo.TownyElections.TownyElections;
 import com.aurgiyalgo.TownyElections.TownyElections.MutableInteger;
-import com.aurgiyalgo.TownyElections.parties.TownParty;
-import com.google.gson.annotations.Expose;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Town;
 
-public class TownElection {
-	
-	@Expose
-	private Map<UUID, String> votes;
-	@Expose
-	private long endTime;
-	@Expose
-	private UUID townUuid;
+public class TownElection extends Election {
+
 	private Town town;
-	private String winner;
 	
 	public TownElection(long endTime, Town town) {
-		this.endTime = endTime;
-		this.town = town;
-		
-		votes = new HashMap<UUID, String>();
-		townUuid = town.getUuid();
+		super(endTime);
+		territoryUuid = town.getUuid();
 	}
 	
 	public void setup() {
 		try {
-			town = TownyUniverse.getInstance().getDataSource().getTown(townUuid);
+			town = TownyUniverse.getInstance().getDataSource().getTown(territoryUuid);
 		} catch (NotRegisteredException e) {
 			e.printStackTrace();
 		}
@@ -46,10 +35,8 @@ public class TownElection {
 	
 	public void addVote(UUID player, String candidate) {
 		if (votes.containsKey(player)) return;
-		for (TownParty party : TownyElections.getInstance().getPartyManager().getTownParties()) {
-			if (!party.getName().equals(candidate)) continue;
-			votes.put(player, candidate);
-		}
+		if (TownyElections.getInstance().getPartyManager().getPartiesForTown(town.getName()).stream().filter(party -> party.getName().equals(candidate)).collect(Collectors.toList()).isEmpty()) return;
+		votes.put(player, candidate);
 	}
 	
 	public void removeVote(UUID player) {
@@ -108,31 +95,11 @@ public class TownElection {
 		} catch (TownyException e) {
 			e.printStackTrace();
 		}
-		return maxCandidate.getKey();
-	}
-	
-	public boolean hasVoted(UUID player) {
-		return votes.containsKey(player);
-	}
-	
-	public int getVotesCount() {
-		return votes.size();
-	}
-	
-	public Map<UUID, String> getVotes() {
-		return votes;
-	}
-
-	public long getEndTime() {
-		return endTime;
+		return winner;
 	}
 
 	public Town getTown() {
 		return town;
-	}
-	
-	public String getWinner() {
-		return winner;
 	}
 
 }

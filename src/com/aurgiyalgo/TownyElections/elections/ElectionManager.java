@@ -22,27 +22,23 @@ import com.palmergames.bukkit.towny.object.Town;
 
 public class ElectionManager {
 
-	private List<TownElection> _townElections;
+	private List<TownElection> townElections;
 	private List<NationElection> nationElections;
-	private List<TownDecision> townDecisions;
-	private List<NationDecision> nationDecisions;
-	private DataHandler _dataHandler;
-	private Gson _gson;
+	private DataHandler dataHandler;
+	private Gson gson;
 
 	public ElectionManager(TownyElections instance, File dataFolder) {
-		_townElections = new ArrayList<TownElection>();
+		townElections = new ArrayList<TownElection>();
 		nationElections = new ArrayList<NationElection>();
-		townDecisions = new ArrayList<TownDecision>();
-		nationDecisions = new ArrayList<NationDecision>();
 		
-		_dataHandler = new DataHandler(dataFolder, "elections.json");
-		_gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+		dataHandler = new DataHandler(dataFolder, "elections.json");
+		gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
 		new BukkitRunnable() {
 
 			@Override
 			public void run() {
-				Iterator<TownElection> it1 = _townElections.iterator();
+				Iterator<TownElection> it1 = townElections.iterator();
 				while (it1.hasNext()) {
 					TownElection e = it1.next();
 					if (System.currentTimeMillis() >= e.getEndTime()) {
@@ -58,22 +54,6 @@ public class ElectionManager {
 						it2.remove();
 					}
 				}
-				Iterator<TownDecision> it3 = townDecisions.iterator();
-				while (it3.hasNext()) {
-					TownDecision d = it3.next();
-					if (System.currentTimeMillis() >= d.getEndTime()) {
-						d.finishDecision();
-						it3.remove();
-					}
-				}
-				Iterator<NationDecision> it4 = nationDecisions.iterator();
-				while (it4.hasNext()) {
-					NationDecision d = it4.next();
-					if (System.currentTimeMillis() >= d.getEndTime()) {
-						d.finishDecision();
-						it4.remove();
-					}
-				}
 			}
 
 		}.runTaskTimer(instance, 0, 100);
@@ -81,31 +61,22 @@ public class ElectionManager {
 
 	public void loadElections() {
 		List<JSONObject> jsonArray;
-		jsonArray = _dataHandler.getDataList("townElections");
+		jsonArray = dataHandler.getDataList("townElections");
 		if (jsonArray == null) return;
 		for (int i = 0; i < jsonArray.size(); i++) {
 			JSONObject currentObject = jsonArray.get(i);
-			TownElection election = _gson.fromJson(currentObject.toJSONString(), TownElection.class);
+			TownElection election = gson.fromJson(currentObject.toJSONString(), TownElection.class);
 			election.setup();
-			_townElections.add(election);
+			townElections.add(election);
 		}
 
-		jsonArray = _dataHandler.getDataList("nationElections");
+		jsonArray = dataHandler.getDataList("nationElections");
 		if (jsonArray == null) return;
 		for (int i = 0; i < jsonArray.size(); i++) {
 			JSONObject currentObject = jsonArray.get(i);
-			NationElection election = _gson.fromJson(currentObject.toJSONString(), NationElection.class);
+			NationElection election = gson.fromJson(currentObject.toJSONString(), NationElection.class);
 			election.setup();
 			nationElections.add(election);
-		}
-
-		jsonArray = _dataHandler.getDataList("townDecisions");
-		if (jsonArray == null) return;
-		for (int i = 0; i < jsonArray.size(); i++) {
-			JSONObject currentObject = jsonArray.get(i);
-			TownDecision decision = _gson.fromJson(currentObject.toJSONString(), TownDecision.class);
-			decision.setup();
-			townDecisions.add(decision);
 		}
 		
 //		File townsFile = new File(dataFolder, "elections.json");
@@ -207,33 +178,24 @@ public class ElectionManager {
 	public void saveElections() {
 		List<JSONObject> jsonArray;
 		jsonArray = new ArrayList<JSONObject>();
-		for (TownElection w : _townElections) {
+		for (TownElection w : townElections) {
 			try {
-				JSONObject jsonObject = (JSONObject) new JSONParser().parse(_gson.toJson(w));
+				JSONObject jsonObject = (JSONObject) new JSONParser().parse(gson.toJson(w));
 				jsonArray.add(jsonObject);
 			} catch (ParseException e) {e.printStackTrace();}
 		}
-		_dataHandler.addDataList("townElections", jsonArray);
+		dataHandler.addDataList("townElections", jsonArray);
 
 		jsonArray = new ArrayList<JSONObject>();
 		for (NationElection w : nationElections) {
 			try {
-				JSONObject jsonObject = (JSONObject) new JSONParser().parse(_gson.toJson(w));
+				JSONObject jsonObject = (JSONObject) new JSONParser().parse(gson.toJson(w));
 				jsonArray.add(jsonObject);
 			} catch (ParseException e) {e.printStackTrace();}
 		}
-		_dataHandler.addDataList("nationElections", jsonArray);
-
-		jsonArray = new ArrayList<JSONObject>();
-		for (TownDecision w : townDecisions) {
-			try {
-				JSONObject jsonObject = (JSONObject) new JSONParser().parse(_gson.toJson(w));
-				jsonArray.add(jsonObject);
-			} catch (ParseException e) {e.printStackTrace();}
-		}
-		_dataHandler.addDataList("townDecisions", jsonArray);
+		dataHandler.addDataList("nationElections", jsonArray);
 		
-		_dataHandler.saveData();
+		dataHandler.saveData();
 		
 //		if (!dataFolder.exists()) {
 //			dataFolder.mkdir();
@@ -352,38 +314,20 @@ public class ElectionManager {
 
 	public void removeTownElection(TownElection e) {
 		e.finishElection();
-		_townElections.remove(e);
+		townElections.remove(e);
 	}
 
 	public void removeNationElection(NationElection e) {
 		e.finishElection();
 		nationElections.remove(e);
 	}
-	
-	public void removeTownDecision(TownDecision d) {
-		d.finishDecision();
-		townDecisions.remove(d);
-	}
-	
-	public void removeNationDecision(NationDecision d) {
-		d.finishDecision();
-		nationDecisions.remove(d);
-	}
 
 	public void addTownElection(TownElection e) {
-		_townElections.add(e);
+		townElections.add(e);
 	}
 
 	public void addNationElection(NationElection e) {
 		nationElections.add(e);
-	}
-	
-	public void addTownDecision(TownDecision d) {
-		townDecisions.add(d);
-	}
-	
-	public void addNationDecision(NationDecision d) {
-		nationDecisions.add(d);
 	}
 
 	public TownElection getTownElection(Player p) {
@@ -393,7 +337,7 @@ public class ElectionManager {
 		} catch (NotRegisteredException e1) {
 			return null;
 		}
-		for (TownElection e : _townElections) {
+		for (TownElection e : townElections) {
 			if (e.getTown() == t) {
 				return e;
 			}
@@ -409,36 +353,6 @@ public class ElectionManager {
 			return null;
 		}
 		for (NationElection e : nationElections) {
-			if (e.getNation() == n) {
-				return e;
-			}
-		}
-		return null;
-	}
-	
-	public TownDecision getTownDecision(Player p) {
-		Town t;
-		try {
-			t = TownyUniverse.getInstance().getDataSource().getResident(p.getName()).getTown();
-		} catch (NotRegisteredException e) {
-			return null;
-		}
-		for (TownDecision e : townDecisions) {
-			if (e.getTown() == t) {
-				return e;
-			}
-		}
-		return null;
-	}
-	
-	public NationDecision getNationDecision(Player p) {
-		Nation n;
-		try {
-			n = TownyUniverse.getInstance().getDataSource().getResident(p.getName()).getTown().getNation();
-		} catch (NotRegisteredException e) {
-			return null;
-		}
-		for (NationDecision e : nationDecisions) {
 			if (e.getNation() == n) {
 				return e;
 			}

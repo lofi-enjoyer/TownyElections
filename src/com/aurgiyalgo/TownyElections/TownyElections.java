@@ -15,10 +15,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.aurgiyalgo.TownyElections.commands.PartyCommandHandler;
 import com.aurgiyalgo.TownyElections.commands.TElectCommandHandler;
 import com.aurgiyalgo.TownyElections.elections.ElectionManager;
-import com.aurgiyalgo.TownyElections.elections.NationDecision;
-import com.aurgiyalgo.TownyElections.elections.NationElection;
-import com.aurgiyalgo.TownyElections.elections.TownDecision;
-import com.aurgiyalgo.TownyElections.elections.TownElection;
 import com.aurgiyalgo.TownyElections.listeners.TElectTabCompleter;
 import com.aurgiyalgo.TownyElections.metrics.TEMetrics;
 import com.aurgiyalgo.TownyElections.parties.PartyManager;
@@ -28,27 +24,26 @@ import com.palmergames.bukkit.towny.object.Town;
 public class TownyElections extends JavaPlugin {
 
 	private static TownyElections instance;
-	private FileConfiguration _languageFile;
-	private ElectionManager _electionManager;
-	private TEMetrics _metrics;
-	private PartyManager _partyManager;
+	private FileConfiguration languageFile;
+	private ElectionManager electionManager;
+	private PartyManager partyManager;
 	
-	private boolean _debugEnabled;
+	private boolean debugEnabled;
 
 	@Override
 	public void onEnable() {
 		instance = this;
 		
-		_metrics = new TEMetrics(instance);
+		new TEMetrics(instance);
 		
 		setupConfig();
 		setupLanguageFile();
 		
-		_electionManager = new ElectionManager(this, getDataFolder());
-		_partyManager = new PartyManager(this.getDataFolder());
+		electionManager = new ElectionManager(this, getDataFolder());
+		partyManager = new PartyManager(this.getDataFolder());
 		
-		_electionManager.loadElections();
-		_partyManager.loadData();
+		electionManager.loadElections();
+		partyManager.loadData();
 
 		getCommand("townyelections").setExecutor(new TElectCommandHandler(instance));
 		getCommand("townyelections").setTabCompleter(new TElectTabCompleter());
@@ -57,8 +52,8 @@ public class TownyElections extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		_electionManager.saveElections();
-		_partyManager.saveData();
+		electionManager.saveElections();
+		partyManager.saveData();
 		
 		saveConfig();
 	}
@@ -71,7 +66,7 @@ public class TownyElections extends JavaPlugin {
 		getConfig().options().copyDefaults(true);
 		saveConfig();
 		
-		_debugEnabled = getConfig().getBoolean("debug-mode");
+		debugEnabled = getConfig().getBoolean("debug-mode");
 	}
 	
 	private void setupLanguageFile() {
@@ -85,36 +80,36 @@ public class TownyElections extends JavaPlugin {
 			}
 		}
 		
-		_languageFile = YamlConfiguration.loadConfiguration(file);
-		_languageFile.addDefault("only-player", "&cOnly a player can execute this command!");
-		_languageFile.addDefault("not-enough-arguments", "&cNot enough arguments!");
-		_languageFile.addDefault("not-active-election", "&cYour town does not have an active election");
-		_languageFile.addDefault("active-election", "&cYour town has an active election");
-		_languageFile.addDefault("no-permission", "&cNot enough permissions!");
-		_languageFile.addDefault("not-in-a-town", "&cYou are not part of a town");
-		_languageFile.addDefault("already-voted", "&7You have already voted");
-		_languageFile.addDefault("election-convoked", "&aAn election just started!");
-		_languageFile.addDefault("error-input-string", "&cError on input string!");
-		_languageFile.addDefault("candidate-now", "&aYou are now a candidate!");
-		_languageFile.addDefault("new-candidate", "&cThe player %player% is now a candidate");
-		_languageFile.addDefault("election-won", "&f%player% won the election and is now the mayor!");
-		_languageFile.addDefault("no-winner", "&cThere is no winner!");
-		_languageFile.addDefault("election-lost", "&cYou lost the election!");
-		_languageFile.addDefault("invalid-candidate", "&cInvalid candidate!");
-		_languageFile.addDefault("you-voted", "&aYou voted for &f&k%player%");
-		_languageFile.addDefault("is-staff", "&cA city staff cannot do this");
-		_languageFile.addDefault("revolution-created", "&aRevolution created!");
-		_languageFile.addDefault("revolution-invited", "&aYou were invited to a revolution!");
-		_languageFile.addDefault("revolution-joined", "&aA player joined the revolution");
-		_languageFile.addDefault("revolutions-disabled", "&cRevolutions are disabled!");
-		_languageFile.addDefault("not-in-a-nation", "&cYour town is not part of a nation");
-		_languageFile.addDefault("not-active-election-nation", "&cYour nation does not have an active election");
-		_languageFile.addDefault("active-election-nation", "&cYour nation has an active election");
-		_languageFile.addDefault("not-active-town-decision", "&cYour town does not have an active decision");
-		_languageFile.addDefault("active-town-decision", "&cYour town has an active decision");
-		_languageFile.options().copyDefaults(true);
+		languageFile = YamlConfiguration.loadConfiguration(file);
+		languageFile.addDefault("only-player", "&cOnly a player can execute this command!");
+		languageFile.addDefault("not-enough-arguments", "&cNot enough arguments!");
+		languageFile.addDefault("not-active-election", "&cYour town does not have an active election");
+		languageFile.addDefault("active-election", "&cYour town has an active election");
+		languageFile.addDefault("no-permission", "&cNot enough permissions!");
+		languageFile.addDefault("not-in-a-town", "&cYou are not part of a town");
+		languageFile.addDefault("already-voted", "&7You have already voted");
+		languageFile.addDefault("election-convoked", "&aAn election just started!");
+		languageFile.addDefault("error-input-string", "&cError on input string!");
+		languageFile.addDefault("candidate-now", "&aYou are now a candidate!");
+		languageFile.addDefault("new-candidate", "&cThe player %player% is now a candidate");
+		languageFile.addDefault("election-won", "&f%player% won the election and is now the mayor!");
+		languageFile.addDefault("no-winner", "&cThere is no winner!");
+		languageFile.addDefault("election-lost", "&cYou lost the election!");
+		languageFile.addDefault("invalid-candidate", "&cInvalid candidate!");
+		languageFile.addDefault("you-voted", "&aYou voted for &f&k%player%");
+		languageFile.addDefault("is-staff", "&cA city staff cannot do this");
+		languageFile.addDefault("revolution-created", "&aRevolution created!");
+		languageFile.addDefault("revolution-invited", "&aYou were invited to a revolution!");
+		languageFile.addDefault("revolution-joined", "&aA player joined the revolution");
+		languageFile.addDefault("revolutions-disabled", "&cRevolutions are disabled!");
+		languageFile.addDefault("not-in-a-nation", "&cYour town is not part of a nation");
+		languageFile.addDefault("not-active-election-nation", "&cYour nation does not have an active election");
+		languageFile.addDefault("active-election-nation", "&cYour nation has an active election");
+		languageFile.addDefault("not-active-town-decision", "&cYour town does not have an active decision");
+		languageFile.addDefault("active-town-decision", "&cYour town has an active decision");
+		languageFile.options().copyDefaults(true);
 		try {
-			_languageFile.save(file);
+			languageFile.save(file);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -131,75 +126,13 @@ public class TownyElections extends JavaPlugin {
 			return value;
 		}
 	}
-	
-	@Deprecated
-	public static TownElection getTownElection(Player p) {
-		return instance._electionManager.getTownElection(p);
-	}
 
-	@Deprecated
-	public static void addTownElection(TownElection e) {
-		instance._electionManager.addTownElection(e);
-	}
-
-	@Deprecated
-	public static void removeTownElection(TownElection e) {
-		instance._electionManager.removeTownElection(e);
-	}
-
-	@Deprecated
-	public static void addNationElection(NationElection e) {
-		instance._electionManager.addNationElection(e);
-	}
-
-	@Deprecated
-	public static void removeNationElection(NationElection e) {
-		instance._electionManager.removeNationElection(e);
-	}
-
-	@Deprecated
-	public static NationElection getNationElection(Player p) {
-		return instance._electionManager.getNationElection(p);
-	}
-
-	@Deprecated
-	public static TownDecision getTownDecision(Player p) {
-		return instance._electionManager.getTownDecision(p);
-	}
-
-	@Deprecated
-	public static void removeTownDecision(TownDecision d) {
-		instance._electionManager.removeTownDecision(d);
-	}
-
-	@Deprecated
-	public static void addTownDecision(TownDecision d) {
-		instance._electionManager.addTownDecision(d);
-	}
-
-	@Deprecated
-	public static NationDecision getNationDecision(Player p) {
-		return instance._electionManager.getNationDecision(p);
-	}
-
-	@Deprecated
-	public static void removeNationDecision(NationDecision d) {
-		instance._electionManager.removeNationDecision(d);
-	}
-
-	@Deprecated
-	public static void addNationDecision(NationDecision d) {
-		instance._electionManager.addNationDecision(d);
-	}
-
-	@Deprecated
 	public static String getTranslatedMessage(String key) {
-		String message = instance._languageFile.getString(key);
+		String message = instance.languageFile.getString(key);
 		if (message == null) return null;
 		return ChatColor.translateAlternateColorCodes('&', message);
 	}
 
-	@Deprecated
 	public static void sendTownMessage(Town n, String message) {
 		for (Player p : Bukkit.getOnlinePlayers()) {
 			if (n.hasResident(p.getName())) {
@@ -208,7 +141,6 @@ public class TownyElections extends JavaPlugin {
 		}
 	}
 
-	@Deprecated
 	public static void sendTownSubtitle(Town n, String message) {
 		for (Player p : Bukkit.getOnlinePlayers()) {
 			if (n.hasResident(p.getName())) {
@@ -217,7 +149,6 @@ public class TownyElections extends JavaPlugin {
 		}
 	}
 
-	@Deprecated
 	public static void sendNationMessage(Nation n, String message) {
 		for (Player p : Bukkit.getOnlinePlayers()) {
 			if (n.hasResident(p.getName())) {
@@ -226,7 +157,6 @@ public class TownyElections extends JavaPlugin {
 		}
 	}
 
-	@Deprecated
 	public static void sendNationSubtitle(Nation n, String message) {
 		for (Player p : Bukkit.getOnlinePlayers()) {
 			if (n.hasResident(p.getName())) {
@@ -244,16 +174,43 @@ public class TownyElections extends JavaPlugin {
 	}
 	
 	public FileConfiguration getLanguageFile() {
-		return _languageFile;
+		return languageFile;
 	}
 	
 	public boolean isDebugModeEnabled() {
-		return _debugEnabled;
+		return debugEnabled;
 	}
 	
 	public static class Permissions {
-		public static final Permission TOWN_VOTE = new Permission("townyelections.vote.town");
-		public static final Permission NATION_VOTE = new Permission("townyelections.vote.nation");
+		public static final Permission TOWN_VOTE = new Permission("townyelections.elections.vote.town");
+		public static final Permission TOWN_CONVOKE = new Permission("townyelections.elections.convoke.town");
+		public static final Permission TOWN_LIST = new Permission("townyelections.elections.list.town");
+		public static final Permission TOWN_STOP = new Permission("townyelections.elections.stop.town");
+		public static final Permission TOWN_UNVOTE = new Permission("townyelections.elections.unvote.town");
+		public static final Permission NATION_VOTE = new Permission("townyelections.elections.vote.nation");
+		public static final Permission NATION_CONVOKE = new Permission("townyelections.elections.convoke.nation");
+		public static final Permission NATION_LIST = new Permission("townyelections.elections.list.nation");
+		public static final Permission NATION_STOP = new Permission("townyelections.elections.stop.nation");
+		public static final Permission NATION_UNVOTE = new Permission("townyelections.elections.unvote.nation");
+
+		public static final Permission TOWNPARTY_CREATE = new Permission("townyelections.party.create.town");
+		public static final Permission TOWNPARTY_LEAVE = new Permission("townyelections.party.leave.town");
+		public static final Permission TOWNPARTY_ADD = new Permission("townyelections.party.add.town");
+		public static final Permission TOWNPARTY_ACCEPT = new Permission("townyelections.party.accept.town");
+		public static final Permission TOWNPARTY_INVITE = new Permission("townyelections.party.invite.town");
+		public static final Permission TOWNPARTY_SETLEADER = new Permission("townyelections.party.setleader.town");
+		public static final Permission TOWNPARTY_PROMOTE = new Permission("townyelections.party.promote.town");
+		public static final Permission TOWNPARTY_DEMOTE = new Permission("townyelections.party.demote.town");
+		public static final Permission TOWNPARTY_INFO = new Permission("townyelections.party.info.town");
+		public static final Permission NATIONPARTY_CREATE = new Permission("townyelections.party.create.nation");
+		public static final Permission NATIONPARTY_LEAVE = new Permission("townyelections.party.leave.nation");
+		public static final Permission NATIONPARTY_ADD = new Permission("townyelections.party.add.nation");
+		public static final Permission NATIONPARTY_ACCEPT = new Permission("townyelections.party.accept.nation");
+		public static final Permission NATIONPARTY_INVITE = new Permission("townyelections.party.invite.nation");
+		public static final Permission NATIONPARTY_SETLEADER = new Permission("townyelections.party.setleader.nation");
+		public static final Permission NATIONPARTY_PROMOTE = new Permission("townyelections.party.promote.nation");
+		public static final Permission NATIONPARTY_DEMOTE = new Permission("townyelections.party.demote.nation");
+		public static final Permission NATIONPARTY_INFO = new Permission("townyelections.party.info.nation");
 	}
 	
 	public static class Text {
@@ -269,16 +226,25 @@ public class TownyElections extends JavaPlugin {
 				"&8---------------------------------";
 		public static final String INFO_MESSAGE = "&8-------- &6&lTowny Elections&r &8--------\r\n" + 
 				"\r\n" + 
-				"&fDescription: &e%version%\r\n" + 
 				"&fVersion: &e%version%\r\n" + 
 				"&fDeveloper: &e%author%\r\n" + 
 				"\r\n" + 
 				"&8---------------------------------";
 	}
 	
-	public static void debug(Level level, String msg) {
-		if (!instance._debugEnabled) return;
-		instance.getLogger().log(level, msg);
+	public static void info(String msg) {
+		if (instance.debugEnabled) 
+			instance.getLogger().log(Level.INFO, msg);
+	}
+	
+	public static void warning(String msg) {
+		if (instance.debugEnabled) 
+			instance.getLogger().log(Level.WARNING, msg);
+	}
+	
+	public static void error(String msg) {
+		if (instance.debugEnabled) 
+			instance.getLogger().log(Level.SEVERE, msg);
 	}
 	
 	public static TownyElections getInstance() {
@@ -286,7 +252,11 @@ public class TownyElections extends JavaPlugin {
 	}
 	
 	public PartyManager getPartyManager() {
-		return _partyManager;
+		return partyManager;
+	}
+	
+	public ElectionManager getElectionManager() {
+		return electionManager;
 	}
 
 }

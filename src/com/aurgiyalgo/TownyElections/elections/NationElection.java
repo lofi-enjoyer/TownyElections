@@ -1,10 +1,9 @@
 package com.aurgiyalgo.TownyElections.elections;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -12,62 +11,46 @@ import org.bukkit.entity.Player;
 
 import com.aurgiyalgo.TownyElections.TownyElections;
 import com.aurgiyalgo.TownyElections.TownyElections.MutableInteger;
-import com.google.gson.annotations.Expose;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 
-public class NationElection {
-	
-	@Expose
-	private List<UUID> candidates;
-	@Expose
-	private Map<UUID, UUID> votes;
-	@Expose
-	private long endTime;
-	@Expose
-	private UUID nationUuid;
+public class NationElection extends Election {
+
 	private Nation nation;
-	private UUID winner;
-	
+
 	public NationElection(Nation nation, long endTime) {
+		super(endTime);
 		this.nation = nation;
-		this.endTime = endTime;
-		
-		candidates = new ArrayList<UUID>();
-		votes = new HashMap<UUID, UUID>();
-		nationUuid = nation.getUuid();
 	}
-	
+
 	public void setup() {
 		try {
-			nation = TownyUniverse.getInstance().getDataSource().getNation(nationUuid);
+			nation = TownyUniverse.getInstance().getDataSource().getNation(territoryUuid);
 		} catch (NotRegisteredException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	public UUID finishElection() {
+
+	public String finishElection() {
 		if (votes.isEmpty()) {
 			TownyElections.sendNationMessage(nation, TownyElections.getTranslatedMessage("no-winner"));
 			return null;
 		}
-		
-		Map<UUID, MutableInteger> voteCount = new HashMap<UUID, MutableInteger>();
-		
-		for (Map.Entry<UUID, UUID> entry : votes.entrySet())  {
+
+		Map<String, MutableInteger> voteCount = new HashMap<String, MutableInteger>();
+
+		for (Map.Entry<UUID, String> entry : votes.entrySet()) {
 			if (!voteCount.containsKey(entry.getValue())) {
 				voteCount.put(entry.getValue(), new MutableInteger(1));
-				System.out.println(entry.getValue() + " - " + voteCount.get(entry.getValue()));
 				continue;
 			}
 			voteCount.get(entry.getValue()).value++;
 		}
-		
-		Map.Entry<UUID, MutableInteger> maxCandidate = null;
-		
-		for (Map.Entry<UUID, MutableInteger> entry : voteCount.entrySet()) {
-			System.out.println(entry.getKey() + " - " + entry.getValue());
+
+		Map.Entry<String, MutableInteger> maxCandidate = null;
+
+		for (Map.Entry<String, MutableInteger> entry : voteCount.entrySet()) {
 			if (maxCandidate == null) {
 				maxCandidate = entry;
 				continue;
@@ -81,75 +64,43 @@ public class NationElection {
 				continue;
 			}
 		}
-		
+
 		winner = maxCandidate.getKey();
-		
+
 		try {
-			nation.setCapital(TownyUniverse.getInstance().getDataSource().getResident(Bukkit.getOfflinePlayer(winner).getName()).getTown());
+			nation.setCapital(TownyUniverse.getInstance().getDataSource()
+					.getResident(Bukkit.getOfflinePlayer(winner).getName()).getTown());
 			TownyUniverse.getInstance().getDataSource().saveNation(nation);
-			String msg = TownyElections.getTranslatedMessage("election-won").replaceAll("%player%", Bukkit.getOfflinePlayer(winner).getName());
+			String msg = TownyElections.getTranslatedMessage("election-won").replaceAll("%player%",
+					Bukkit.getOfflinePlayer(winner).getName());
 			TownyElections.sendNationSubtitle(nation, msg);
 			Player p = Bukkit.getPlayer(winner);
 			if (p != null) {
 				p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
 			}
-			
+
 		} catch (NotRegisteredException e) {
 			e.printStackTrace();
 		}
-		return maxCandidate.getKey();
-	}
-	
-	public void addCandidate(UUID candidate) {
-		if (candidates.contains(candidate)) return;
-		candidates.add(candidate);
-	}
-	
-	public void removeCandidate(UUID candidate) {
-		if (!candidates.contains(candidate)) return;
-		candidates.remove(candidate);
-		for (Map.Entry<UUID, UUID> entry : votes.entrySet()) {
-			if (entry.getValue().equals(candidate)) {
-				votes.remove(entry.getKey());
-			}
-		}
-	}
-	
-	public void addVote(UUID player, UUID candidate) {
-		if (!candidates.contains(candidate)) return;
-		votes.put(player, candidate);
-	}
-	
-	public void removeVote(UUID player) {
-		if (votes.containsKey(player)) votes.remove(player);
-	}
-	
-	public boolean hasVoted(UUID player) {
-		return votes.containsKey(player);
-	}
-	
-	public int getVotesCount() {
-		return votes.size();
-	}
-	
-	public Map<UUID, UUID> getVotes() {
-		return votes;
+		return winner;
 	}
 
-	public long getEndTime() {
-		return endTime;
+	public void addVote(UUID player, String candidate) {
+		if (TownyElections.getInstance().getPartyManager().getPartiesForNation(nation.getName()).stream()
+				.filter(party -> party.getName().equals(candidate)).collect(Collectors.toList()).isEmpty())
+			return;
+		if (votes.containsKey(player))
+			return;
+		votes.put(player, candidate);
+	}
+
+	public void removeVote(UUID player) {
+		if (votes.containsKey(player))
+			votes.remove(player);
 	}
 
 	public Nation getNation() {
 		return nation;
-	}
-	
-	public List<UUID> getCandidates() {
-		return candidates;
-	}
-	
-	public UUID getWinner() {
-		return winner;
 	}
 
 }
