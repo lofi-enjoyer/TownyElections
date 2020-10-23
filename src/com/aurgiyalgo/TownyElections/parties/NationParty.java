@@ -10,8 +10,8 @@ public class NationParty extends Party {
 	
 	private Nation nation;
 
-	public NationParty(String name, UUID leader) {
-		super(name, leader, PartyType.NATION);
+	public NationParty(String name, UUID leader, UUID territory) {
+		super(name, leader, PartyType.NATION, territory);
 		
 		setup();
 	}

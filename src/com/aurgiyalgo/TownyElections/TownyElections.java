@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.aurgiyalgo.TownyElections.commands.ElectionsCommandHandler;
 import com.aurgiyalgo.TownyElections.commands.PartyCommandHandler;
 import com.aurgiyalgo.TownyElections.commands.TElectCommandHandler;
 import com.aurgiyalgo.TownyElections.elections.ElectionManager;
@@ -47,6 +48,7 @@ public class TownyElections extends JavaPlugin {
 
 		getCommand("townyelections").setExecutor(new TElectCommandHandler(instance));
 		getCommand("townyelections").setTabCompleter(new TElectTabCompleter());
+		getCommand("elections").setExecutor(new ElectionsCommandHandler());
 		getCommand("party").setExecutor(new PartyCommandHandler());
 	}
 

@@ -60,7 +60,7 @@ public abstract class Party {
 	
 	protected List<UUID> invites;
 	
-	public Party(String name, UUID leader, PartyType partyType) {
+	public Party(String name, UUID leader, PartyType partyType, UUID territory) {
 		members = new ArrayList<UUID>();
 		assistants = new ArrayList<UUID>();
 		invites = new ArrayList<UUID>();
@@ -68,6 +68,7 @@ public abstract class Party {
 		this.name = name;
 		this.leader = leader;
 		this.partyType = partyType.type;
+		this.territory = territory;
 		
 		members.add(leader);
 	}

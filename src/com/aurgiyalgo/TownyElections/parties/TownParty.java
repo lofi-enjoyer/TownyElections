@@ -11,8 +11,8 @@ public class TownParty extends Party {
 	
 	private Town town;
 
-	public TownParty(String name, UUID leader) {
-		super(name, leader, PartyType.TOWN);
+	public TownParty(String name, UUID leader, UUID territory) {
+		super(name, leader, PartyType.TOWN, territory);
 		
 		setup();
 	}

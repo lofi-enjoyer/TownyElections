@@ -31,7 +31,7 @@
 			</resource>
 		</resources>
 
-		<finalName>${project.artifactId}_vSNAPSHOT_${git.commit.id.abbrev}</finalName>
+		<finalName>${project.artifactId}_v${project.version}_${git.commit.id.abbrev}</finalName>
 
 		<plugins>
 			<plugin>

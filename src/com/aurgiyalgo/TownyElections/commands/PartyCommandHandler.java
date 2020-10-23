@@ -18,7 +18,9 @@ import com.aurgiyalgo.TownyElections.parties.Party;
 import com.aurgiyalgo.TownyElections.parties.TownParty;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
 
 public class PartyCommandHandler implements CommandExecutor {
 
@@ -58,7 +60,7 @@ public class PartyCommandHandler implements CommandExecutor {
 
 	private boolean executeCreate(CommandSender sender, Command cmd, String str, String[] args) {
 		if (args.length < 3) {
-			return executeHelp(sender, cmd, str, args);
+			return notEnoughArguments(sender, cmd, str, args);
 		}
 
 		if (!isPlayer(sender)) return true;
@@ -75,7 +77,14 @@ public class PartyCommandHandler implements CommandExecutor {
 				player.sendMessage(ChatColor.RED + "You are already part of a party");
 				return true;
 			}
-			party = new TownParty(args[2], player.getUniqueId());
+			Town town;
+			try {
+				town = TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown();
+			} catch (NotRegisteredException e) {
+				player.sendMessage(ChatColor.RED + "You are not part of a town!");
+				return true;
+			}
+			party = new TownParty(args[2], player.getUniqueId(), town.getUuid());
 			TownyElections.getInstance().getPartyManager().addParty(party);
 		}
 		return true;
@@ -89,7 +98,14 @@ public class PartyCommandHandler implements CommandExecutor {
 				player.sendMessage(ChatColor.RED + "You are already part of a party");
 				return true;
 			}
-			party = new NationParty(args[2], player.getUniqueId());
+			Nation nation;
+			try {
+				nation = TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation();
+			} catch (NotRegisteredException e) {
+				player.sendMessage(ChatColor.RED + "You are not part of a nation!");
+				return true;
+			}
+			party = new NationParty(args[2], player.getUniqueId(), nation.getUuid());
 			TownyElections.getInstance().getPartyManager().addParty(party);
 		}
 		return true;
@@ -100,7 +116,7 @@ public class PartyCommandHandler implements CommandExecutor {
 
 	private boolean executeLeave(CommandSender sender, Command cmd, String str, String[] args) {
 		if (args.length < 2) {
-			return executeHelp(sender, cmd, str, args);
+			return notEnoughArguments(sender, cmd, str, args);
 		}
 		
 		if (!isPlayer(sender)) return true;
@@ -132,7 +148,7 @@ public class PartyCommandHandler implements CommandExecutor {
 
 	private boolean executeAdd(CommandSender sender, Command cmd, String str, String[] args) {
 		if (args.length < 3) {
-			return executeHelp(sender, cmd, str, args);
+			return notEnoughArguments(sender, cmd, str, args);
 		}
 		
 		if (!isPlayer(sender)) return true;
@@ -192,7 +208,7 @@ public class PartyCommandHandler implements CommandExecutor {
 
 	private boolean executeAccept(CommandSender sender, Command cmd, String str, String[] args) {
 		if (args.length < 3) {
-			return executeHelp(sender, cmd, str, args);
+			return notEnoughArguments(sender, cmd, str, args);
 		}
 		
 		if (!isPlayer(sender)) return true;
@@ -258,8 +274,8 @@ public class PartyCommandHandler implements CommandExecutor {
 	}
 
 	private boolean executeInvites(CommandSender sender, Command cmd, String str, String[] args) {
-		if (args.length < 3) {
-			return executeHelp(sender, cmd, str, args);
+		if (args.length < 2) {
+			return notEnoughArguments(sender, cmd, str, args);
 		}
 		
 		if (!isPlayer(sender)) return true;
@@ -322,7 +338,7 @@ public class PartyCommandHandler implements CommandExecutor {
 
 	private boolean executeSetLeader(CommandSender sender, Command cmd, String str, String[] args) {
 		if (args.length < 3) {
-			return executeHelp(sender, cmd, str, args);
+			return notEnoughArguments(sender, cmd, str, args);
 		}
 
 		if (!isPlayer(sender)) return true;
@@ -362,7 +378,7 @@ public class PartyCommandHandler implements CommandExecutor {
 
 	private boolean executePromote(CommandSender sender, Command cmd, String str, String[] args) {
 		if (args.length < 3) {
-			return executeHelp(sender, cmd, str, args);
+			return notEnoughArguments(sender, cmd, str, args);
 		}
 
 		if (!isPlayer(sender)) return true;
@@ -424,7 +440,7 @@ public class PartyCommandHandler implements CommandExecutor {
 
 	private boolean executeDemote(CommandSender sender, Command cmd, String str, String[] args) {
 		if (args.length < 3) {
-			return executeHelp(sender, cmd, str, args);
+			return notEnoughArguments(sender, cmd, str, args);
 		}
 
 		if (!isPlayer(sender)) return true;
@@ -494,7 +510,7 @@ public class PartyCommandHandler implements CommandExecutor {
 
 	private boolean executeInfo(CommandSender sender, Command cmd, String str, String[] args) {
 		if (args.length < 2) {
-			return executeHelp(sender, cmd, str, args);
+			return notEnoughArguments(sender, cmd, str, args);
 		}
 
 		if (!isPlayer(sender)) return true;
@@ -519,6 +535,7 @@ public class PartyCommandHandler implements CommandExecutor {
 			for (UUID member : party.getMembers()) {
 				builder.append(Bukkit.getOfflinePlayer(member) + " ");
 			}
+			player.sendMessage(builder.toString());
 		}
 		return true;
 		case "nation": {
@@ -539,11 +556,17 @@ public class PartyCommandHandler implements CommandExecutor {
 			for (UUID member : party.getMembers()) {
 				builder.append(Bukkit.getOfflinePlayer(member) + " ");
 			}
+			player.sendMessage(builder.toString());
 		}
 		return true;
 		default:
 			return executeHelp(sender, cmd, str, args);
 		}
+	}
+
+	private boolean notEnoughArguments(CommandSender sender, Command cmd, String str, String[] args) {
+		sender.sendMessage(ChatColor.RED + "Not enough arguments!");
+		return true;
 	}
 
 }
