@@ -84,6 +84,10 @@ public class PartyCommandHandler implements CommandExecutor {
 				player.sendMessage(ChatColor.RED + "You are not part of a town!");
 				return true;
 			}
+			if (TownyElections.getInstance().getPartyManager().getPartiesForTown(town.getName()).stream().filter(prty -> prty.getName().toLowerCase().equals(args[2].toLowerCase())).collect(Collectors.toList()).size() > 0) {
+				player.sendMessage(ChatColor.RED + "That name is already taken!");
+				return true;
+			}
 			party = new TownParty(args[2], player.getUniqueId(), town.getUuid());
 			TownyElections.getInstance().getPartyManager().addParty(party);
 		}
@@ -103,6 +107,10 @@ public class PartyCommandHandler implements CommandExecutor {
 				nation = TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation();
 			} catch (NotRegisteredException e) {
 				player.sendMessage(ChatColor.RED + "You are not part of a nation!");
+				return true;
+			}
+			if (TownyElections.getInstance().getPartyManager().getPartiesForNation(nation.getName()).stream().filter(prty -> prty.getName().toLowerCase().equals(args[2].toLowerCase())).collect(Collectors.toList()).size() > 0) {
+				player.sendMessage(ChatColor.RED + "That name is already taken!");
 				return true;
 			}
 			party = new NationParty(args[2], player.getUniqueId(), nation.getUuid());
