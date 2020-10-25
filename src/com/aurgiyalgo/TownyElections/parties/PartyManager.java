@@ -55,6 +55,16 @@ public class PartyManager {
 		return null;
 	}
 
+	public List<NationParty> getNationParties() {
+		List<NationParty> nationParties = new ArrayList<NationParty>();
+		for (Party party : _parties) {
+			if (party instanceof NationParty)
+				nationParties.add((NationParty) party);
+		}
+		return null;
+	}
+
+
 	public List<TownParty> getPartiesForTown(String town) {
 		List<TownParty> townParties = new ArrayList<TownParty>();
 		for (Party party : _parties) {

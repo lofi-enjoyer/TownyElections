@@ -6,11 +6,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Sound;
-import org.bukkit.entity.Player;
 
 import com.aurgiyalgo.TownyElections.TownyElections;
 import com.aurgiyalgo.TownyElections.TownyElections.MutableInteger;
+import com.aurgiyalgo.TownyElections.parties.NationParty;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -32,7 +31,6 @@ public class NationElection extends Election {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	public String finishElection() {
 		if (votes.isEmpty()) {
 			TownyElections.sendNationMessage(nation, TownyElections.getTranslatedMessage("no-winner"));
@@ -69,16 +67,13 @@ public class NationElection extends Election {
 		winner = maxCandidate.getKey();
 
 		try {
+			NationParty party = TownyElections.getInstance().getPartyManager().getNationParties().stream().filter(t -> t.getName().toLowerCase().equals(winner.toLowerCase())).collect(Collectors.toList()).get(0);
 			nation.setCapital(TownyUniverse.getInstance().getDataSource()
-					.getResident(Bukkit.getOfflinePlayer(winner).getName()).getTown());
+					.getResident(Bukkit.getOfflinePlayer(party.getLeader()).getName()).getTown());
 			TownyUniverse.getInstance().getDataSource().saveNation(nation);
 			String msg = TownyElections.getTranslatedMessage("election-won").replaceAll("%player%",
-					Bukkit.getOfflinePlayer(winner).getName());
+					party.getName());
 			TownyElections.sendNationSubtitle(nation, msg);
-			Player p = Bukkit.getPlayer(winner);
-			if (p != null) {
-				p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
-			}
 
 		} catch (NotRegisteredException e) {
 			e.printStackTrace();

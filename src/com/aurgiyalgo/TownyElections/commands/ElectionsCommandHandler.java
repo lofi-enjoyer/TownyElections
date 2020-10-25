@@ -3,7 +3,6 @@ package com.aurgiyalgo.TownyElections.commands;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
@@ -22,7 +21,6 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 
-@SuppressWarnings("deprecation")
 public class ElectionsCommandHandler implements CommandExecutor {
 
 	@Override
@@ -345,7 +343,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 		}
 		e.addVote(p.getUniqueId(), args[2]);
 		String msg = TownyElections.getTranslatedMessage("you-voted");
-		msg = msg.replaceAll("%player", Bukkit.getOfflinePlayer(args[2]).getName());
+		msg = msg.replaceAll("%party%", args[2]);
 		p.sendMessage(msg);
 		p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
 		return true;
@@ -381,14 +379,11 @@ public class ElectionsCommandHandler implements CommandExecutor {
 		}
 		if (System.currentTimeMillis() >= e.getEndTime()) {
 			TownyElections.getInstance().getElectionManager().removeNationElection(e);
-			String msg = TownyElections.getTranslatedMessage("election-won").replaceAll("%player%",
-					Bukkit.getOfflinePlayer(e.getWinner()).getName());
-			TownyElections.sendNationSubtitle(e.getNation(), msg);
 			return true;
 		}
 		e.addVote(p.getUniqueId(), args[2]);
 		String msg = TownyElections.getTranslatedMessage("you-voted");
-		msg = msg.replaceAll("%player", Bukkit.getOfflinePlayer(args[2]).getName());
+		msg = msg.replaceAll("%party%", args[2]);
 		p.sendMessage(msg);
 		p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
 		return true;
