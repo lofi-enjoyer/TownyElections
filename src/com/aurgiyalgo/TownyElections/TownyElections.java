@@ -22,6 +22,10 @@ import com.aurgiyalgo.TownyElections.parties.PartyManager;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 
+/**
+ * @author javi
+ *
+ */
 public class TownyElections extends JavaPlugin {
 
 	private static TownyElections instance;
@@ -159,8 +163,14 @@ public class TownyElections extends JavaPlugin {
 			}
 		}
 	}
-	
-	public static boolean checkPerms(Player p, Permission perm) {
+
+	/**
+	 * If player does not have permission sends a "no-permission" message and returns false
+	 * @param
+	 * @param
+	 * @return Player have permission
+	 */
+	public static boolean hasPerms(Player p, Permission perm) {
 		if (!p.hasPermission(perm)) {
 			p.sendMessage(TownyElections.getTranslatedMessage("no-permission"));
 			return false;
@@ -192,7 +202,7 @@ public class TownyElections extends JavaPlugin {
 		public static final Permission TOWNPARTY_LEAVE = new Permission("townyelections.party.leave.town");
 		public static final Permission TOWNPARTY_ADD = new Permission("townyelections.party.add.town");
 		public static final Permission TOWNPARTY_ACCEPT = new Permission("townyelections.party.accept.town");
-		public static final Permission TOWNPARTY_INVITE = new Permission("townyelections.party.invite.town");
+		public static final Permission TOWNPARTY_INVITES = new Permission("townyelections.party.invites.town");
 		public static final Permission TOWNPARTY_SETLEADER = new Permission("townyelections.party.setleader.town");
 		public static final Permission TOWNPARTY_PROMOTE = new Permission("townyelections.party.promote.town");
 		public static final Permission TOWNPARTY_DEMOTE = new Permission("townyelections.party.demote.town");
@@ -201,7 +211,7 @@ public class TownyElections extends JavaPlugin {
 		public static final Permission NATIONPARTY_LEAVE = new Permission("townyelections.party.leave.nation");
 		public static final Permission NATIONPARTY_ADD = new Permission("townyelections.party.add.nation");
 		public static final Permission NATIONPARTY_ACCEPT = new Permission("townyelections.party.accept.nation");
-		public static final Permission NATIONPARTY_INVITE = new Permission("townyelections.party.invite.nation");
+		public static final Permission NATIONPARTY_INVITES = new Permission("townyelections.party.invites.nation");
 		public static final Permission NATIONPARTY_SETLEADER = new Permission("townyelections.party.setleader.nation");
 		public static final Permission NATIONPARTY_PROMOTE = new Permission("townyelections.party.promote.nation");
 		public static final Permission NATIONPARTY_DEMOTE = new Permission("townyelections.party.demote.nation");
@@ -209,21 +219,30 @@ public class TownyElections extends JavaPlugin {
 	}
 	
 	public static class Text {
-		public static final String HELP_MESSAGE = "&8&m-------- &6&lTowny Elections&r &8&m--------\r\n" + 
-				"\r\n" + 
-				"  &7- &f/elections [town/nation/towndecision/nationdecision] info &8- &ePlugin info\r\n" + 
-				"  &7- &f/elections [town/nation/towndecision/nationdecision] &8- &ePlugin info\r\n" + 
-				"  &7- &f/elections [town/nation/towndecision/nationdecision] vote &8- &eVote for a candidate\r\n" + 
-				"  &7- &f/elections [town/nation/towndecision/nationdecision] list &8- &eCandidates of the election\r\n" + 
-				"  &7- &f/elections [town/nation/towndecision/nationdecision] convoke &8- &eConvoke an election in your town\r\n" + 
-				"  &7- &f/elections [town/nation/towndecision/nationdecision] run &8- &eBe a candidate\r\n" + 
-				"\r\n" + 
+		public static final String HELP_MESSAGE = "&8&m-------- &6&lTowny Elections&r &8&m--------\n" + 
+				"\n" + 
+				"  &7- &f/elections [town/nation] &evote &8- &eVote for a candidate\n" + 
+				"  &7- &f/elections [town/nation] &econvoke &8- &eConvoke an election in your town\n" +
+				"  &7- &f/elections [town/nation] &elist &8- &eCandidates of the election\n" + 
+				"  &7- &f/elections [town/nation] &estop &8- &eStop the current election\n" +
+				"  &7- &f/elections [town/nation] &eunvote &8- &eRetire your vote so you can vote for another party\n" +
+				"\n" +
+				"  &7- &f/party [town/nation] &ecreate &8- &eCreate a political party\n" +
+				"  &7- &f/party [town/nation] &eleave &8- &eLeave your current party\n" +
+				"  &7- &f/party [town/nation] &eadd &8- &eInvite a player to the party\n" +
+				"  &7- &f/party [town/nation] &eaccept &8- &eAccept an invite to join a party\n" +
+				"  &7- &f/party [town/nation] &einvites &8- &eList of your invites\n" +
+				"  &7- &f/party [town/nation] &esetleader &8- &eSet the leader of your party\n" +
+				"  &7- &f/party [town/nation] &epromote &8- &ePromote a member to a party assistant\n" +
+				"  &7- &f/party [town/nation] &edemote &8- &eDemote a party assistant to member\n" +
+				"  &7- &f/party [town/nation] &einfo &8- &eInformation about your party\n" +
+				"\n" + 
 				"&8---------------------------------";
-		public static final String INFO_MESSAGE = "&8-------- &6&lTowny Elections&r &8--------\r\n" + 
-				"\r\n" + 
-				"&fVersion: &e%version%\r\n" + 
-				"&fDeveloper: &e%author%\r\n" + 
-				"\r\n" + 
+		public static final String INFO_MESSAGE = "&8-------- &6&lTowny Elections&r &8--------\n" + 
+				"\n" + 
+				"&fVersion: &e%version%\n" + 
+				"&fDeveloper: &e%author%\n" + 
+				"\n" + 
 				"&8---------------------------------";
 	}
 	

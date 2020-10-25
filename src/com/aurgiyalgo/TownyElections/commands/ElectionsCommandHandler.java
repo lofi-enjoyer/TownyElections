@@ -84,10 +84,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			return true;
 		}
 		Player p = (Player) sender;
-		if (!(p.hasPermission("townyelections.unvote.town"))) {
-			p.sendMessage(TownyElections.getTranslatedMessage("no-permission"));
-			return true;
-		}
+		if (!TownyElections.hasPerms(p, TownyElections.Permissions.TOWN_UNVOTE)) return true;
 		try {
 			TownyUniverse.getInstance().getDataSource().getResident(p.getName()).getTown();
 		} catch (NotRegisteredException e) {
@@ -109,10 +106,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			return true;
 		}
 		Player p = (Player) sender;
-		if (!(p.hasPermission("townyelections.unvote.nation"))) {
-			p.sendMessage(TownyElections.getTranslatedMessage("no-permission"));
-			return true;
-		}
+		if (!TownyElections.hasPerms(p, TownyElections.Permissions.NATION_UNVOTE)) return true;
 		try {
 			TownyUniverse.getInstance().getDataSource().getResident(p.getName()).getTown().getNation();
 		} catch (NotRegisteredException e) {
@@ -134,10 +128,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			return true;
 		}
 		Player p = (Player) sender;
-		if (!(p.hasPermission("townyelections.stop.town"))) {
-			p.sendMessage(TownyElections.getTranslatedMessage("no-permission"));
-			return true;
-		}
+		if (!TownyElections.hasPerms(p, TownyElections.Permissions.TOWN_STOP)) return true;
 		try {
 			TownyUniverse.getInstance().getDataSource().getResident(p.getName()).getTown();
 		} catch (NotRegisteredException e) {
@@ -159,10 +150,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			return true;
 		}
 		Player p = (Player) sender;
-		if (!(p.hasPermission("townyelections.stop.nation"))) {
-			p.sendMessage(TownyElections.getTranslatedMessage("no-permission"));
-			return true;
-		}
+		if (!TownyElections.hasPerms(p, TownyElections.Permissions.NATION_STOP)) return true;
 		try {
 			TownyUniverse.getInstance().getDataSource().getResident(p.getName()).getTown().getNation();
 		} catch (NotRegisteredException e) {
@@ -184,6 +172,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			return true;
 		}
 		Player p = (Player) sender;
+		if (!TownyElections.hasPerms(p, TownyElections.Permissions.TOWN_LIST)) return true;
 		TownElection e = TownyElections.getInstance().getElectionManager().getTownElection(p);
 		if (e == null) {
 			p.sendMessage(TownyElections.getTranslatedMessage("not-active-election"));
@@ -212,6 +201,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			return true;
 		}
 		Player p = (Player) sender;
+		if (!TownyElections.hasPerms(p, TownyElections.Permissions.NATION_LIST)) return true;
 		NationElection e = TownyElections.getInstance().getElectionManager().getNationElection(p);
 		if (e == null) {
 			p.sendMessage(TownyElections.getTranslatedMessage("not-active-election-nation"));
@@ -239,10 +229,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			return true;
 		}
 		Player p = (Player) sender;
-		if (!(p.hasPermission("townyelections.convoke.town"))) {
-			p.sendMessage(TownyElections.getTranslatedMessage("no-permission"));
-			return true;
-		}
+		if (!TownyElections.hasPerms(p, TownyElections.Permissions.TOWN_CONVOKE)) return true;
 		Town t;
 		try {
 			t = TownyUniverse.getInstance().getDataSource().getResident(p.getName()).getTown();
@@ -277,10 +264,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			return true;
 		}
 		Player p = (Player) sender;
-		if (!(p.hasPermission("townyelections.convoke.nation"))) {
-			p.sendMessage(TownyElections.getTranslatedMessage("no-permission"));
-			return true;
-		}
+		if (!TownyElections.hasPerms(p, TownyElections.Permissions.NATION_CONVOKE)) return true;
 		Nation n;
 		try {
 			n = TownyUniverse.getInstance().getDataSource().getResident(p.getName()).getTown().getNation();
@@ -315,10 +299,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			return true;
 		}
 		Player p = (Player) sender;
-		if (!(p.hasPermission(TownyElections.Permissions.TOWN_VOTE))) {
-			p.sendMessage(TownyElections.getTranslatedMessage("no-permission"));
-			return true;
-		}
+		if (!TownyElections.hasPerms(p, TownyElections.Permissions.TOWN_VOTE)) return true;
 		if (args.length <= 2) {
 			p.sendMessage(TownyElections.getTranslatedMessage("not-enough-arguments"));
 			return true;
@@ -355,10 +336,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			return true;
 		}
 		Player p = (Player) sender;
-		if (!(p.hasPermission("townyelections.vote.nation"))) {
-			p.sendMessage(TownyElections.getTranslatedMessage("no-permission"));
-			return true;
-		}
+		if (!TownyElections.hasPerms(p, TownyElections.Permissions.NATION_VOTE)) return true;
 		if (args.length <= 2) {
 			p.sendMessage(TownyElections.getTranslatedMessage("not-enough-arguments"));
 			return true;
