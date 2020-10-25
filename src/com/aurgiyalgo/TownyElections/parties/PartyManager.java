@@ -1,6 +1,5 @@
 package com.aurgiyalgo.TownyElections.parties;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -10,6 +9,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.aurgiyalgo.TownyElections.TownyElections;
 import com.aurgiyalgo.TownyElections.data.DataHandler;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -20,9 +20,9 @@ public class PartyManager {
 	private DataHandler _dataHandler;
 	private Gson _gson;
 
-	public PartyManager(File dataFolder) {
+	public PartyManager() {
 		_parties = new ArrayList<Party>();
-		_dataHandler = new DataHandler(dataFolder, "parties.json");
+		_dataHandler = new DataHandler(TownyElections.getInstance().getDataFolder(), "parties.json");
 		_gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 	}
 

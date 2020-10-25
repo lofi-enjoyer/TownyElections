@@ -1,6 +1,5 @@
 package com.aurgiyalgo.TownyElections.elections;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -27,11 +26,11 @@ public class ElectionManager {
 	private DataHandler dataHandler;
 	private Gson gson;
 
-	public ElectionManager(TownyElections instance, File dataFolder) {
+	public ElectionManager() {
 		townElections = new ArrayList<TownElection>();
 		nationElections = new ArrayList<NationElection>();
 		
-		dataHandler = new DataHandler(dataFolder, "elections.json");
+		dataHandler = new DataHandler(TownyElections.getInstance().getDataFolder(), "elections.json");
 		gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
 		new BukkitRunnable() {
@@ -56,7 +55,7 @@ public class ElectionManager {
 				}
 			}
 
-		}.runTaskTimer(instance, 0, 100);
+		}.runTaskTimer(TownyElections.getInstance(), 0, 100);
 	}
 
 	public void loadElections() {

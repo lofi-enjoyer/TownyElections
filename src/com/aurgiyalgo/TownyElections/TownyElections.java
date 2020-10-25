@@ -40,8 +40,8 @@ public class TownyElections extends JavaPlugin {
 		setupConfig();
 		setupLanguageFile();
 		
-		electionManager = new ElectionManager(this, getDataFolder());
-		partyManager = new PartyManager(this.getDataFolder());
+		electionManager = new ElectionManager();
+		partyManager = new PartyManager();
 		
 		electionManager.loadElections();
 		partyManager.loadData();
@@ -93,22 +93,15 @@ public class TownyElections extends JavaPlugin {
 		languageFile.addDefault("election-convoked", "&aAn election just started!");
 		languageFile.addDefault("error-input-string", "&cError on input string!");
 		languageFile.addDefault("candidate-now", "&aYou are now a candidate!");
-		languageFile.addDefault("new-candidate", "&cThe player %player% is now a candidate");
-		languageFile.addDefault("election-won", "&f%player% won the election and is now the mayor!");
+		languageFile.addDefault("election-won", "&f%party% won the election and are leaders now!");
 		languageFile.addDefault("no-winner", "&cThere is no winner!");
 		languageFile.addDefault("election-lost", "&cYou lost the election!");
 		languageFile.addDefault("invalid-candidate", "&cInvalid candidate!");
-		languageFile.addDefault("you-voted", "&aYou voted for &f&k%player%");
+		languageFile.addDefault("you-voted", "&aYou voted for &f&l%party%");
 		languageFile.addDefault("is-staff", "&cA city staff cannot do this");
-		languageFile.addDefault("revolution-created", "&aRevolution created!");
-		languageFile.addDefault("revolution-invited", "&aYou were invited to a revolution!");
-		languageFile.addDefault("revolution-joined", "&aA player joined the revolution");
-		languageFile.addDefault("revolutions-disabled", "&cRevolutions are disabled!");
 		languageFile.addDefault("not-in-a-nation", "&cYour town is not part of a nation");
 		languageFile.addDefault("not-active-election-nation", "&cYour nation does not have an active election");
 		languageFile.addDefault("active-election-nation", "&cYour nation has an active election");
-		languageFile.addDefault("not-active-town-decision", "&cYour town does not have an active decision");
-		languageFile.addDefault("active-town-decision", "&cYour town has an active decision");
 		languageFile.options().copyDefaults(true);
 		try {
 			languageFile.save(file);
