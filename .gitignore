@@ -4,3 +4,6 @@
 /.settings
 /.settings
 /target/
+/.idea
+TownyElections.iml
+
