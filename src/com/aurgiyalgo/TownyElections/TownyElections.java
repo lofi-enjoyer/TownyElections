@@ -227,15 +227,15 @@ public class TownyElections extends JavaPlugin {
 				"  &7- &f/elections [town/nation] &estop &8- &eStop the current election\n" +
 				"  &7- &f/elections [town/nation] &eunvote &8- &eRetire your vote so you can vote for another party\n" +
 				"\n" +
-				"  &7- &f/party [town/nation] &ecreate &8- &eCreate a political party\n" +
-				"  &7- &f/party [town/nation] &eleave &8- &eLeave your current party\n" +
-				"  &7- &f/party [town/nation] &eadd &8- &eInvite a player to the party\n" +
-				"  &7- &f/party [town/nation] &eaccept &8- &eAccept an invite to join a party\n" +
-				"  &7- &f/party [town/nation] &einvites &8- &eList of your invites\n" +
-				"  &7- &f/party [town/nation] &esetleader &8- &eSet the leader of your party\n" +
-				"  &7- &f/party [town/nation] &epromote &8- &ePromote a member to a party assistant\n" +
-				"  &7- &f/party [town/nation] &edemote &8- &eDemote a party assistant to member\n" +
-				"  &7- &f/party [town/nation] &einfo &8- &eInformation about your party\n" +
+				"  &7- &f/party &ecreate [town/nation] &8- &eCreate a political party\n" +
+				"  &7- &f/party &eleave [town/nation] &8- &eLeave your current party\n" +
+				"  &7- &f/party &eadd [town/nation] &8- &eInvite a player to the party\n" +
+				"  &7- &f/party &eaccept [town/nation] &8- &eAccept an invite to join a party\n" +
+				"  &7- &f/party &einvites [town/nation] &8- &eList of your invites\n" +
+				"  &7- &f/party &esetleader [town/nation] &8- &eSet the leader of your party\n" +
+				"  &7- &f/party &epromote [town/nation] &8- &ePromote a member to a party assistant\n" +
+				"  &7- &f/party &edemote [town/nation] &8- &eDemote a party assistant to member\n" +
+				"  &7- &f/party &einfo [town/nation] &8- &eInformation about your party\n" +
 				"\n" + 
 				"&8---------------------------------";
 		public static final String INFO_MESSAGE = "&8-------- &6&lTowny Elections&r &8--------\n" + 

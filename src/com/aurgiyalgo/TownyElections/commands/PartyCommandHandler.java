@@ -90,6 +90,7 @@ public class PartyCommandHandler implements CommandExecutor {
 			}
 			party = new TownParty(args[2], player.getUniqueId(), town.getUuid());
 			TownyElections.getInstance().getPartyManager().addParty(party);
+			player.sendMessage(ChatColor.GREEN + "The party was succesfully created!");
 		}
 		return true;
 		case "nation": {
@@ -115,6 +116,7 @@ public class PartyCommandHandler implements CommandExecutor {
 			}
 			party = new NationParty(args[2], player.getUniqueId(), nation.getUuid());
 			TownyElections.getInstance().getPartyManager().addParty(party);
+			player.sendMessage(ChatColor.GREEN + "The party was succesfully created!");
 		}
 		return true;
 		default:
@@ -533,7 +535,7 @@ public class PartyCommandHandler implements CommandExecutor {
 			}
 			StringBuilder builder = new StringBuilder();
 			builder.append(ChatColor.GOLD + "" + ChatColor.BOLD + party.getName() + "\n" + ChatColor.RESET);
-			builder.append(ChatColor.GREEN + "  Leader: " + Bukkit.getOfflinePlayer(party.getLeader()) + "\n");
+			builder.append(ChatColor.GREEN + "  Leader: " + Bukkit.getOfflinePlayer(party.getLeader()).getName() + "\n");
 			builder.append(ChatColor.GREEN + "  Assistants: ");
 			for (UUID assistant : party.getAssistants()) {
 				builder.append(Bukkit.getOfflinePlayer(assistant) + " ");
@@ -554,7 +556,7 @@ public class PartyCommandHandler implements CommandExecutor {
 			}
 			StringBuilder builder = new StringBuilder();
 			builder.append(ChatColor.GOLD + "" + ChatColor.BOLD + party.getName() + "\n" + ChatColor.RESET);
-			builder.append(ChatColor.GREEN + "  Leader: " + Bukkit.getOfflinePlayer(party.getLeader()) + "\n");
+			builder.append(ChatColor.GREEN + "  Leader: " + Bukkit.getOfflinePlayer(party.getLeader()).getName() + "\n");
 			builder.append(ChatColor.GREEN + "  Assistants: ");
 			for (UUID assistant : party.getAssistants()) {
 				builder.append(Bukkit.getOfflinePlayer(assistant) + " ");
