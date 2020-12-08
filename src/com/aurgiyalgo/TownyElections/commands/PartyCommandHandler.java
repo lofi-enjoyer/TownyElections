@@ -538,12 +538,12 @@ public class PartyCommandHandler implements CommandExecutor {
 			builder.append(ChatColor.GREEN + "  Leader: " + Bukkit.getOfflinePlayer(party.getLeader()).getName() + "\n");
 			builder.append(ChatColor.GREEN + "  Assistants: ");
 			for (UUID assistant : party.getAssistants()) {
-				builder.append(Bukkit.getOfflinePlayer(assistant) + " ");
+				builder.append(Bukkit.getOfflinePlayer(assistant).getName() + " ");
 			}
 			builder.append("\n");
 			builder.append(ChatColor.GREEN + "  Members: ");
 			for (UUID member : party.getMembers()) {
-				builder.append(Bukkit.getOfflinePlayer(member) + " ");
+				builder.append(Bukkit.getOfflinePlayer(member).getName() + " ");
 			}
 			player.sendMessage(builder.toString());
 		}
@@ -559,12 +559,12 @@ public class PartyCommandHandler implements CommandExecutor {
 			builder.append(ChatColor.GREEN + "  Leader: " + Bukkit.getOfflinePlayer(party.getLeader()).getName() + "\n");
 			builder.append(ChatColor.GREEN + "  Assistants: ");
 			for (UUID assistant : party.getAssistants()) {
-				builder.append(Bukkit.getOfflinePlayer(assistant) + " ");
+				builder.append(Bukkit.getOfflinePlayer(assistant).getName() + " ");
 			}
 			builder.append("\n");
 			builder.append(ChatColor.GREEN + "  Members: ");
 			for (UUID member : party.getMembers()) {
-				builder.append(Bukkit.getOfflinePlayer(member) + " ");
+				builder.append(Bukkit.getOfflinePlayer(member).getName() + " ");
 			}
 			player.sendMessage(builder.toString());
 		}
