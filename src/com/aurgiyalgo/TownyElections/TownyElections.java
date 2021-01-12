@@ -9,7 +9,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.aurgiyalgo.TownyElections.commands.ElectionsCommandHandler;
@@ -47,7 +46,7 @@ public class TownyElections extends JavaPlugin {
 		electionManager = new ElectionManager();
 		partyManager = new PartyManager();
 		
-		electionManager.loadElections();
+		electionManager.loadData();
 		partyManager.loadData();
 
 		getCommand("townyelections").setExecutor(new TElectCommandHandler(instance));
@@ -58,7 +57,7 @@ public class TownyElections extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		electionManager.saveElections();
+		electionManager.saveData();
 		partyManager.saveData();
 		
 		saveConfig();
@@ -102,6 +101,7 @@ public class TownyElections extends JavaPlugin {
 		languageFile.addDefault("election-lost", "&cYou lost the election!");
 		languageFile.addDefault("invalid-candidate", "&cInvalid candidate!");
 		languageFile.addDefault("you-voted", "&aYou voted for &f&l%party%");
+		languageFile.addDefault("unvoted", "&7Your vote was succesfully removed");
 		languageFile.addDefault("is-staff", "&cA city staff cannot do this");
 		languageFile.addDefault("not-in-a-nation", "&cYour town is not part of a nation");
 		languageFile.addDefault("not-active-election-nation", "&cYour nation does not have an active election");
@@ -170,7 +170,7 @@ public class TownyElections extends JavaPlugin {
 	 * @param
 	 * @return Player have permission
 	 */
-	public static boolean hasPerms(Player p, Permission perm) {
+	public static boolean hasPerms(Player p, String perm) {
 		if (!p.hasPermission(perm)) {
 			p.sendMessage(TownyElections.getTranslatedMessage("no-permission"));
 			return false;
@@ -187,35 +187,35 @@ public class TownyElections extends JavaPlugin {
 	}
 	
 	public static class Permissions {
-		public static final Permission TOWN_VOTE = new Permission("townyelections.elections.vote.town");
-		public static final Permission TOWN_CONVOKE = new Permission("townyelections.elections.convoke.town");
-		public static final Permission TOWN_LIST = new Permission("townyelections.elections.list.town");
-		public static final Permission TOWN_STOP = new Permission("townyelections.elections.stop.town");
-		public static final Permission TOWN_UNVOTE = new Permission("townyelections.elections.unvote.town");
-		public static final Permission NATION_VOTE = new Permission("townyelections.elections.vote.nation");
-		public static final Permission NATION_CONVOKE = new Permission("townyelections.elections.convoke.nation");
-		public static final Permission NATION_LIST = new Permission("townyelections.elections.list.nation");
-		public static final Permission NATION_STOP = new Permission("townyelections.elections.stop.nation");
-		public static final Permission NATION_UNVOTE = new Permission("townyelections.elections.unvote.nation");
-
-		public static final Permission TOWNPARTY_CREATE = new Permission("townyelections.party.create.town");
-		public static final Permission TOWNPARTY_LEAVE = new Permission("townyelections.party.leave.town");
-		public static final Permission TOWNPARTY_ADD = new Permission("townyelections.party.add.town");
-		public static final Permission TOWNPARTY_ACCEPT = new Permission("townyelections.party.accept.town");
-		public static final Permission TOWNPARTY_INVITES = new Permission("townyelections.party.invites.town");
-		public static final Permission TOWNPARTY_SETLEADER = new Permission("townyelections.party.setleader.town");
-		public static final Permission TOWNPARTY_PROMOTE = new Permission("townyelections.party.promote.town");
-		public static final Permission TOWNPARTY_DEMOTE = new Permission("townyelections.party.demote.town");
-		public static final Permission TOWNPARTY_INFO = new Permission("townyelections.party.info.town");
-		public static final Permission NATIONPARTY_CREATE = new Permission("townyelections.party.create.nation");
-		public static final Permission NATIONPARTY_LEAVE = new Permission("townyelections.party.leave.nation");
-		public static final Permission NATIONPARTY_ADD = new Permission("townyelections.party.add.nation");
-		public static final Permission NATIONPARTY_ACCEPT = new Permission("townyelections.party.accept.nation");
-		public static final Permission NATIONPARTY_INVITES = new Permission("townyelections.party.invites.nation");
-		public static final Permission NATIONPARTY_SETLEADER = new Permission("townyelections.party.setleader.nation");
-		public static final Permission NATIONPARTY_PROMOTE = new Permission("townyelections.party.promote.nation");
-		public static final Permission NATIONPARTY_DEMOTE = new Permission("townyelections.party.demote.nation");
-		public static final Permission NATIONPARTY_INFO = new Permission("townyelections.party.info.nation");
+		public static final String TOWN_VOTE = "townyelections.elections.vote.town";
+		public static final String TOWN_CONVOKE = "townyelections.elections.convoke.town";
+		public static final String TOWN_LIST = "townyelections.elections.list.town";
+		public static final String TOWN_STOP = "townyelections.elections.stop.town";
+		public static final String TOWN_UNVOTE = "townyelections.elections.unvote.town";
+		public static final String NATION_VOTE = "townyelections.elections.vote.nation";
+		public static final String NATION_CONVOKE = "townyelections.elections.convoke.nation";
+		public static final String NATION_LIST = "townyelections.elections.list.nation";
+		public static final String NATION_STOP = "townyelections.elections.stop.nation";
+		public static final String NATION_UNVOTE = "townyelections.elections.unvote.nation";
+                            
+		public static final String TOWNPARTY_CREATE = "townyelections.party.create.town";
+		public static final String TOWNPARTY_LEAVE = "townyelections.party.leave.town";
+		public static final String TOWNPARTY_ADD = "townyelections.party.add.town";
+		public static final String TOWNPARTY_ACCEPT = "townyelections.party.accept.town";
+		public static final String TOWNPARTY_INVITES = "townyelections.party.invites.town";
+		public static final String TOWNPARTY_SETLEADER = "townyelections.party.setleader.town";
+		public static final String TOWNPARTY_PROMOTE = "townyelections.party.promote.town";
+		public static final String TOWNPARTY_DEMOTE = "townyelections.party.demote.town";
+		public static final String TOWNPARTY_INFO = "townyelections.party.info.town";
+		public static final String NATIONPARTY_CREATE = "townyelections.party.create.nation";
+		public static final String NATIONPARTY_LEAVE = "townyelections.party.leave.nation";
+		public static final String NATIONPARTY_ADD = "townyelections.party.add.nation";
+		public static final String NATIONPARTY_ACCEPT = "townyelections.party.accept.nation";
+		public static final String NATIONPARTY_INVITES = "townyelections.party.invites.nation";
+		public static final String NATIONPARTY_SETLEADER = "townyelections.party.setleader.nation";
+		public static final String NATIONPARTY_PROMOTE = "townyelections.party.promote.nation";
+		public static final String NATIONPARTY_DEMOTE = "townyelections.party.demote.nation";
+		public static final String NATIONPARTY_INFO = "townyelections.party.info.nation";
 	}
 	
 	public static class Text {

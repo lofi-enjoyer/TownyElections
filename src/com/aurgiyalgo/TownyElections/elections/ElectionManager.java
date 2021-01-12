@@ -58,7 +58,7 @@ public class ElectionManager {
 		}.runTaskTimer(TownyElections.getInstance(), 0, 100);
 	}
 
-	public void loadElections() {
+	public void loadData() {
 		List<JSONObject> jsonArray;
 		jsonArray = dataHandler.getDataList("townElections");
 		if (jsonArray == null) return;
@@ -77,104 +77,9 @@ public class ElectionManager {
 			election.setup();
 			nationElections.add(election);
 		}
-		
-//		File townsFile = new File(dataFolder, "elections.json");
-//		if (townsFile.exists()) {
-//			JSONParser parser = new JSONParser();
-//
-//			Object obj = parser.parse(new FileReader(townsFile));
-//			JSONObject jsonFile = (JSONObject) obj;
-//
-//			JSONArray electionsArray = (JSONArray) jsonFile.get("elections");
-//
-//			for (int i = 0; i < electionsArray.size(); i++) {
-//				JSONObject election = (JSONObject) electionsArray.get(i);
-//
-//				long endTime = (long) election.get("endtime");
-//				Town town = TownyUniverse.getInstance().getDataSource().getTown((String) election.get("town"));
-//				TownElection e = new TownElection(endTime, town);
-//				
-//				JSONArray candidates = (JSONArray) election.get("votes");
-//				for (int j = 0; j < candidates.size(); j++) {
-//					e.addCandidate(UUID.fromString((String) candidates.get(j)));
-//				}
-//				
-//				JSONArray votes = (JSONArray) election.get("votes");
-//				for (int j = 0; j < votes.size(); j++) {
-//					JSONObject vote = (JSONObject) votes.get(j);
-//					UUID key = UUID.fromString((String) vote.get(vote.keySet().toArray()[0]));
-//					UUID candidate = (UUID) vote.get(key.toString());
-//					e.addVote(key, candidate);
-//				}
-//				_townElections.add(e);
-//			}
-//		}
-//
-//		File nationsFile = new File(dataFolder, "nationElections.json");
-//		if (nationsFile.exists()) {
-//			JSONParser parser = new JSONParser();
-//
-//			Object obj = parser.parse(new FileReader(nationsFile));
-//			JSONObject jsonFile = (JSONObject) obj;
-//
-//			JSONArray electionsArray = (JSONArray) jsonFile.get("elections");
-//
-//			for (int i = 0; i < electionsArray.size(); i++) {
-//				JSONObject election = (JSONObject) electionsArray.get(i);
-//
-//				long endTime = (long) election.get("endtime");
-//				Nation nation = TownyUniverse.getInstance().getDataSource().getNation((String) election.get("nation"));
-//				NationElection e = new NationElection(nation, endTime);
-//				
-//				JSONArray candidates = (JSONArray) election.get("candidates");
-//				for (int j = 0; j < candidates.size(); j++) {
-//					e.addCandidate(UUID.fromString((String) candidates.get(j)));
-//				}
-//				
-//				JSONArray votes = (JSONArray) election.get("votes");
-//				for (int j = 0; j < votes.size(); j++) {
-//					JSONObject vote = (JSONObject) votes.get(j);
-//					UUID key = UUID.fromString((String) vote.get(vote.keySet().toArray()[0]));
-//					UUID candidate = (UUID) vote.get(key.toString());
-//					e.addVote(key, candidate);
-//				}
-//				nationElections.add(e);
-//			}
-//		}
-//		
-//
-//
-//		File townDecisionsFile = new File(dataFolder, "townDecisions.json");
-//		if (townDecisionsFile.exists()) {
-//			JSONParser parser = new JSONParser();
-//
-//			Object obj = parser.parse(new FileReader(townDecisionsFile));
-//			JSONObject jsonFile = (JSONObject) obj;
-//
-//			JSONArray electionsArray = (JSONArray) jsonFile.get("decisions");
-//
-//			for (int i = 0; i < electionsArray.size(); i++) {
-//				JSONObject election = (JSONObject) electionsArray.get(i);
-//
-//				long endTime = (long) election.get("endtime");
-//				String type = (String) election.get("type");
-//				Town town = TownyUniverse.getInstance().getDataSource().getTown((String) election.get("town"));
-//				TownDecision d = new TownDecision(town, endTime, type);
-//				
-//				JSONArray votes = (JSONArray) election.get("votes");
-//				for (int j = 0; j < votes.size(); j++) {
-//					JSONObject vote = (JSONObject) votes.get(j);
-//					UUID key = UUID.fromString((String) vote.get(vote.keySet().toArray()[0]));
-//					boolean candidate = (boolean) vote.get(key.toString());
-//					d.addVote(key, candidate);
-//				}
-//				townDecisions.add(d);
-//			}
-//		}
-		
 	}
 
-	public void saveElections() {
+	public void saveData() {
 		List<JSONObject> jsonArray;
 		jsonArray = new ArrayList<JSONObject>();
 		for (TownElection w : townElections) {
@@ -195,120 +100,6 @@ public class ElectionManager {
 		dataHandler.addDataList("nationElections", jsonArray);
 		
 		dataHandler.saveData();
-		
-//		if (!dataFolder.exists()) {
-//			dataFolder.mkdir();
-//		}
-//		File townsFile = new File(dataFolder, "elections.json");
-//		if (townsFile.exists()) {
-//			townsFile.delete();
-//			townsFile.createNewFile();
-//
-//			JSONObject jsonFile = new JSONObject();
-//
-//			JSONArray electionsArray = new JSONArray();
-//
-//			for (int i = 0; i < _townElections.size(); i++) {
-//				JSONObject electionObject = new JSONObject();
-//				electionObject.put("endtime", _townElections.get(i).getEndTime());
-//				electionObject.put("town", _townElections.get(i).getTown().getName());
-//				
-//				JSONArray candidates = new JSONArray();
-//				for (UUID player : _townElections.get(i).getCandidates()) {
-//					candidates.add(player);
-//				}
-//				electionObject.put("candidates", candidates);
-//				
-//				JSONArray votes = new JSONArray();
-//				for (Map.Entry<UUID, UUID> entry : _townElections.get(i).getVotes().entrySet()) {
-//					JSONObject vote = new JSONObject();
-//					vote.put(entry.getKey().toString(), entry.getValue().toString());
-//					votes.add(vote);
-//				}
-//				electionObject.put("votes", votes);
-//
-//				electionsArray.add(electionObject);
-//			}
-//
-//			jsonFile.put("elections", electionsArray);
-//
-//			FileWriter fw = new FileWriter(townsFile);
-//			fw.write(jsonFile.toString());
-//			fw.close();
-//		}
-//		
-//
-//		File nationsFile = new File(dataFolder, "nationElections.json");
-//		if (nationsFile.exists()) {
-//			nationsFile.delete();
-//			nationsFile.createNewFile();
-//
-//			JSONObject jsonFile = new JSONObject();
-//
-//			JSONArray electionsArray = new JSONArray();
-//
-//			for (int i = 0; i < nationElections.size(); i++) {
-//				JSONObject electionObject = new JSONObject();
-//				electionObject.put("endtime", nationElections.get(i).getEndTime());
-//				electionObject.put("nation", nationElections.get(i).getNation().getName());
-//				
-//				JSONArray candidates = new JSONArray();
-//				for (UUID player : nationElections.get(i).getCandidates()) {
-//					candidates.add(player);
-//				}
-//				electionObject.put("candidates", candidates);
-//				
-//				JSONArray votes = new JSONArray();
-//				for (Map.Entry<UUID, UUID> entry : nationElections.get(i).getVotes().entrySet()) {
-//					JSONObject vote = new JSONObject();
-//					vote.put(entry.getKey().toString(), entry.getValue().toString());
-//					votes.add(vote);
-//				}
-//				electionObject.put("votes", votes);
-//
-//				electionsArray.add(electionObject);
-//			}
-//
-//			jsonFile.put("elections", electionsArray);
-//
-//			FileWriter fw = new FileWriter(nationsFile);
-//			fw.write(jsonFile.toString());
-//			fw.close();
-//		}
-//		
-//
-//		File townDecisionsFile = new File(dataFolder, "townDecisions.json");
-//		if (townDecisionsFile.exists()) {
-//			townDecisionsFile.delete();
-//			townDecisionsFile.createNewFile();
-//
-//			JSONObject jsonFile = new JSONObject();
-//
-//			JSONArray electionsArray = new JSONArray();
-//
-//			for (int i = 0; i < townDecisions.size(); i++) {
-//				JSONObject electionObject = new JSONObject();
-//				electionObject.put("endtime", townDecisions.get(i).getEndTime());
-//				electionObject.put("town", townDecisions.get(i).getTown().getName());
-//				
-//				JSONArray votes = new JSONArray();
-//				for (Map.Entry<UUID, Boolean> entry : townDecisions.get(i).getVotes().entrySet()) {
-//					JSONObject vote = new JSONObject();
-//					vote.put(entry.getKey().toString(), entry.getValue());
-//					votes.add(vote);
-//				}
-//				electionObject.put("votes", votes);
-//				electionObject.put("type", townDecisions.get(i).getType());
-//
-//				electionsArray.add(electionObject);
-//			}
-//
-//			jsonFile.put("decisions", electionsArray);
-//
-//			FileWriter fw = new FileWriter(townDecisionsFile);
-//			fw.write(jsonFile.toString());
-//			fw.close();
-//		}
 	}
 
 	public void removeTownElection(TownElection e) {
@@ -337,7 +128,7 @@ public class ElectionManager {
 			return null;
 		}
 		for (TownElection e : townElections) {
-			if (e.getTown() == t) {
+			if (e.getTown().getName().equals(t.getName())) {
 				return e;
 			}
 		}
@@ -352,7 +143,7 @@ public class ElectionManager {
 			return null;
 		}
 		for (NationElection e : nationElections) {
-			if (e.getNation() == n) {
+			if (e.getNation().getName().equals(n.getName())) {
 				return e;
 			}
 		}

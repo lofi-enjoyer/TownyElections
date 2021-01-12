@@ -97,6 +97,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			return true;
 		}
 		e.removeVote(p.getUniqueId());
+		p.sendMessage(TownyElections.getTranslatedMessage("unvoted"));
 		return true;
 	}
 
@@ -252,7 +253,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			return true;
 		}
 		TownElection e = new TownElection(finishTime, t);
-		TownyElections.getInstance().getElectionManager().addTownElection(e);;
+		TownyElections.getInstance().getElectionManager().addTownElection(e);
 		TownyElections.sendTownSubtitle(t, TownyElections.getTranslatedMessage("election-convoked"));
 		p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
 		return true;
