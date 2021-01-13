@@ -25,6 +25,10 @@ permissions:
       townyelections.party.*: true
   townyelections.use:
     default: true
+  townyelections.elections:
+    default: true
+  townyelections.party:
+    default: true
   townyelections.elections.*:
     default: op
     children:

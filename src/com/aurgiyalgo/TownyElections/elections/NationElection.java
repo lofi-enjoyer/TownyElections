@@ -20,7 +20,8 @@ public class NationElection extends Election {
 
 	public NationElection(Nation nation, long endTime) {
 		super(endTime);
-		this.nation = nation;
+		territoryUuid = nation.getUuid();
+		setup();
 	}
 
 	public void setup() {

@@ -21,16 +21,15 @@ import com.aurgiyalgo.TownyElections.parties.PartyManager;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 
-/**
- * @author javi
- *
- */
+import fr.minuskube.inv.InventoryManager;
+
 public class TownyElections extends JavaPlugin {
 
 	private static TownyElections instance;
 	private FileConfiguration languageFile;
 	private ElectionManager electionManager;
 	private PartyManager partyManager;
+	private InventoryManager inventoryManager;
 	
 	private boolean debugEnabled;
 
@@ -42,6 +41,9 @@ public class TownyElections extends JavaPlugin {
 		
 		setupConfig();
 		setupLanguageFile();
+		
+		inventoryManager = new InventoryManager(this);
+		inventoryManager.init();
 		
 		electionManager = new ElectionManager();
 		partyManager = new PartyManager();
@@ -128,7 +130,7 @@ public class TownyElections extends JavaPlugin {
 
 	public static String getTranslatedMessage(String key) {
 		String message = instance.languageFile.getString(key);
-		if (message == null) return null;
+		if (message == null) return "";
 		return ChatColor.translateAlternateColorCodes('&', message);
 	}
 
@@ -271,6 +273,10 @@ public class TownyElections extends JavaPlugin {
 	
 	public ElectionManager getElectionManager() {
 		return electionManager;
+	}
+	
+	public InventoryManager getInventoryManager() {
+		return inventoryManager;
 	}
 
 }

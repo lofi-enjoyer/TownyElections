@@ -244,6 +244,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 		}
 		if (TownyElections.getInstance().getElectionManager().getTownElection(p) != null) {
 			p.sendMessage(TownyElections.getTranslatedMessage("active-election"));
+			return true;
 		}
 		long finishTime = 0;
 		try {
@@ -323,6 +324,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			TownyElections.getInstance().getElectionManager().removeTownElection(e);
 			return true;
 		}
+//		VoteGui.INVENTORY.open(p);
 		e.addVote(p.getUniqueId(), args[2]);
 		String msg = TownyElections.getTranslatedMessage("you-voted");
 		msg = msg.replaceAll("%party%", args[2]);

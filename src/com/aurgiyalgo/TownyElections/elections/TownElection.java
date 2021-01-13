@@ -22,6 +22,7 @@ public class TownElection extends Election {
 	public TownElection(long endTime, Town town) {
 		super(endTime);
 		territoryUuid = town.getUuid();
+		setup();
 	}
 	
 	public void setup() {
@@ -83,7 +84,7 @@ public class TownElection extends Election {
 			TownParty party = TownyElections.getInstance().getPartyManager().getPartiesForTown(town.getName()).stream().filter(pty -> pty.getName().toLowerCase().equals(winner.toLowerCase())).collect(Collectors.toList()).get(0);
 			town.setMayor(TownyUniverse.getInstance().getDataSource().getResident(Bukkit.getOfflinePlayer(party.getLeader()).getName()));
 			TownyUniverse.getInstance().getDataSource().saveTown(town);
-			String msg = TownyElections.getTranslatedMessage("election-won").replaceAll("%player%", party.getName());
+			String msg = TownyElections.getTranslatedMessage("election-won").replace("%party%", party.getName());
 			TownyElections.sendTownSubtitle(town, msg);
 			
 		} catch (NotRegisteredException e) {

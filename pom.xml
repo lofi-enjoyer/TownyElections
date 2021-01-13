@@ -65,6 +65,26 @@
 					</gitDescribe>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.2.4</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<artifactSet>
+								<includes>
+									<include>fr.minuskube.inv:smart-invs</include>
+								</includes>
+							</artifactSet>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -91,6 +111,11 @@
 			<artifactId>lombok</artifactId>
 			<version>1.18.16</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>fr.minuskube.inv</groupId>
+			<artifactId>smart-invs</artifactId>
+			<version>1.2.7</version>
 		</dependency>
 	</dependencies>
 
