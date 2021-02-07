@@ -32,6 +32,7 @@ public class TownyElections extends JavaPlugin {
 	private InventoryManager inventoryManager;
 	
 	private boolean debugEnabled;
+	private int minDuration;
 
 	@Override
 	public void onEnable() {
@@ -67,13 +68,23 @@ public class TownyElections extends JavaPlugin {
 	
 	private void setupConfig() {
 		getConfig().addDefault("language", "en-US");
-		getConfig().addDefault("max-duration", 604800000L);
-		getConfig().addDefault("enabled-revolutions", true);
+		getConfig().addDefault("max-duration", 10080);
+		getConfig().addDefault("min-duration", 60);
 		getConfig().addDefault("debug-mode", false);
 		getConfig().options().copyDefaults(true);
 		saveConfig();
 		
-		debugEnabled = getConfig().getBoolean("debug-mode");
+		Configuration.DEBUG_ENABLED = getConfig().getBoolean("debug-mode");
+		Configuration.MAX_DURATION = getConfig().getInt("max-duration");
+		Configuration.MIN_DURATION = getConfig().getInt("min-duration");
+	}
+	
+	public static class Configuration {
+		
+		public static int MAX_DURATION = 10080;
+		public static int MIN_DURATION = 60;
+		public static boolean DEBUG_ENABLED = false;
+		
 	}
 	
 	private void setupLanguageFile() {
@@ -108,6 +119,8 @@ public class TownyElections extends JavaPlugin {
 		languageFile.addDefault("not-in-a-nation", "&cYour town is not part of a nation");
 		languageFile.addDefault("not-active-election-nation", "&cYour nation does not have an active election");
 		languageFile.addDefault("active-election-nation", "&cYour nation has an active election");
+		languageFile.addDefault("min-duration", "&cThe duration has to be at least %min%");
+		languageFile.addDefault("max-duration", "&cThe duration has to be at most %max%");
 		languageFile.options().copyDefaults(true);
 		try {
 			languageFile.save(file);

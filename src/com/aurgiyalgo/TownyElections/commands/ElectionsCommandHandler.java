@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.aurgiyalgo.TownyElections.TownyElections;
+import com.aurgiyalgo.TownyElections.TownyElections.Configuration;
 import com.aurgiyalgo.TownyElections.elections.NationElection;
 import com.aurgiyalgo.TownyElections.elections.TownElection;
 import com.aurgiyalgo.TownyElections.parties.NationParty;
@@ -248,9 +249,17 @@ public class ElectionsCommandHandler implements CommandExecutor {
 		}
 		long finishTime = 0;
 		try {
-			finishTime = Integer.parseInt(args[2]) * 1000 + System.currentTimeMillis();
+			finishTime = Integer.parseInt(args[2]) * 60 * 1000 + System.currentTimeMillis();
 		} catch (Exception e) {
 			p.sendMessage(TownyElections.getTranslatedMessage("error-input-string"));
+			return true;
+		}
+		if (finishTime / (1000 * 60) < Configuration.MIN_DURATION) {
+			p.sendMessage(TownyElections.getTranslatedMessage("min-duration").replace("%min%", String.valueOf(Configuration.MIN_DURATION)));
+			return true;
+		}
+		if (finishTime / (1000 * 60) > Configuration.MAX_DURATION) {
+			p.sendMessage(TownyElections.getTranslatedMessage("max-duration").replace("%max%", String.valueOf(Configuration.MAX_DURATION)));
 			return true;
 		}
 		TownElection e = new TownElection(finishTime, t);
@@ -283,9 +292,17 @@ public class ElectionsCommandHandler implements CommandExecutor {
 		}
 		long finishTime = 0;
 		try {
-			finishTime = Integer.parseInt(args[2]) * 1000 + System.currentTimeMillis();
+			finishTime = Integer.parseInt(args[2]) * 60 * 1000 + System.currentTimeMillis();
 		} catch (Exception e) {
 			p.sendMessage(TownyElections.getTranslatedMessage("error-input-string"));
+			return true;
+		}
+		if (finishTime / (1000 * 60) < Configuration.MIN_DURATION) {
+			p.sendMessage(TownyElections.getTranslatedMessage("min-duration").replace("%min%", String.valueOf(Configuration.MIN_DURATION)));
+			return true;
+		}
+		if (finishTime / (1000 * 60) > Configuration.MAX_DURATION) {
+			p.sendMessage(TownyElections.getTranslatedMessage("max-duration").replace("%max%", String.valueOf(Configuration.MAX_DURATION)));
 			return true;
 		}
 		NationElection e = new NationElection(n, finishTime);

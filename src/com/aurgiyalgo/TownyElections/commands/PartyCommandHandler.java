@@ -68,7 +68,7 @@ public class PartyCommandHandler implements CommandExecutor {
 		Player player = (Player) sender;
 		switch (args[1].toLowerCase()) {
 		case "town": {
-			if (!player.hasPermission(TownyElections.Permissions.TOWN_CONVOKE)) {
+			if (!player.hasPermission(TownyElections.Permissions.TOWNPARTY_CREATE)) {
 				player.sendMessage(ChatColor.RED + "You cannot do that!");
 				return true;
 			}
@@ -94,7 +94,7 @@ public class PartyCommandHandler implements CommandExecutor {
 		}
 		return true;
 		case "nation": {
-			if (!player.hasPermission(TownyElections.Permissions.NATION_CONVOKE)) {
+			if (!player.hasPermission(TownyElections.Permissions.NATIONPARTY_CREATE)) {
 				player.sendMessage(ChatColor.RED + "You cannot do that!");
 				return true;
 			}

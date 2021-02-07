@@ -64,7 +64,6 @@ public class PartyManager {
 		return null;
 	}
 
-
 	public List<TownParty> getPartiesForTown(String town) {
 		List<TownParty> townParties = new ArrayList<TownParty>();
 		for (Party party : parties) {

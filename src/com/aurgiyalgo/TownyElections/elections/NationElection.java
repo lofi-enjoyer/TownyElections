@@ -68,12 +68,11 @@ public class NationElection extends Election {
 		winner = maxCandidate.getKey();
 
 		try {
-			NationParty party = TownyElections.getInstance().getPartyManager().getNationParties().stream().filter(t -> t.getName().toLowerCase().equals(winner.toLowerCase())).collect(Collectors.toList()).get(0);
+			NationParty party = TownyElections.getInstance().getPartyManager().getPartiesForNation(nation.getName()).stream().filter(t -> t.getName().toLowerCase().equals(winner.toLowerCase())).collect(Collectors.toList()).get(0);
 			nation.setCapital(TownyUniverse.getInstance().getDataSource()
 					.getResident(Bukkit.getOfflinePlayer(party.getLeader()).getName()).getTown());
 			TownyUniverse.getInstance().getDataSource().saveNation(nation);
-			String msg = TownyElections.getTranslatedMessage("election-won").replaceAll("%player%",
-					party.getName());
+			String msg = TownyElections.getTranslatedMessage("election-won").replace("%party%", party.getName());
 			TownyElections.sendNationSubtitle(nation, msg);
 
 		} catch (NotRegisteredException e) {
