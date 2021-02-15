@@ -29,54 +29,76 @@ public class ElectionsCommandHandler implements CommandExecutor {
 		if (args.length < 1) {
 			return executeHelp(sender, cmd, str, args);
 		}
+		if (args.length < 2) {
+			sender.sendMessage(TownyElections.getTranslatedMessage("not-enough-arguments"));
+			return true;
+		}
 		switch (args[0]) {
-		case "town":
-			if (args.length < 2) {
-				sender.sendMessage(TownyElections.getTranslatedMessage("not-enough-arguments"));
-				return true;
-			}
-			switch (args[1]) {
-			case "vote":
-				return executeTownVote(sender, cmd, str, args);
-			case "convoke":
-				return executeTownConvoke(sender, cmd, str, args);
-			case "list":
-				return executeTownList(sender, cmd, str, args);
-			case "stop":
-				return executeTownStop(sender, cmd, str, args);
-			case "unvote":
-				return executeTownUnvote(sender, cmd, str, args);
-			default:
-				sender.sendMessage(ChatColor.RED + "Invalid argument!");
-				break;
-			}
-			break;
-		case "nation":
-			if (args.length < 2) {
-				sender.sendMessage(TownyElections.getTranslatedMessage("not-enough-arguments"));
-				return true;
-			}
-			switch (args[1]) {
-			case "vote":
-				return executeNationVote(sender, cmd, str, args);
-			case "convoke":
-				return executeNationConvoke(sender, cmd, str, args);
-			case "list":
-				return executeNationList(sender, cmd, str, args);
-			case "stop":
-				return executeNationStop(sender, cmd, str, args);
-			case "unvote":
-				return executeNationUnvote(sender, cmd, str, args);
-			default:
-				sender.sendMessage(ChatColor.RED + "Invalid argument!");
-				break;
-			}
-			break;
+		case "vote":
+			return executeVote(sender, cmd, str, args);
+		case "convoke":
+			return executeConvoke(sender, cmd, str, args);
+		case "list":
+			return executeList(sender, cmd, str, args);
+		case "stop":
+			return executeStop(sender, cmd, str, args);
+		case "unvote":
+			return executeUnvote(sender, cmd, str, args);
 		default:
 			sender.sendMessage(ChatColor.RED + "Invalid argument!");
 			break;
 		}
 		return true;
+	}
+
+	private boolean executeVote(CommandSender sender, Command cmd, String str, String[] args) {
+		switch (args[1]) {
+		case "town": return executeTownVote(sender, cmd, str, args);
+		case "nation": return executeNationVote(sender, cmd, str, args);
+		default:
+			sender.sendMessage(ChatColor.RED + "Invalid argument!");
+			return true;
+		}
+	}
+
+	private boolean executeConvoke(CommandSender sender, Command cmd, String str, String[] args) {
+		switch (args[1]) {
+		case "town": return executeTownConvoke(sender, cmd, str, args);
+		case "nation": return executeNationConvoke(sender, cmd, str, args);
+		default:
+			sender.sendMessage(ChatColor.RED + "Invalid argument!");
+			return true;
+		}
+	}
+
+	private boolean executeList(CommandSender sender, Command cmd, String str, String[] args) {
+		switch (args[1]) {
+		case "town": return executeTownList(sender, cmd, str, args);
+		case "nation": return executeNationList(sender, cmd, str, args);
+		default:
+			sender.sendMessage(ChatColor.RED + "Invalid argument!");
+			return true;
+		}
+	}
+
+	private boolean executeStop(CommandSender sender, Command cmd, String str, String[] args) {
+		switch (args[1]) {
+		case "town": return executeTownStop(sender, cmd, str, args);
+		case "nation": return executeNationStop(sender, cmd, str, args);
+		default:
+			sender.sendMessage(ChatColor.RED + "Invalid argument!");
+			return true;
+		}
+	}
+
+	private boolean executeUnvote(CommandSender sender, Command cmd, String str, String[] args) {
+		switch (args[1]) {
+		case "town": return executeTownUnvote(sender, cmd, str, args);
+		case "nation": return executeNationUnvote(sender, cmd, str, args);
+		default:
+			sender.sendMessage(ChatColor.RED + "Invalid argument!");
+			return true;
+		}
 	}
 
 	private boolean executeTownUnvote(CommandSender sender, Command cmd, String str, String[] args) {
@@ -388,7 +410,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 	}
 
 	private boolean executeHelp(CommandSender sender, Command cmd, String str, String[] args) {
-		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', TownyElections.Text.HELP_MESSAGE));
+		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', TownyElections.Text.ELECTIONS_HELP_MESSAGE));
 		return true;
 	}
 
