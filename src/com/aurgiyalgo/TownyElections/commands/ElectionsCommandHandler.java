@@ -3,6 +3,9 @@ package com.aurgiyalgo.TownyElections.commands;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.aurgiyalgo.TownyElections.gui.NationVoteGui;
+import com.aurgiyalgo.TownyElections.gui.TownVoteGui;
+import com.aurgiyalgo.TownyElections.gui.VoteGui;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
@@ -271,7 +274,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 		}
 		long finishTime = 0;
 		try {
-			finishTime = Integer.parseInt(args[2]) * 60 * 1000 + System.currentTimeMillis();
+			finishTime = Integer.parseInt(args[2]) * 60 * 1000;
 		} catch (Exception e) {
 			p.sendMessage(TownyElections.getTranslatedMessage("error-input-string"));
 			return true;
@@ -284,7 +287,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			p.sendMessage(TownyElections.getTranslatedMessage("max-duration").replace("%max%", String.valueOf(Configuration.MAX_DURATION)));
 			return true;
 		}
-		TownElection e = new TownElection(finishTime, t);
+		TownElection e = new TownElection(finishTime + System.currentTimeMillis(), t);
 		TownyElections.getInstance().getElectionManager().addTownElection(e);
 		TownyElections.sendTownSubtitle(t, TownyElections.getTranslatedMessage("election-convoked"));
 		p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
@@ -314,7 +317,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 		}
 		long finishTime = 0;
 		try {
-			finishTime = Integer.parseInt(args[2]) * 60 * 1000 + System.currentTimeMillis();
+			finishTime = Integer.parseInt(args[2]) * 60 * 1000;
 		} catch (Exception e) {
 			p.sendMessage(TownyElections.getTranslatedMessage("error-input-string"));
 			return true;
@@ -327,7 +330,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			p.sendMessage(TownyElections.getTranslatedMessage("max-duration").replace("%max%", String.valueOf(Configuration.MAX_DURATION)));
 			return true;
 		}
-		NationElection e = new NationElection(n, finishTime);
+		NationElection e = new NationElection(n, finishTime + System.currentTimeMillis());
 		TownyElections.getInstance().getElectionManager().addNationElection(e);
 		TownyElections.sendNationSubtitle(n, TownyElections.getTranslatedMessage("election-convoked"));
 		p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
@@ -341,10 +344,6 @@ public class ElectionsCommandHandler implements CommandExecutor {
 		}
 		Player p = (Player) sender;
 		if (!TownyElections.hasPerms(p, TownyElections.Permissions.TOWN_VOTE)) return true;
-		if (args.length <= 2) {
-			p.sendMessage(TownyElections.getTranslatedMessage("not-enough-arguments"));
-			return true;
-		}
 		TownElection e;
 		e = TownyElections.getInstance().getElectionManager().getTownElection(p);
 		if (e == null) {
@@ -355,20 +354,11 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			p.sendMessage(TownyElections.getTranslatedMessage("already-voted"));
 			return true;
 		}
-		if (TownyElections.getInstance().getPartyManager().getPartiesForTown(e.getTown().getName()).stream().filter(party -> party.getName().equals(args[2])).collect(Collectors.toList()).isEmpty()) {
-			p.sendMessage(TownyElections.getTranslatedMessage("invalid-candidate"));
-			return true;
-		}
 		if (System.currentTimeMillis() >= e.getEndTime()) {
 			TownyElections.getInstance().getElectionManager().removeTownElection(e);
 			return true;
 		}
-//		VoteGui.INVENTORY.open(p);
-		e.addVote(p.getUniqueId(), args[2]);
-		String msg = TownyElections.getTranslatedMessage("you-voted");
-		msg = msg.replaceAll("%party%", args[2]);
-		p.sendMessage(msg);
-		p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
+		TownVoteGui.INVENTORY.open(p);
 		return true;
 	}
 
@@ -379,10 +369,6 @@ public class ElectionsCommandHandler implements CommandExecutor {
 		}
 		Player p = (Player) sender;
 		if (!TownyElections.hasPerms(p, TownyElections.Permissions.NATION_VOTE)) return true;
-		if (args.length <= 2) {
-			p.sendMessage(TownyElections.getTranslatedMessage("not-enough-arguments"));
-			return true;
-		}
 		NationElection e;
 		e = TownyElections.getInstance().getElectionManager().getNationElection(p);
 		if (e == null) {
@@ -393,19 +379,11 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			p.sendMessage(TownyElections.getTranslatedMessage("already-voted"));
 			return true;
 		}
-		if (TownyElections.getInstance().getPartyManager().getPartiesForNation(e.getNation().getName()).stream().filter(party -> party.getName().equals(args[2])).collect(Collectors.toList()).isEmpty()) {
-			p.sendMessage(TownyElections.getTranslatedMessage("invalid-candidate"));
-			return true;
-		}
 		if (System.currentTimeMillis() >= e.getEndTime()) {
 			TownyElections.getInstance().getElectionManager().removeNationElection(e);
 			return true;
 		}
-		e.addVote(p.getUniqueId(), args[2]);
-		String msg = TownyElections.getTranslatedMessage("you-voted");
-		msg = msg.replaceAll("%party%", args[2]);
-		p.sendMessage(msg);
-		p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
+		NationVoteGui.INVENTORY.open(p);
 		return true;
 	}
 
