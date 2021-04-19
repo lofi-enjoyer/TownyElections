@@ -1,13 +1,7 @@
 package com.aurgiyalgo.TownyElections;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
-
+import lombok.Getter;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -25,14 +19,16 @@ import fr.minuskube.inv.InventoryManager;
 
 public class TownyElections extends JavaPlugin {
 
+	@Getter
 	private static TownyElections instance;
-	private FileConfiguration languageFile;
+	@Getter
 	private ElectionManager electionManager;
+	@Getter
 	private PartyManager partyManager;
+	@Getter
 	private InventoryManager inventoryManager;
-	
-	private boolean debugEnabled;
-	private int minDuration;
+	@Getter
+	private LanguageData languageData;
 
 	@Override
 	public void onEnable() {
@@ -41,7 +37,8 @@ public class TownyElections extends JavaPlugin {
 		new TEMetrics(instance);
 		
 		setupConfig();
-		setupLanguageFile();
+		languageData = new LanguageData();
+		languageData.load();
 		
 		inventoryManager = new InventoryManager(this);
 		inventoryManager.init();
@@ -62,6 +59,7 @@ public class TownyElections extends JavaPlugin {
 	public void onDisable() {
 		electionManager.saveData();
 		partyManager.saveData();
+		languageData.save();
 		
 		saveConfig();
 	}
@@ -86,65 +84,9 @@ public class TownyElections extends JavaPlugin {
 		public static boolean DEBUG_ENABLED = false;
 		
 	}
-	
-	private void setupLanguageFile() {
-		File file = new File(getDataFolder(), getConfig().getString("language") + ".yml");
-		if (!file.exists()) {
-			file.getParentFile().mkdirs();
-			try {
-				file.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		languageFile = YamlConfiguration.loadConfiguration(file);
-		languageFile.addDefault("only-player", "&cOnly a player can execute this command!");
-		languageFile.addDefault("not-enough-arguments", "&cNot enough arguments!");
-		languageFile.addDefault("not-active-election", "&cYour town does not have an active election");
-		languageFile.addDefault("active-election", "&cYour town has an active election");
-		languageFile.addDefault("no-permission", "&cNot enough permissions!");
-		languageFile.addDefault("not-in-a-town", "&cYou are not part of a town");
-		languageFile.addDefault("already-voted", "&7You have already voted");
-		languageFile.addDefault("election-convoked", "&aAn election just started!");
-		languageFile.addDefault("error-input-string", "&cError on input string!");
-		languageFile.addDefault("candidate-now", "&aYou are now a candidate!");
-		languageFile.addDefault("election-won", "&f%party% won the election and are leaders now!");
-		languageFile.addDefault("no-winner", "&cThere is no winner!");
-		languageFile.addDefault("election-lost", "&cYou lost the election!");
-		languageFile.addDefault("invalid-candidate", "&cInvalid candidate!");
-		languageFile.addDefault("you-voted", "&aYou voted for &f&l%party%");
-		languageFile.addDefault("unvoted", "&7Your vote was succesfully removed");
-		languageFile.addDefault("is-staff", "&cA city staff cannot do this");
-		languageFile.addDefault("not-in-a-nation", "&cYour town is not part of a nation");
-		languageFile.addDefault("not-active-election-nation", "&cYour nation does not have an active election");
-		languageFile.addDefault("active-election-nation", "&cYour nation has an active election");
-		languageFile.addDefault("min-duration", "&cThe duration has to be at least %min%");
-		languageFile.addDefault("max-duration", "&cThe duration has to be at most %max%");
-		languageFile.options().copyDefaults(true);
-		try {
-			languageFile.save(file);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 
-	public static class MutableInteger {
-		public int value;
-
-		public MutableInteger(int value) {
-			this.value = value;
-		}
-
-		public int getValue() {
-			return value;
-		}
-	}
-
-	public static String getTranslatedMessage(String key) {
-		String message = instance.languageFile.getString(key);
-		if (message == null) return "";
-		return ChatColor.translateAlternateColorCodes('&', message);
+	public static String getMessage(String key) {
+		return instance.getLanguageData().getString(key);
 	}
 
 	public static void sendTownMessage(Town n, String message) {
@@ -187,18 +129,10 @@ public class TownyElections extends JavaPlugin {
 	 */
 	public static boolean hasPerms(Player p, String perm) {
 		if (!p.hasPermission(perm)) {
-			p.sendMessage(TownyElections.getTranslatedMessage("no-permission"));
+			p.sendMessage(TownyElections.getInstance().getLanguageData().getString("no-permission"));
 			return false;
 		}
 		return true;
-	}
-	
-	public FileConfiguration getLanguageFile() {
-		return languageFile;
-	}
-	
-	public boolean isDebugModeEnabled() {
-		return debugEnabled;
 	}
 	
 	public static class Permissions {
@@ -281,37 +215,6 @@ public class TownyElections extends JavaPlugin {
 				"&fDeveloper: &e%author%\n" + 
 				"\n" + 
 				"&8---------------------------------";
-	}
-	
-	public static void info(String msg) {
-		if (instance.debugEnabled) 
-			instance.getLogger().log(Level.INFO, msg);
-	}
-	
-	public static void warning(String msg) {
-		if (instance.debugEnabled) 
-			instance.getLogger().log(Level.WARNING, msg);
-	}
-	
-	public static void error(String msg) {
-		if (instance.debugEnabled) 
-			instance.getLogger().log(Level.SEVERE, msg);
-	}
-	
-	public static TownyElections getInstance() {
-		return instance;
-	}
-	
-	public PartyManager getPartyManager() {
-		return partyManager;
-	}
-	
-	public ElectionManager getElectionManager() {
-		return electionManager;
-	}
-	
-	public InventoryManager getInventoryManager() {
-		return inventoryManager;
 	}
 
 }

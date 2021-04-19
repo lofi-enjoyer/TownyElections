@@ -134,6 +134,7 @@ public class PartyCommandHandler implements CommandExecutor {
 		Player player = (Player) sender;
 		switch (args[1].toLowerCase()) {
 		case "town": {
+			if (!TownyElections.hasPerms(player, TownyElections.Permissions.TOWNPARTY_LEAVE)) return true;
 			TownParty party = TownyElections.getInstance().getPartyManager().getPlayerTownParty(player.getUniqueId());
 			if (party == null) {
 				player.sendMessage(ChatColor.RED + "You're not part of a party");
@@ -143,6 +144,7 @@ public class PartyCommandHandler implements CommandExecutor {
 		}
 		return true;
 		case "nation": {
+			if (!TownyElections.hasPerms(player, TownyElections.Permissions.NATIONPARTY_LEAVE)) return true;
 			NationParty party = TownyElections.getInstance().getPartyManager().getPlayerNationParty(player.getUniqueId());
 			if (party == null) {
 				player.sendMessage(ChatColor.RED + "You're not part of a party");
@@ -166,6 +168,7 @@ public class PartyCommandHandler implements CommandExecutor {
 		Player player = (Player) sender;
 		switch (args[1].toLowerCase()) {
 		case "town": {
+			if (!TownyElections.hasPerms(player, TownyElections.Permissions.TOWNPARTY_ADD)) return true;
 			TownParty party = TownyElections.getInstance().getPartyManager().getPlayerTownParty(player.getUniqueId());
 			if (party == null) {
 				player.sendMessage(ChatColor.RED + "You're not part of a party");
@@ -186,6 +189,7 @@ public class PartyCommandHandler implements CommandExecutor {
 		}
 		return true;
 		case "nation": {
+			if (!TownyElections.hasPerms(player, TownyElections.Permissions.NATIONPARTY_ADD)) return true;
 			NationParty party = TownyElections.getInstance().getPartyManager().getPlayerNationParty(player.getUniqueId());
 			if (party == null) {
 				player.sendMessage(ChatColor.RED + "You're not part of a party");
@@ -233,6 +237,7 @@ public class PartyCommandHandler implements CommandExecutor {
 		}
 		switch (args[1].toLowerCase()) {
 		case "town": {
+			if (!TownyElections.hasPerms(player, TownyElections.Permissions.TOWNPARTY_ACCEPT)) return true;
 			TownParty party;
 			try {
 				party = TownyElections.getInstance().getPartyManager().getPartiesForTown(resident.getTown().getName()).stream().filter(obj -> obj.getName().toLowerCase().equals(args[2])).collect(Collectors.toList()).get(0);
@@ -256,6 +261,7 @@ public class PartyCommandHandler implements CommandExecutor {
 		}
 		return true;
 		case "nation": {
+			if (!TownyElections.hasPerms(player, TownyElections.Permissions.NATIONPARTY_ACCEPT)) return true;
 			NationParty party;
 			try {
 				party = TownyElections.getInstance().getPartyManager().getPartiesForNation(resident.getTown().getNation().getName()).stream().filter(obj -> obj.getName().toLowerCase().equals(args[2])).collect(Collectors.toList()).get(0);
@@ -300,6 +306,7 @@ public class PartyCommandHandler implements CommandExecutor {
 		}
 		switch (args[1].toLowerCase()) {
 		case "town": {
+			if (!TownyElections.hasPerms(player, TownyElections.Permissions.TOWNPARTY_INVITES)) return true;
 			List<String> parties = new ArrayList<String>();
 			try {
 				for (Party p : TownyElections.getInstance().getPartyManager().getPartiesForTown(resident.getTown().getName())) 
@@ -321,6 +328,7 @@ public class PartyCommandHandler implements CommandExecutor {
 		}
 		return true;
 		case "nation": {
+			if (!TownyElections.hasPerms(player, TownyElections.Permissions.NATIONPARTY_INVITES)) return true;
 			List<String> parties = new ArrayList<String>();
 			try {
 				for (Party p : TownyElections.getInstance().getPartyManager().getPartiesForNation(resident.getTown().getNation().getName())) 
@@ -356,6 +364,7 @@ public class PartyCommandHandler implements CommandExecutor {
 		Player player = (Player) sender;
 		switch (args[1].toLowerCase()) {
 		case "town": {
+			if (!TownyElections.hasPerms(player, TownyElections.Permissions.TOWNPARTY_SETLEADER)) return true;
 			TownParty party = TownyElections.getInstance().getPartyManager().getPlayerTownParty(player.getUniqueId());
 			if (party == null) {
 				player.sendMessage(ChatColor.RED + "You are not part of a party");
@@ -369,6 +378,7 @@ public class PartyCommandHandler implements CommandExecutor {
 		}
 		return true;
 		case "nation": {
+			if (!TownyElections.hasPerms(player, TownyElections.Permissions.NATIONPARTY_SETLEADER)) return true;
 			NationParty party = TownyElections.getInstance().getPartyManager().getPlayerNationParty(player.getUniqueId());
 			if (party == null) {
 				player.sendMessage(ChatColor.RED + "You are not part of a party");
@@ -396,6 +406,7 @@ public class PartyCommandHandler implements CommandExecutor {
 		Player player = (Player) sender;
 		switch (args[1].toLowerCase()) {
 		case "town": {
+			if (!TownyElections.hasPerms(player, TownyElections.Permissions.TOWNPARTY_PROMOTE)) return true;
 			TownParty party = TownyElections.getInstance().getPartyManager().getPlayerTownParty(player.getUniqueId());
 			if (party == null) {
 				player.sendMessage(ChatColor.RED + "You are not part of a party");
@@ -420,6 +431,7 @@ public class PartyCommandHandler implements CommandExecutor {
 		}
 		return true;
 		case "nation": {
+			if (!TownyElections.hasPerms(player, TownyElections.Permissions.NATIONPARTY_PROMOTE)) return true;
 			NationParty party = TownyElections.getInstance().getPartyManager().getPlayerNationParty(player.getUniqueId());
 			if (party == null) {
 				player.sendMessage(ChatColor.RED + "You are not part of a party");
@@ -458,6 +470,7 @@ public class PartyCommandHandler implements CommandExecutor {
 		Player player = (Player) sender;
 		switch (args[1].toLowerCase()) {
 		case "town": {
+			if (!TownyElections.hasPerms(player, TownyElections.Permissions.TOWNPARTY_DEMOTE)) return true;
 			TownParty party = TownyElections.getInstance().getPartyManager().getPlayerTownParty(player.getUniqueId());
 			if (party == null) {
 				player.sendMessage(ChatColor.RED + "You are not part of a party");
@@ -486,6 +499,7 @@ public class PartyCommandHandler implements CommandExecutor {
 		}
 		return true;
 		case "nation": {
+			if (!TownyElections.hasPerms(player, TownyElections.Permissions.NATIONPARTY_DEMOTE)) return true;
 			NationParty party = TownyElections.getInstance().getPartyManager().getPlayerNationParty(player.getUniqueId());
 			if (party == null) {
 				player.sendMessage(ChatColor.RED + "You are not part of a party");
@@ -528,6 +542,7 @@ public class PartyCommandHandler implements CommandExecutor {
 		Player player = (Player) sender;
 		switch (args[1].toLowerCase()) {
 		case "town": {
+			if (!TownyElections.hasPerms(player, TownyElections.Permissions.TOWNPARTY_INFO)) return true;
 			TownParty party = TownyElections.getInstance().getPartyManager().getPlayerTownParty(player.getUniqueId());
 			if (party == null) {
 				player.sendMessage(ChatColor.RED + "You are not part of a party");
@@ -549,6 +564,7 @@ public class PartyCommandHandler implements CommandExecutor {
 		}
 		return true;
 		case "nation": {
+			if (!TownyElections.hasPerms(player, TownyElections.Permissions.NATIONPARTY_INFO)) return true;
 			NationParty party = TownyElections.getInstance().getPartyManager().getPlayerNationParty(player.getUniqueId());
 			if (party == null) {
 				player.sendMessage(ChatColor.RED + "You are not part of a party");

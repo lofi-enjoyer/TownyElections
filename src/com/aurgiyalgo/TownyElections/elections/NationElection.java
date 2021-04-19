@@ -3,12 +3,12 @@ package com.aurgiyalgo.TownyElections.elections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 
 import com.aurgiyalgo.TownyElections.TownyElections;
-import com.aurgiyalgo.TownyElections.TownyElections.MutableInteger;
 import com.aurgiyalgo.TownyElections.parties.NationParty;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -34,32 +34,32 @@ public class NationElection extends Election {
 
 	public String finishElection() {
 		if (votes.isEmpty()) {
-			TownyElections.sendNationMessage(nation, TownyElections.getTranslatedMessage("no-winner"));
+			TownyElections.sendNationMessage(nation, TownyElections.getInstance().getLanguageData().getString("no-winner"));
 			return null;
 		}
 
-		Map<String, MutableInteger> voteCount = new HashMap<String, MutableInteger>();
+		Map<String, AtomicInteger> voteCount = new HashMap<String, AtomicInteger>();
 
 		for (Map.Entry<UUID, String> entry : votes.entrySet()) {
 			if (!voteCount.containsKey(entry.getValue())) {
-				voteCount.put(entry.getValue(), new MutableInteger(1));
+				voteCount.put(entry.getValue(), new AtomicInteger(1));
 				continue;
 			}
-			voteCount.get(entry.getValue()).value++;
+			voteCount.get(entry.getValue()).incrementAndGet();
 		}
 
-		Map.Entry<String, MutableInteger> maxCandidate = null;
+		Map.Entry<String, AtomicInteger> maxCandidate = null;
 
-		for (Map.Entry<String, MutableInteger> entry : voteCount.entrySet()) {
+		for (Map.Entry<String, AtomicInteger> entry : voteCount.entrySet()) {
 			if (maxCandidate == null) {
 				maxCandidate = entry;
 				continue;
 			}
-			if (maxCandidate.getValue().value == entry.getValue().value) {
-				TownyElections.sendNationMessage(nation, TownyElections.getTranslatedMessage("no-winner"));
+			if (maxCandidate.getValue().get() == entry.getValue().get()) {
+				TownyElections.sendNationMessage(nation, TownyElections.getInstance().getLanguageData().getString("no-winner"));
 				return null;
 			}
-			if (maxCandidate.getValue().value < entry.getValue().value) {
+			if (maxCandidate.getValue().get() < entry.getValue().get()) {
 				maxCandidate = entry;
 				continue;
 			}
@@ -72,7 +72,7 @@ public class NationElection extends Election {
 			nation.setCapital(TownyUniverse.getInstance().getDataSource()
 					.getResident(Bukkit.getOfflinePlayer(party.getLeader()).getName()).getTown());
 			TownyUniverse.getInstance().getDataSource().saveNation(nation);
-			String msg = TownyElections.getTranslatedMessage("election-won").replace("%party%", party.getName());
+			String msg = TownyElections.getInstance().getLanguageData().getString("election-won").replace("%party%", party.getName());
 			TownyElections.sendNationSubtitle(nation, msg);
 
 		} catch (NotRegisteredException e) {

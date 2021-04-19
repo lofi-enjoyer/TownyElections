@@ -27,7 +27,7 @@ public class NationVoteGui extends VoteGui {
 
     public static SmartInventory INVENTORY = SmartInventory.builder()
             .manager(TownyElections.getInstance().getInventoryManager())
-            .id("votegui")
+            .id("nationvotegui")
             .provider(new NationVoteGui())
             .size(4, 9)
             .title(ChatColor.BLUE + "Vote in your nation election!")

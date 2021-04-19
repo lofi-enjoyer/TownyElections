@@ -21,7 +21,7 @@ public class TEListener implements Listener {
 			TownElection election;
 			election = TownyElections.getInstance().getElectionManager().getTownElection(e.getPlayer());
 			if (election == null) return;
-			e.getPlayer().sendTitle(" ", TownyElections.getTranslatedMessage("active-election"), 20, 60, 20);
+			e.getPlayer().sendTitle(" ", TownyElections.getMessage("active-election"), 20, 60, 20);
 		}
 	}
 	

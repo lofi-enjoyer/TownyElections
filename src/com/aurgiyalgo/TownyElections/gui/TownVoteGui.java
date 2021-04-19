@@ -24,7 +24,7 @@ public class TownVoteGui extends VoteGui {
 
     public static SmartInventory INVENTORY = SmartInventory.builder()
             .manager(TownyElections.getInstance().getInventoryManager())
-            .id("votegui")
+            .id("townvotegui")
             .provider(new TownVoteGui())
             .size(4, 9)
             .title(ChatColor.BLUE + "Vote in your town election!")

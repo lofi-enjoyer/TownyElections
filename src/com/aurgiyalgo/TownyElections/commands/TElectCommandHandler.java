@@ -6,6 +6,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import com.aurgiyalgo.TownyElections.TownyElections;
+import org.bukkit.entity.Player;
 
 public class TElectCommandHandler implements CommandExecutor {
 
@@ -23,6 +24,8 @@ public class TElectCommandHandler implements CommandExecutor {
 		switch (args[0]) {
 		case "info":
 			return executeInfo(sender, cmd, str, args);
+		case "reload":
+			return executeReload(sender, cmd, str, args);
 		default:
 			sender.sendMessage(ChatColor.RED + "Invalid argument!");
 			break;
@@ -41,6 +44,13 @@ public class TElectCommandHandler implements CommandExecutor {
 		infoMessage = infoMessage.replaceAll("%version%", instance.getDescription().getVersion());
 		infoMessage = infoMessage.replaceAll("%author%", instance.getDescription().getAuthors().get(0));
 		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', infoMessage));
+		return true;
+	}
+
+	private boolean executeReload(CommandSender sender, Command cmd, String str, String[] args) {
+		if (!TownyElections.hasPerms((Player) sender, "townyelections.reload")) return true;
+		TownyElections.getInstance().getLanguageData().load();
+		TownyElections.getInstance().getLanguageData().getString("plugin-reloaded");
 		return true;
 	}
 
