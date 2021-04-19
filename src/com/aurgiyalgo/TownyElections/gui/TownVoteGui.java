@@ -59,7 +59,7 @@ public class TownVoteGui extends VoteGui {
             items[i] = ClickableItem.of(item, e -> {
                 election.addVote(player.getUniqueId(), townPartyList.get(it).getName());
                 player.closeInventory();
-                String msg = TownyElections.getTranslatedMessage("you-voted");
+                String msg = TownyElections.getMessage("you-voted");
                 msg = msg.replaceAll("%party%", townPartyList.get(it).getName());
                 player.sendMessage(msg);
                 player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_PLACE, 1, 2);
