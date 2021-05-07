@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.aurgiyalgo.TownyElections</groupId>
 	<artifactId>TownyElections</artifactId>
-	<version>1.5</version>
+	<version>1.6</version>
 	<name>TownyElections</name>
 
 	<repositories>

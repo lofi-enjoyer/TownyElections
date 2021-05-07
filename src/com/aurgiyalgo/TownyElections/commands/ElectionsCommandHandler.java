@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.aurgiyalgo.TownyElections.gui.NationVoteGui;
+import com.aurgiyalgo.TownyElections.gui.TownStopGui;
 import com.aurgiyalgo.TownyElections.gui.TownVoteGui;
 import com.aurgiyalgo.TownyElections.gui.VoteGui;
 import org.bukkit.ChatColor;
@@ -167,7 +168,7 @@ public class ElectionsCommandHandler implements CommandExecutor {
 			p.sendMessage(TownyElections.getMessage("not-active-election"));
 			return true;
 		}
-		TownyElections.getInstance().getElectionManager().removeTownElection(e);
+		TownStopGui.INVENTORY.open(p);
 		return true;
 	}
 
