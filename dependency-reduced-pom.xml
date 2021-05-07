@@ -4,7 +4,7 @@
   <groupId>com.aurgiyalgo.TownyElections</groupId>
   <artifactId>TownyElections</artifactId>
   <name>TownyElections</name>
-  <version>1.5</version>
+  <version>1.6</version>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <resources>
