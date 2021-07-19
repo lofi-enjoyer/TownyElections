@@ -1,8 +1,6 @@
 package com.aurgiyalgo.TownyElections.commands;
 
-import com.aurgiyalgo.TownyElections.TownyElections;
 import org.apache.commons.lang.ArrayUtils;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -49,10 +47,7 @@ public abstract class CommandHandler implements CommandExecutor {
         subCommands.add(subCommand);
     }
 
-    private boolean executeHelp(CommandSender sender) {
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', TownyElections.Text.PARTY_HELP_MESSAGE));
-        return true;
-    }
+    protected abstract boolean executeHelp(CommandSender sender);
 
     private boolean notEnoughArguments(CommandSender sender) {
         sender.sendMessage(getMessage("not-enough-arguments"));
