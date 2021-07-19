@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -36,70 +37,53 @@ public class PartyManager {
 	}
 
 	public void removeParty(String partyName) {
-		Iterator<Party> iterator = parties.iterator();
-		while (iterator.hasNext()) {
-			Party party = iterator.next();
-			if (!party.getName().equals(partyName))
-				continue;
-			iterator.remove();
-			return;
-		}
+		parties.removeIf(party -> party.getName().equals(partyName));
 	}
 
 	public List<TownParty> getTownParties() {
-		List<TownParty> townParties = new ArrayList<TownParty>();
-		for (Party party : parties) {
-			if (party instanceof TownParty)
-				townParties.add((TownParty) party);
-		}
-		return null;
+		return parties.stream()
+				.filter(TownParty.class::isInstance)
+				.map(TownParty.class::cast)
+				.collect(Collectors.toList());
 	}
 
 	public List<NationParty> getNationParties() {
-		List<NationParty> nationParties = new ArrayList<NationParty>();
-		for (Party party : parties) {
-			if (party instanceof NationParty)
-				nationParties.add((NationParty) party);
-		}
-		return null;
+		return parties.stream()
+				.filter(NationParty.class::isInstance)
+				.map(NationParty.class::cast)
+				.collect(Collectors.toList());
 	}
 
 	public List<TownParty> getPartiesForTown(String town) {
-		List<TownParty> townParties = new ArrayList<TownParty>();
-		for (Party party : parties) {
-			if (!(party instanceof TownParty))
-				continue;
-			if (!((TownParty) party).getTown().getName().equals(town))
-				continue;
-			townParties.add((TownParty) party);
-		}
-		return townParties;
+		return parties.stream()
+				.filter(TownParty.class::isInstance)
+				.map(TownParty.class::cast)
+				.filter(townParty -> townParty.getTown().getName().equals(town))
+				.collect(Collectors.toList());
 	}
 	
 	public List<NationParty> getPartiesForNation(String nation) {
-		List<NationParty> nationParties = new ArrayList<NationParty>();
-		for (Party party : parties) {
-			if (!(party instanceof NationParty)) continue;
-			if (!((NationParty) party).getNation().getName().equals(nation)) continue;
-			nationParties.add((NationParty) party);
-		}
-		return nationParties;
+		return parties.stream()
+				.filter(NationParty.class::isInstance)
+				.map(NationParty.class::cast)
+				.filter(nationParty -> nationParty.getNation().getName().equals(nation))
+				.collect(Collectors.toList());
 	}
 	
 	public TownParty getPlayerTownParty(UUID player) {
-		for (Party party : parties) {
-			if (!(party instanceof TownParty)) continue;
-			if (party.members.contains(player)) return (TownParty) party;
-		}
-		return null;
+		return parties.stream()
+				.filter(TownParty.class::isInstance)
+				.map(TownParty.class::cast)
+				.filter(townParty -> townParty.getMembers().contains(player))
+				.findFirst().orElse(null);
 	}
 	
 	public NationParty getPlayerNationParty(UUID player) {
-		for (Party party : parties) {
-			if (!(party instanceof NationParty)) continue;
-			if (party.members.contains(player)) return (NationParty) party;
-		}
-		return null;
+		return parties.stream()
+				.filter(NationParty.class::isInstance)
+				.map(NationParty.class::cast)
+				.filter(nationParty -> nationParty.getMembers().contains(player))
+				.findFirst().orElse(null);
 	}
 
 	public void loadData() {

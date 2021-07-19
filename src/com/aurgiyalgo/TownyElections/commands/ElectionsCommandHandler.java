@@ -1,5 +1,6 @@
 package com.aurgiyalgo.TownyElections.commands;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +28,12 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 
 public class ElectionsCommandHandler implements CommandExecutor {
+
+	private List<SubCommand> subCommands;
+
+	public ElectionsCommandHandler() {
+		this.subCommands = new ArrayList<>();
+	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String str, String[] args) {
