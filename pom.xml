@@ -20,11 +20,9 @@
 
 	<distributionManagement>
 		<repository>
-			<uniqueVersion>false</uniqueVersion>
-			<id>githubRepo</id>
-			<name>Github Repository</name>
-			<url>https://github.com/aurgiyalgo/TownyElections</url>
-			<layout>default</layout>
+			<id>github</id>
+			<name>GitHub Packages</name>
+			<url>https://maven.pkg.github.com/octocat/hello-world</url>
 		</repository>
 	</distributionManagement>
 
