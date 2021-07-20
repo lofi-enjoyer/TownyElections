@@ -18,6 +18,16 @@
 		</repository>
 	</repositories>
 
+	<distributionManagement>
+		<repository>
+			<uniqueVersion>false</uniqueVersion>
+			<id>githubRepo</id>
+			<name>Github Repository</name>
+			<url>https://github.com/aurgiyalgo/TownyElections</url>
+			<layout>default</layout>
+		</repository>
+	</distributionManagement>
+
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<resources>
