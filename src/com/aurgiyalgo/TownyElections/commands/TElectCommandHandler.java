@@ -39,18 +39,18 @@ public class TElectCommandHandler implements CommandExecutor {
 	}
 
 	private boolean executeInfo(CommandSender sender, Command cmd, String str, String[] args) {
-		String infoMessage = TownyElections.Text.INFO_MESSAGE;
-		infoMessage = infoMessage.replaceAll("%description%", instance.getDescription().getDescription());
-		infoMessage = infoMessage.replaceAll("%version%", instance.getDescription().getVersion());
-		infoMessage = infoMessage.replaceAll("%author%", instance.getDescription().getAuthors().get(0));
+		String infoMessage = TownyElections.Text.INFO_MESSAGE
+				.replaceAll("%description%", instance.getDescription().getDescription())
+				.replaceAll("%version%", instance.getDescription().getVersion())
+				.replaceAll("%author%", instance.getDescription().getAuthors().get(0));
 		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', infoMessage));
 		return true;
 	}
 
 	private boolean executeReload(CommandSender sender, Command cmd, String str, String[] args) {
 		if (!TownyElections.hasPerms((Player) sender, "townyelections.reload")) return true;
-		TownyElections.getInstance().getLanguageData().load();
-		TownyElections.getInstance().getLanguageData().getString("plugin-reloaded");
+		instance.getLanguageData().load();
+		instance.getLanguageData().getString("plugin-reloaded");
 		return true;
 	}
 

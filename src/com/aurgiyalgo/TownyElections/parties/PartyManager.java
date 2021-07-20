@@ -17,12 +17,12 @@ import com.google.gson.GsonBuilder;
 
 public class PartyManager {
 
-	private List<Party> parties;
-	private DataHandler dataHandler;
-	private Gson gson;
+	private final List<Party> parties;
+	private final DataHandler dataHandler;
+	private final Gson gson;
 
 	public PartyManager() {
-		parties = new ArrayList<Party>();
+		parties = new ArrayList<>();
 		dataHandler = new DataHandler(TownyElections.getInstance().getDataFolder(), "parties.json");
 		gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 	}
@@ -34,10 +34,6 @@ public class PartyManager {
 
 	public void removeParty(Party party) {
 		parties.remove(party);
-	}
-
-	public void removeParty(String partyName) {
-		parties.removeIf(party -> party.getName().equals(partyName));
 	}
 
 	public List<TownParty> getTownParties() {
@@ -54,35 +50,35 @@ public class PartyManager {
 				.collect(Collectors.toList());
 	}
 
-	public List<TownParty> getPartiesForTown(String town) {
+	public List<TownParty> getPartiesForTown(String townName) {
 		return parties.stream()
 				.filter(TownParty.class::isInstance)
 				.map(TownParty.class::cast)
-				.filter(townParty -> townParty.getTown().getName().equals(town))
+				.filter(townParty -> townParty.getTown().getName().equals(townName))
 				.collect(Collectors.toList());
 	}
 	
-	public List<NationParty> getPartiesForNation(String nation) {
+	public List<NationParty> getPartiesForNation(String nationName) {
 		return parties.stream()
 				.filter(NationParty.class::isInstance)
 				.map(NationParty.class::cast)
-				.filter(nationParty -> nationParty.getNation().getName().equals(nation))
+				.filter(nationParty -> nationParty.getNation().getName().equals(nationName))
 				.collect(Collectors.toList());
 	}
 	
-	public TownParty getPlayerTownParty(UUID player) {
+	public TownParty getPlayerTownParty(UUID playerUuid) {
 		return parties.stream()
 				.filter(TownParty.class::isInstance)
 				.map(TownParty.class::cast)
-				.filter(townParty -> townParty.getMembers().contains(player))
+				.filter(townParty -> townParty.getMembers().contains(playerUuid))
 				.findFirst().orElse(null);
 	}
-	
-	public NationParty getPlayerNationParty(UUID player) {
+
+	public NationParty getPlayerNationParty(UUID playerUuid) {
 		return parties.stream()
 				.filter(NationParty.class::isInstance)
 				.map(NationParty.class::cast)
-				.filter(nationParty -> nationParty.getMembers().contains(player))
+				.filter(nationParty -> nationParty.getMembers().contains(playerUuid))
 				.findFirst().orElse(null);
 	}
 

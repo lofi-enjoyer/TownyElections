@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.aurgiyalgo.TownyElections.commands.ElectionsCommandHandler;
-import com.aurgiyalgo.TownyElections.commands.party.PartyCommandHandler;
+import com.aurgiyalgo.TownyElections.commands.PartyCommandHandler;
 import com.aurgiyalgo.TownyElections.commands.TElectCommandHandler;
 import com.aurgiyalgo.TownyElections.elections.ElectionManager;
 import com.aurgiyalgo.TownyElections.listeners.TElectTabCompleter;

@@ -21,10 +21,10 @@ import com.palmergames.bukkit.towny.object.Town;
 
 public class ElectionManager {
 
-	private List<TownElection> townElections;
-	private List<NationElection> nationElections;
-	private DataHandler dataHandler;
-	private Gson gson;
+	private final List<TownElection> townElections;
+	private final List<NationElection> nationElections;
+	private final DataHandler dataHandler;
+	private final Gson gson;
 
 	public ElectionManager() {
 		townElections = new ArrayList<TownElection>();

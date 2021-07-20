@@ -20,10 +20,11 @@ public class TownElection extends Election {
 	
 	public TownElection(long endTime, Town town) {
 		super(endTime);
-		territoryUuid = town.getUuid();
+		territoryUuid = town.getUUID();
 		setup();
 	}
-	
+
+	@Override
 	public void setup() {
 		try {
 			town = TownyUniverse.getInstance().getDataSource().getTown(territoryUuid);
@@ -33,24 +34,25 @@ public class TownElection extends Election {
 	}
 	
 	public void addVote(UUID player, String candidate) {
-		if (votes.containsKey(player)) return;
-		if (TownyElections.getInstance().getPartyManager().getPartiesForTown(town.getName()).stream().filter(party -> party.getName().equals(candidate)).collect(Collectors.toList()).isEmpty()) return;
+		if (votes.containsKey(player))
+			return;
+		if (instance.getPartyManager().getPartiesForTown(town.getName()).stream()
+				.noneMatch(party -> party.getName().equals(candidate)))
+			return;
 		votes.put(player, candidate);
 	}
 	
 	public void removeVote(UUID player) {
-		if (votes.containsKey(player)) {
-			votes.remove(player);
-		}
+		votes.remove(player);
 	}
 	
 	public String finishElection() {
 		if (votes.isEmpty()) {
-			TownyElections.sendTownMessage(town, TownyElections.getInstance().getLanguageData().getString("no-winner"));
+			TownyElections.sendTownMessage(town, TownyElections.getMessage("no-winner"));
 			return null;
 		}
 		
-		Map<String, AtomicInteger> voteCount = new HashMap<String, AtomicInteger>();
+		Map<String, AtomicInteger> voteCount = new HashMap<>();
 		
 		for (Map.Entry<UUID, String> entry : votes.entrySet())  {
 			if (!voteCount.containsKey(entry.getValue())) {
@@ -68,22 +70,21 @@ public class TownElection extends Election {
 				continue;
 			}
 			if (maxCandidate.getValue().get() == entry.getValue().get()) {
-				TownyElections.sendTownMessage(town, TownyElections.getInstance().getLanguageData().getString("no-winner"));
+				TownyElections.sendTownMessage(town, TownyElections.getMessage("no-winner"));
 				return null;
 			}
 			if (maxCandidate.getValue().get() < entry.getValue().get()) {
 				maxCandidate = entry;
-				continue;
 			}
 		}
 		
 		winner = maxCandidate.getKey();
 		
 		try {
-			TownParty party = TownyElections.getInstance().getPartyManager().getPartiesForTown(town.getName()).stream().filter(pty -> pty.getName().toLowerCase().equals(winner.toLowerCase())).collect(Collectors.toList()).get(0);
+			TownParty party = instance.getPartyManager().getPartiesForTown(town.getName()).stream().filter(pty -> pty.getName().toLowerCase().equals(winner.toLowerCase())).collect(Collectors.toList()).get(0);
 			town.setMayor(TownyUniverse.getInstance().getDataSource().getResident(Bukkit.getOfflinePlayer(party.getLeader()).getName()));
 			TownyUniverse.getInstance().getDataSource().saveTown(town);
-			String msg = TownyElections.getInstance().getLanguageData().getString("election-won").replace("%party%", party.getName());
+			String msg = TownyElections.getMessage("election-won").replace("%party%", party.getName());
 			TownyElections.sendTownSubtitle(town, msg);
 		} catch (NotRegisteredException e) {
 			e.printStackTrace();

@@ -1,7 +1,7 @@
-package com.aurgiyalgo.TownyElections.commands.party;
+package com.aurgiyalgo.TownyElections.commands;
 
 import com.aurgiyalgo.TownyElections.TownyElections;
-import com.aurgiyalgo.TownyElections.commands.CommandHandler;
+import com.aurgiyalgo.TownyElections.commands.party.*;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
