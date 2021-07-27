@@ -2,6 +2,7 @@ package com.aurgiyalgo.TownyElections;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -86,7 +87,7 @@ public class TownyElections extends JavaPlugin {
 	}
 
 	public static String getMessage(String key) {
-		return instance.getLanguageData().getString(key);
+		return ChatColor.translateAlternateColorCodes('&', instance.getLanguageData().getString(key));
 	}
 
 	public static void sendTownMessage(Town n, String message) {

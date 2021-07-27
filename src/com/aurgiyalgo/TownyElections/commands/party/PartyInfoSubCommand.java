@@ -51,7 +51,7 @@ public class PartyInfoSubCommand extends SubCommand {
         }
         builder.append("\n");
         builder.append(getMessage("members"));
-        builder.append(party.getMembers().get(0));
+        builder.append(Bukkit.getOfflinePlayer(party.getMembers().get(0)).getName());
         for (int i = 1; i < party.getMembers().size(); i++) {
             builder.append(", ");
             builder.append(Bukkit.getOfflinePlayer(party.getMembers().get(i)).getName());

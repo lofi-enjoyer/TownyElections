@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
+import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
@@ -76,6 +77,7 @@ public class ElectionsConvokeSubCommand extends SubCommand {
 
         }
         player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
+        player.sendMessage(ChatColor.GREEN + "You convoked an election for " + args[1] + " minutes");
         return true;
     }
 

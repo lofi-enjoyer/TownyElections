@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 public class ElectionsVoteSubCommand extends SubCommand {
 
     public ElectionsVoteSubCommand() {
-        super("vote", 2);
+        super("vote", 1);
     }
 
     @Override

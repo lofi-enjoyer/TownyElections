@@ -4,6 +4,7 @@ import com.aurgiyalgo.TownyElections.TownyElections;
 import com.aurgiyalgo.TownyElections.commands.SubCommand;
 import com.aurgiyalgo.TownyElections.elections.NationElection;
 import com.aurgiyalgo.TownyElections.elections.TownElection;
+import com.aurgiyalgo.TownyElections.gui.NationStopGui;
 import com.aurgiyalgo.TownyElections.gui.TownStopGui;
 import org.bukkit.entity.Player;
 
@@ -36,7 +37,7 @@ public class ElectionsStopSubCommand extends SubCommand {
                     player.sendMessage(TownyElections.getMessage("not-active-election-nation"));
                     return true;
                 }
-                TownyElections.getInstance().getElectionManager().removeNationElection(election);
+                NationStopGui.INVENTORY.open(player);
             } break;
 
             default:

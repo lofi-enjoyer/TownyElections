@@ -52,7 +52,12 @@ public class PartyDemoteSubCommand extends SubCommand {
         }
 
         OfflinePlayer demotedPlayer = Bukkit.getOfflinePlayer(args[1]);
-        if (party.isAssistant(demotedPlayer.getUniqueId())) {
+        if (party.getLeader().equals(demotedPlayer.getUniqueId())) {
+            player.sendMessage(getMessage("cannot-demote-leader"));
+            return true;
+        }
+
+        if (!party.isAssistant(demotedPlayer.getUniqueId())) {
             player.sendMessage(getMessage("not-assistant"));
             return true;
         }
