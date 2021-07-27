@@ -24,26 +24,36 @@ TownyElections allows players to choose leaders for their towns and nations, vot
   </ol>
 </details>
 
-## About the project 🗺
+<div id="about-the-project"></div>
+
+## About the project 🗺 
 
 After years of playing Towny in geopolitical and roleplaying servers I always missed politics and diplomacy, which could not be done properly as the leader of a nation/town had always all the power. So I started doing tests on my Minecraft server with elections (just for towns at that moment), and given how much players enjoyed it I decided to make it a full working plugin.
 
 The goal of TownyElections is becoming an expansion for Towny, with elections, parties, political systems and diplomacy, suitable for all kinds of survival and roleplaying servers.
 
-## How to use 🎮
+<div id="how-to-use"></div>
 
-### For players
+## How to use 🎮 
+
+<div id="for-players"></div>
+
+### For players 
 
 You can see the usage of the commands with <strong>/telect</strong>
 
 _For more information, refer to the [Wiki](https://github.com/aurgiyalgo/TownyElections/wiki)_
 
-### For server owners
+<div id="for-server-owners"></div>
+
+### For server owners 
 
 * [Permissions](https://github.com/aurgiyalgo/TownyElections/wiki/permissions)
 * [Commands](https://github.com/aurgiyalgo/TownyElections/wiki/commands)
 
-## Building 🚀
+<div id="building"></div>
+
+## Building 🚀 
 
 _Prerequisites: Java Development Kit 11 or newer and Maven_
 
@@ -59,7 +69,9 @@ cd TownyElections/
 mvn package
 ```
 
-## Contributions 🎓
+<div id="contributing"></div>
+
+## Contributing 🎓 
 
 Contributions are greatly appreciated and help not only the project but the community making use of it. Here's how you can contibute:
 
@@ -69,10 +81,14 @@ Contributions are greatly appreciated and help not only the project but the comm
 4. Push to the branch (`git push origin feature/YourNewFeature`)
 5. Open a Pull Request
 
-## License 📜
+<div id="license"></div>
+
+## License 📜 
 
 This project is under a MIT License. Check [`LICENSE`](https://github.com/aurgiyalgo/TownyElections/blob/master/LICENSE) for more information.
 
-## Support 💡
+<div id="support"></div>
+
+## Support 💡 
 
 You can get help on the [support Discord server](https://discord.gg/NjtN58e).
