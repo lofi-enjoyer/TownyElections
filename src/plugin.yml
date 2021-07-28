@@ -16,6 +16,9 @@ commands:
     usage: /<command>
     permission: townyelections.party
     aliases: [p, pty, prty]
+  government:
+    permission: townyelections.government
+    aliases: [gov]
 permissions:
   townyelections.*:
     default: op
