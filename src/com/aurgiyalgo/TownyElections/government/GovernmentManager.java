@@ -12,6 +12,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class GovernmentManager {
 
@@ -23,6 +24,16 @@ public class GovernmentManager {
         governmentDataList = new ArrayList<>();
         dataHandler = new DataHandler(TownyElections.getInstance().getDataFolder(), "governments.json");
         gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+    }
+
+    public void addGovernmentData(Nation nation) {
+        governmentDataList.add(new GovernmentData(nation.getUUID(), GovernmentType.MONARCHY));
+    }
+
+    public void removeGovernmentData(UUID uuid) {
+        governmentDataList = governmentDataList.stream().
+                filter(governmentData -> !governmentData.getUuid().equals(uuid))
+                .collect(Collectors.toList());
     }
 
     public void loadData() {
