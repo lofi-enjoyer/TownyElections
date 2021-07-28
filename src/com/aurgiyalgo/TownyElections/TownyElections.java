@@ -1,5 +1,7 @@
 package com.aurgiyalgo.TownyElections;
 
+import com.aurgiyalgo.TownyElections.commands.GovernmentCommandHandler;
+import com.aurgiyalgo.TownyElections.government.GovernmentManager;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -30,6 +32,8 @@ public class TownyElections extends JavaPlugin {
 	private InventoryManager inventoryManager;
 	@Getter
 	private LanguageData languageData;
+	@Getter
+	private GovernmentManager governmentManager;
 
 	@Override
 	public void onEnable() {
@@ -46,20 +50,24 @@ public class TownyElections extends JavaPlugin {
 		
 		electionManager = new ElectionManager();
 		partyManager = new PartyManager();
+		governmentManager = new GovernmentManager();
 		
 		electionManager.loadData();
 		partyManager.loadData();
+		governmentManager.loadData();
 
 		getCommand("townyelections").setExecutor(new TElectCommandHandler(instance));
 		getCommand("townyelections").setTabCompleter(new TElectTabCompleter());
 		getCommand("elections").setExecutor(new ElectionsCommandHandler());
 		getCommand("party").setExecutor(new PartyCommandHandler());
+		getCommand("government").setExecutor(new GovernmentCommandHandler());
 	}
 
 	@Override
 	public void onDisable() {
 		electionManager.saveData();
 		partyManager.saveData();
+		governmentManager.saveData();
 		languageData.save();
 		
 		saveConfig();
