@@ -2,7 +2,6 @@ package com.aurgiyalgo.TownyElections;
 
 import com.aurgiyalgo.TownyElections.commands.GovernmentCommandHandler;
 import com.aurgiyalgo.TownyElections.government.GovernmentManager;
-import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -22,17 +21,11 @@ import fr.minuskube.inv.InventoryManager;
 
 public class TownyElections extends JavaPlugin {
 
-	@Getter
 	private static TownyElections instance;
-	@Getter
 	private ElectionManager electionManager;
-	@Getter
 	private PartyManager partyManager;
-	@Getter
 	private InventoryManager inventoryManager;
-	@Getter
 	private LanguageData languageData;
-	@Getter
 	private GovernmentManager governmentManager;
 
 	@Override
@@ -226,4 +219,27 @@ public class TownyElections extends JavaPlugin {
 				"&8---------------------------------";
 	}
 
+	public ElectionManager getElectionManager() {
+		return electionManager;
+	}
+
+	public PartyManager getPartyManager() {
+		return partyManager;
+	}
+
+	public InventoryManager getInventoryManager() {
+		return inventoryManager;
+	}
+
+	public LanguageData getLanguageData() {
+		return languageData;
+	}
+
+	public GovernmentManager getGovernmentManager() {
+		return governmentManager;
+	}
+
+	public static TownyElections getInstance() {
+		return instance;
+	}
 }
