@@ -9,8 +9,6 @@ import java.util.UUID;
 import com.aurgiyalgo.TownyElections.TownyElections;
 import com.google.gson.annotations.Expose;
 
-import lombok.Getter;
-
 public abstract class Party {
 	
 	public static enum PartyType {
@@ -41,16 +39,12 @@ public abstract class Party {
 		}
 	}
 
-	@Getter
 	@Expose
 	protected String name;
-	@Getter
 	@Expose
 	protected UUID leader;
-	@Getter
 	@Expose
 	protected List<UUID> members;
-	@Getter
 	@Expose
 	protected List<UUID> assistants;
 	@Expose
@@ -133,6 +127,22 @@ public abstract class Party {
 	
 	public PartyType getType() {
 		return PartyType.getPartyType(partyType);
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public UUID getLeader() {
+		return leader;
+	}
+
+	public List<UUID> getMembers() {
+		return members;
+	}
+
+	public List<UUID> getAssistants() {
+		return assistants;
 	}
 
 }
