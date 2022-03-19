@@ -123,7 +123,7 @@ public class ElectionManager {
 	public TownElection getTownElection(Player p) {
 		Town t;
 		try {
-			t = TownyUniverse.getInstance().getDataSource().getResident(p.getName()).getTown();
+			t = TownyUniverse.getInstance().getResident(p.getName()).getTown();
 		} catch (NotRegisteredException e1) {
 			return null;
 		}
@@ -138,7 +138,7 @@ public class ElectionManager {
 	public NationElection getNationElection(Player p) {
 		Nation n;
 		try {
-			n = TownyUniverse.getInstance().getDataSource().getResident(p.getName()).getTown().getNation();
+			n = TownyUniverse.getInstance().getResident(p.getName()).getTown().getNation();
 		} catch (NotRegisteredException e) {
 			return null;
 		}

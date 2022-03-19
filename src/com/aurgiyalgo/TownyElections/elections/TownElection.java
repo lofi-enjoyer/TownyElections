@@ -79,14 +79,14 @@ public class TownElection extends Election {
 		}
 		
 		winner = maxCandidate.getKey();
-		
+
 		try {
 			TownParty party = instance.getPartyManager().getPartiesForTown(town.getName()).stream().filter(pty -> pty.getName().toLowerCase().equals(winner.toLowerCase())).collect(Collectors.toList()).get(0);
-			town.setMayor(TownyUniverse.getInstance().getDataSource().getResident(Bukkit.getOfflinePlayer(party.getLeader()).getName()));
+			town.setMayor(TownyUniverse.getInstance().getResident(Bukkit.getOfflinePlayer(party.getLeader()).getName()));
 			TownyUniverse.getInstance().getDataSource().saveTown(town);
 			String msg = TownyElections.getMessage("election-won").replace("%party%", party.getName());
 			TownyElections.sendTownSubtitle(town, msg);
-		} catch (NotRegisteredException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return winner;

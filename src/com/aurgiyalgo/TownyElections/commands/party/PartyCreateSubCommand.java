@@ -41,7 +41,7 @@ public class PartyCreateSubCommand extends SubCommand {
 
                 Town town;
                 try {
-                    town = TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown();
+                    town = TownyUniverse.getInstance().getResident(player.getName()).getTown();
                 } catch (NotRegisteredException e) {
                     player.sendMessage(TownyElections.getMessage("not-in-a-town"));
                     return true;
@@ -52,7 +52,7 @@ public class PartyCreateSubCommand extends SubCommand {
                     return true;
                 }
 
-                party = new TownParty(args[1], player.getUniqueId(), town.getUuid());
+                party = new TownParty(args[1], player.getUniqueId(), town.getUUID());
             } break;
 
             case "nation": {

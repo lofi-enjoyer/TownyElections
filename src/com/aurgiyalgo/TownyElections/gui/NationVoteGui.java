@@ -37,7 +37,7 @@ public class NationVoteGui extends VoteGui {
     public void setItems(Player player, InventoryContents contents) {
         Nation n;
         try {
-            n = TownyUniverse.getInstance().getDataSource().getResident(player.getName()).getTown().getNation();
+            n = TownyUniverse.getInstance().getResident(player.getName()).getTown().getNation();
         } catch (NotRegisteredException e1) {
             e1.printStackTrace();
             player.sendMessage(ChatColor.RED + "Error while loading the menu!");
