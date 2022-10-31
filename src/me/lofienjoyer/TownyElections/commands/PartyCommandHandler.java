@@ -1,7 +1,6 @@
 package me.lofienjoyer.TownyElections.commands;
 
 import me.lofienjoyer.TownyElections.TownyElections;
-import com.aurgiyalgo.TownyElections.commands.party.*;
 import me.lofienjoyer.TownyElections.commands.party.*;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
