@@ -6,4 +6,5 @@
 /target/
 /.idea
 TownyElections.iml
-
+/server
+export.sh

@@ -3,7 +3,7 @@ version: ${project.version}_${git.commit.id.abbrev}
 author: aurgiyalgo
 main: com.aurgiyalgo.TownyElections.TownyElections
 depend: [Towny]
-api-version: 1.14
+api-version: 1.19
 commands:
   townyelections:
     usage: /<command>
