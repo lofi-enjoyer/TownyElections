@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class LanguageData {
 
-    private Map<String, String> messages;
+    private final Map<String, String> messages;
 
     public LanguageData() {
         messages = new HashMap<String, String>();
@@ -25,6 +25,11 @@ public class LanguageData {
         }
 
         FileConfiguration languageFile = YamlConfiguration.loadConfiguration(new InputStreamReader(instance.getResource("language.yml")));
+        for (String key : languageFile.getKeys(false)) {
+            messages.put(key, (String) languageFile.get(key));
+        }
+
+        languageFile = YamlConfiguration.loadConfiguration(file);
         for (String key : languageFile.getKeys(false)) {
             messages.put(key, (String) languageFile.get(key));
         }
