@@ -23,16 +23,17 @@
 	</repositories>
 
 	<properties>
-		<java.version>16</java.version>
-		<maven.compiler.source>16</maven.compiler.source>
-		<maven.compiler.target>16</maven.compiler.target>
+		<java.version>17</java.version>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+		<dev.name>lofienjoyer</dev.name>
 	</properties>
 
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<resources>
 			<resource>
-				<directory>src</directory>
+				<directory>res</directory>
 				<filtering>true</filtering>
 				<includes>
 					<include>**/*.yml</include>
@@ -88,6 +89,13 @@
 									<include>fr.minuskube.inv:smart-invs</include>
 								</includes>
 							</artifactSet>
+							<transformers>
+								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<manifestEntries>
+										<Built-By>${dev.name}</Built-By>
+									</manifestEntries>
+								</transformer>
+							</transformers>
 						</configuration>
 					</execution>
 				</executions>
@@ -99,13 +107,13 @@
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
-			<version>1.14.4-R0.1-SNAPSHOT</version>
+			<version>1.19.2-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.palmergames.bukkit.towny</groupId>
 			<artifactId>towny</artifactId>
-			<version>0.98.1.0</version>
+			<version>0.98.3.0</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
