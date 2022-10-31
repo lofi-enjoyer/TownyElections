@@ -9,6 +9,8 @@ import me.lofienjoyer.TownyElections.gui.NationVoteGui;
 import me.lofienjoyer.TownyElections.gui.TownVoteGui;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
+
 public class ElectionsVoteSubCommand extends SubCommand {
 
     public ElectionsVoteSubCommand() {
@@ -17,6 +19,7 @@ public class ElectionsVoteSubCommand extends SubCommand {
 
     @Override
     public boolean execute(Player player, String[] args) {
+        System.out.println(Arrays.toString(args));
         Election election;
 
         switch (args[0].toLowerCase()) {
@@ -51,7 +54,7 @@ public class ElectionsVoteSubCommand extends SubCommand {
                 return false;
 
         }
-        return false;
+        return true;
     }
     
     private boolean doChecks(Player player, Election election) {

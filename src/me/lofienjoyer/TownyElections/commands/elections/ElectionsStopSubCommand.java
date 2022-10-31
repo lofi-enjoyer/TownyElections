@@ -44,7 +44,7 @@ public class ElectionsStopSubCommand extends SubCommand {
                 return false;
 
         }
-        return false;
+        return true;
     }
 
 }

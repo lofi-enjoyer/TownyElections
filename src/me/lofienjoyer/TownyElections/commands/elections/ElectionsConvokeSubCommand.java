@@ -12,6 +12,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
+
 public class ElectionsConvokeSubCommand extends SubCommand {
 
     public ElectionsConvokeSubCommand() {
@@ -20,7 +22,13 @@ public class ElectionsConvokeSubCommand extends SubCommand {
 
     @Override
     public boolean execute(Player player, String[] args) {
-        long finishTime = Integer.parseInt(args[1]) * 60 * 1000;
+        long finishTime;
+        try {
+            finishTime = Integer.parseInt(args[1]) * 60 * 1000;
+        } catch (Exception e) {
+            player.sendMessage(TownyElections.getMessage("error-input-number"));
+            return false;
+        }
 
         switch (args[0].toLowerCase()) {
 
@@ -74,7 +82,7 @@ public class ElectionsConvokeSubCommand extends SubCommand {
 
         }
         player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
-        player.sendMessage(ChatColor.GREEN + "You convoked an election for " + args[1] + " minutes");
+        player.sendMessage(TownyElections.getMessage("election-convoked").replaceAll("%time%", args[1]));
         return true;
     }
 
